@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Endless Vocals — Declare Your New Vocal Life</title>
+    <title>Endless Vocals — Your Vocals Don’t Expire</title>
     <meta name="description" content="Endless Vocals is a practical, modern vocal school by Ryan Wall and Tiago Costa. Two‑month bootcamps, live sessions + replays, and a free Discord community." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -79,7 +79,7 @@
         .subtitle {
             font-size: clamp(16px, 2.2vw, 20px);
             color: var(--muted);
-            max-width: 48ch
+            max-width: 60ch
         }
 
         .cta-row {
@@ -183,6 +183,27 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 0;
+            }
+
+            .masthead,
+            .footer {
+                padding: 24px;
+            }
+
+            .hero {
+                margin: 0;
+                border-radius: 0;
+                padding: 48px 24px;
+            }
+
+            .sticky .wrap {
+                max-width: none;
+            }
+        }
         /* Sticky mobile footer CTA */
         .sticky {
             position: fixed;
@@ -216,13 +237,13 @@
         </header>
 
         <section class="hero" aria-labelledby="h1">
-            <h1 id="h1" class="title">Declare Your New Vocal Life</h1>
+            <h1 id="h1" class="title">Your Vocals Don’t Expire</h1>
             <p class="subtitle">Practical training, clear structure, steady progress. Two‑month bootcamps with Ryan Wall and Tiago Costa. Live sessions, replays, and a friendly Discord to keep you moving.</p>
             <div class="cta-row" role="group" aria-label="Primary actions">
                 <a class="btn btn-primary" href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener noreferrer" aria-label="Sign up at Ko‑fi">
                     <span>Sign Up at Ko‑fi — $24/mo</span>
                 </a>
-                <a class="btn btn-secondary" href="https://discord.gg/" target="_blank" rel="noopener noreferrer" aria-label="Join the Discord">
+                <a class="btn btn-secondary" href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener noreferrer" aria-label="Join the Discord">
                     <span>Join the Discord (Free)</span>
                 </a>
             </div>
@@ -255,7 +276,7 @@
             <section class="card" aria-labelledby="how">
                 <h3 id="how">How it works</h3>
                 <ol>
-                    <li style="margin:8px 0">Join the <a href="https://discord.gg/" target="_blank" rel="noopener">Discord</a> (free) to see schedules, share clips, and meet the community.</li>
+                    <li style="margin:8px 0">Join the <a href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener">Discord</a> (free) to see schedules, share clips, and meet the community.</li>
                     <li style="margin:8px 0">When you’re ready, enroll in a <a href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener">Two‑Month Bootcamp</a> ($24/month via Ko‑fi). Attend live or watch replays—your pace.</li>
                     <li style="margin:8px 0">Follow the weekly checklist. Short, repeatable sessions beat long, rare ones.</li>
                 </ol>
@@ -271,7 +292,7 @@
     <div class="sticky" role="group" aria-label="Mobile actions">
         <div class="wrap">
             <a class="btn btn-primary" style="flex:1" href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener">Sign Up — Ko‑fi</a>
-            <a class="btn btn-secondary" style="flex:1" href="https://discord.gg/" target="_blank" rel="noopener">Join Discord</a>
+            <a class="btn btn-secondary" style="flex:1" href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener">Join Discord</a>
         </div>
     </div>
 
