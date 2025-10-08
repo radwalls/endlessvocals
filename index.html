@@ -28,6 +28,7 @@
             background: var(--bg);
             color: var(--fg);
             font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
+            scroll-behavior: smooth;
         }
 
         a {
@@ -63,6 +64,36 @@
             letter-spacing: 2px;
             font-size: 28px
         }
+
+        .masthead-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+            nav a {
+                padding: 10px 16px;
+                border-radius: 999px;
+                border: 1px solid transparent;
+                color: var(--muted);
+                transition: border .2s ease, color .2s ease;
+            }
+
+            nav a:hover,
+            nav a:focus {
+                color: var(--fg);
+                border-color: rgba(255,255,255,.12);
+            }
 
         .badge {
             font-size: 14px;
@@ -140,6 +171,115 @@
             margin: 40px 0
         }
 
+        .mic-sprinkle {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+            .mic-sprinkle img {
+                width: 38px;
+                height: auto;
+                opacity: .85;
+                filter: drop-shadow(0 6px 12px rgba(0,0,0,.35));
+            }
+
+        .coaches {
+            margin-top: 72px;
+            background: linear-gradient(135deg, rgba(22,166,163,.12), rgba(44,30,74,.25));
+            border-radius: 24px;
+            padding: 48px 36px 56px;
+            box-shadow: 0 18px 48px rgba(0,0,0,.35);
+        }
+
+            .coaches h2 {
+                margin: 0;
+                font-size: clamp(32px, 4vw, 52px);
+                letter-spacing: -.5px;
+            }
+
+            .coaches p.lead {
+                margin: 12px 0 32px;
+                max-width: 70ch;
+                color: var(--muted);
+            }
+
+        .coach-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        .coach-card {
+            background: rgba(12,12,16,.8);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 18px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            position: relative;
+        }
+
+            .coach-card h3 {
+                margin: 0;
+                font-size: 20px;
+            }
+
+            .coach-card .role {
+                font-weight: 600;
+                color: var(--accent);
+                text-transform: uppercase;
+                font-size: 12px;
+                letter-spacing: 1px;
+            }
+
+            .coach-card p {
+                margin: 0;
+                color: #d9d4cb;
+                line-height: 1.6;
+            }
+
+            .coach-card .coach-gallery {
+                margin-top: auto;
+            }
+
+                .coach-card .coach-gallery .coach-photo {
+                    display: block;
+                    width: 100%;
+                    border-radius: 14px;
+                    box-shadow: 0 10px 24px rgba(0,0,0,.45);
+                    object-fit: cover;
+                    aspect-ratio: 4 / 5;
+                    background: rgba(12,12,16,.85);
+                }
+
+        .coach-card.mentor {
+            background: rgba(60,60,68,.45);
+            border-color: rgba(255,255,255,.05);
+            color: #bebebe;
+        }
+
+            .coach-card.mentor .role {
+                color: var(--muted);
+            }
+
+            .coach-card.mentor p {
+                color: #c9c9c9;
+            }
+
+            .coach-card.mentor .coach-gallery .coach-photo {
+                filter: grayscale(.6);
+                opacity: .85;
+            }
+
+        @media (max-width: 1020px) {
+            .coach-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
         .footer {
             color: #9a9791;
             font-size: 14px;
@@ -179,6 +319,17 @@
         }
 
         @media (max-width: 880px) {
+            .masthead {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .masthead-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
             .grid {
                 grid-template-columns: 1fr;
             }
@@ -194,10 +345,38 @@
                 padding: 24px;
             }
 
+            nav {
+                display: none;
+            }
+
             .hero {
                 margin: 0;
                 border-radius: 0;
                 padding: 48px 24px;
+            }
+
+            .coaches {
+                border-radius: 0;
+                padding: 40px 24px 48px;
+                margin: 48px -24px 0;
+            }
+
+            .coach-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .coach-card .coach-gallery {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+                .coach-card .coach-gallery .coach-photo {
+                    width: calc(50% - 6px);
+                    min-width: 140px;
+                }
+
+            .mic-sprinkle {
+                justify-content: center;
             }
 
             .sticky .wrap {
@@ -233,7 +412,12 @@
     <div class="container">
         <header class="masthead" aria-label="Site header">
             <div class="logo" aria-label="Endless Vocals">ENDLESS <span style="opacity:.7;font-weight:600">vocals</span></div>
-            <div class="badge">Two‑Month Bootcamps • Free Discord</div>
+            <div class="masthead-right">
+                <nav aria-label="Site navigation">
+                    <a href="#coaches">Meet the Coaches</a>
+                </nav>
+                <div class="badge">Two‑Month Bootcamps • Free Discord</div>
+            </div>
         </header>
 
         <section class="hero" aria-labelledby="h1">
@@ -281,6 +465,52 @@
                     <li style="margin:8px 0">Follow the weekly checklist. Short, repeatable sessions beat long, rare ones.</li>
                 </ol>
             </section>
+
+            <div class="mic-sprinkle" aria-hidden="true">
+                <img src="images/mics/mic-gold.png" alt="" loading="lazy">
+                <img src="images/mics/mic-purple.png" alt="" loading="lazy">
+                <img src="images/mics/mic-turqoise.png" alt="" loading="lazy">
+                <img src="images/mics/pink-mic.png" alt="" loading="lazy">
+            </div>
+        </section>
+
+        <section id="coaches" class="coaches" aria-labelledby="coaches-title">
+            <h2 id="coaches-title">Meet the Coaches</h2>
+            <p class="lead">The Endless Vocals team blends decades of stage experience, technical mastery, and songwriting craft to help you grow as a vocalist and artist. Get to know the coaches guiding each session and the mentor who set the foundations.</p>
+
+            <div class="mic-sprinkle" aria-hidden="true">
+                <img src="images/mics/mic-purple.png" alt="" loading="lazy">
+                <img src="images/mics/mic-gold.png" alt="" loading="lazy">
+                <img src="images/mics/pink-mic.png" alt="" loading="lazy">
+                <img src="images/mics/mic-turqoise.png" alt="" loading="lazy">
+            </div>
+
+            <div class="coach-grid">
+                <article class="coach-card" aria-labelledby="coach-ryan">
+                    <span class="role">Head Coach &amp; Founder</span>
+                    <h3 id="coach-ryan">Ryan Wall</h3>
+                    <p>Ryan Wall is a singer, songwriter, and long-time vocal coach who spent a decade teaching alongside Jaime Vendera as Chief Coach of the Vendera Vocal Academy. With over 20 years of songwriting experience and multiple albums to his name, Ryan brings a deep creative perspective to his teaching. Through Endless Vocals, he not only helps singers strengthen and protect their voices but also guides them in the art of writing and producing original music—skills he shares directly with members of the Discord community. His coaching blends technical precision, stage experience, and creative mentorship to help every vocalist find their unique voice and message.</p>
+                    <div class="coach-gallery">
+                        <img class="coach-photo" src="images/coaches/ryan-wall.png" alt="Photo of Ryan Wall" loading="lazy">
+                    </div>
+                </article>
+                <article class="coach-card" aria-labelledby="coach-tiago">
+                    <span class="role">Coach &amp; Artist</span>
+                    <h3 id="coach-tiago">Tiago Costa</h3>
+                    <p>Tiago Costa is a dynamic vocalist, guitarist, and multi-instrumentalist known for his work with Firemage and Xeque Mate. His background spans rock, metal, and folk metal, giving him a broad stylistic reach and deep stage experience. Within Endless Vocals, Tiago focuses on expression, authenticity, and turning raw technique into art. His guitar and musicianship training will also play a role in future bootcamps, connecting vocal control with instrumental understanding. Tiago’s goal is to help singers develop tone, emotion, and confidence—on stage, in the studio, and in themselves.</p>
+                    <div class="coach-gallery">
+                        <img class="coach-photo" src="images/coaches/tiago-costa.png" alt="Photo of Tiago Costa" loading="lazy">
+                    </div>
+                </article>
+                <article class="coach-card mentor" aria-labelledby="coach-jaime">
+                    <span class="role">Mentor &amp; Originator of the ISO Method</span>
+                    <h3 id="coach-jaime">Jaime Vendera</h3>
+                    <p>Jaime Vendera is an internationally recognized vocal coach, author of Raise Your Voice, and creator of the ISO Method. He has trained countless singers and professionals around the world, known for his legendary glass-shattering demonstrations and focus on vocal health. Though VVA has come to a close, Jaime continues to inspire and mentor Ryan and Tiago, giving Endless Vocals his full blessing to carry the ISO legacy forward. While Jaime isn't directly involved in Endless Vocals, his website is worth mentioning as it's a bastion for singers. <a href="https://www.jaimevendera.com" target="_blank" rel="noopener">www.jaimevendera.com</a></p>
+                    <div class="coach-gallery">
+                        <img class="coach-photo" src="images/coaches/jaime-vendera.png" alt="Photo of Jaime Vendera" loading="lazy">
+                    </div>
+                </article>
+            </div>
         </section>
 
         <footer class="footer" aria-label="Site footer">
