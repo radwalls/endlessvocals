@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" role="img" aria-labelledby="title desc">
+  <title id="title">Stylized portrait placeholder for Ryan Wall</title>
+  <desc id="desc">Geometric illustration representing vocal coach Ryan Wall.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b2233" />
+      <stop offset="100%" stop-color="#101520" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#23d3cf" />
+      <stop offset="100%" stop-color="#128480" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="420" rx="32" fill="url(#bg)" />
+  <circle cx="300" cy="170" r="96" fill="#233147" />
+  <ellipse cx="300" cy="165" rx="74" ry="78" fill="#2f415f" />
+  <path d="M220 280c22-36 70-58 80-58s58 22 80 58v72H220z" fill="#162130" />
+  <path d="M180 340c30-44 82-70 120-70s90 26 120 70v40H180z" fill="url(#accent)" opacity="0.7" />
+  <text x="300" y="380" text-anchor="middle" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="36" fill="#f5f2ed" font-weight="700">Ryan Wall</text>
+</svg>

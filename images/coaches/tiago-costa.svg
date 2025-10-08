@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" role="img" aria-labelledby="title desc">
+  <title id="title">Stylized portrait placeholder for Tiago Costa</title>
+  <desc id="desc">Geometric illustration representing vocal coach and artist Tiago Costa.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a163a" />
+      <stop offset="100%" stop-color="#140d22" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f08dbb" />
+      <stop offset="100%" stop-color="#c25f94" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="420" rx="32" fill="url(#bg)" />
+  <circle cx="220" cy="180" r="88" fill="#351e4f" />
+  <circle cx="360" cy="180" r="88" fill="#3f255d" />
+  <rect x="180" y="248" width="240" height="132" rx="60" fill="url(#accent)" opacity="0.85" />
+  <path d="M160 340l120-72 160 72-40 40H200z" fill="#8d4b8f" opacity="0.5" />
+  <text x="300" y="380" text-anchor="middle" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="36" fill="#f5f2ed" font-weight="700">Tiago Costa</text>
+</svg>
