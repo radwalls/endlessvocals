@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" role="img" aria-labelledby="title desc">
+  <title id="title">Stylized portrait placeholder for Jaime Vendera</title>
+  <desc id="desc">Geometric illustration representing mentor Jaime Vendera.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d1f24" />
+      <stop offset="100%" stop-color="#121318" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b6b2aa" />
+      <stop offset="100%" stop-color="#6f6b66" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="420" rx="32" fill="url(#bg)" />
+  <circle cx="300" cy="170" r="92" fill="#2a2c33" />
+  <rect x="210" y="260" width="180" height="110" rx="48" fill="#3a3d44" opacity="0.7" />
+  <path d="M170 340c26-44 90-82 130-82s104 38 130 82l-30 40H200z" fill="url(#accent)" opacity="0.45" />
+  <text x="300" y="372" text-anchor="middle" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="34" fill="#d8d5cf" font-weight="600">Jaime Vendera</text>
+  <text x="300" y="406" text-anchor="middle" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="18" fill="#a3a19b" letter-spacing="4">ISO MENTOR</text>
+</svg>
