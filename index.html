@@ -10,12 +10,47 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
+            color-scheme: light;
+            --bg: #f6f9ff;
+            --fg: #0c182b;
+            --muted: #50627a;
+            --surface: rgba(255, 255, 255, 0.94);
+            --surface-strong: #ffffff;
+            --surface-border: rgba(37, 74, 140, 0.18);
+            --surface-soft: rgba(246, 249, 255, 0.9);
+            --accent: #1f5cff;
+            --accent-2: #ff7a1a;
+            --accent-3: #0f2c7a;
+            --accent-alt: #5f89ff;
+            --accent-2-alt: #ffd08f;
+            --shadow: rgba(15, 51, 120, 0.12);
+            --hero-bg: radial-gradient(1200px 600px at 10% -10%, rgba(31,92,255,.18), transparent 60%), radial-gradient(900px 600px at 100% 0%, rgba(255,122,26,.15), transparent 60%), linear-gradient(135deg, #fdfcff, #f0f5ff 60%, #f9fbff 100%);
+            --coaches-bg: linear-gradient(135deg, rgba(31,92,255,.08), rgba(15,44,122,.18));
+            --list-item-bg: rgba(255,255,255,0.82);
+            --note: #42526a;
+            --focus-outline: rgba(31,92,255,.28);
+        }
+
+        body[data-theme="dark"] {
+            color-scheme: dark;
             --bg: #0b0b0c;
             --fg: #f5f2ed;
             --muted: #bdb9b2;
+            --surface: rgba(12, 12, 16, 0.92);
+            --surface-strong: #121217;
+            --surface-border: #26262f;
+            --surface-soft: rgba(20, 20, 27, 0.9);
             --accent: #16a6a3;
             --accent-2: #f08dbb;
             --accent-3: #2c1e4a;
+            --accent-alt: #1bc7c3;
+            --accent-2-alt: #ffb0cf;
+            --shadow: rgba(0, 0, 0, 0.35);
+            --hero-bg: radial-gradient(1200px 600px at 10% -10%, rgba(22,166,163,.4), transparent 60%), radial-gradient(800px 500px at 100% 0%, rgba(240,141,187,.28), transparent 60%), linear-gradient(135deg, #191a1d, #0d0d12 60%, #15121c 100%);
+            --coaches-bg: linear-gradient(135deg, rgba(22,166,163,.12), rgba(44,30,74,.25));
+            --list-item-bg: #14141b;
+            --note: #bdb9b2;
+            --focus-outline: rgba(255,255,255,.2);
         }
 
         * {
@@ -29,6 +64,7 @@
             color: var(--fg);
             font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
             scroll-behavior: smooth;
+            transition: background .3s ease, color .3s ease;
         }
 
         a {
@@ -47,8 +83,8 @@
             overflow: hidden;
             border-radius: 24px;
             padding: 60px 24px;
-            background: radial-gradient(1200px 600px at 10% -10%, rgba(22,166,163,.4), transparent 60%), radial-gradient(800px 500px at 100% 0%, rgba(240,141,187,.28), transparent 60%), linear-gradient(135deg, #191a1d, #0d0d12 60%, #15121c 100%);
-            box-shadow: 0 20px 60px rgba(0,0,0,.35);
+            background: var(--hero-bg);
+            box-shadow: 0 20px 60px var(--shadow);
         }
 
         .masthead {
@@ -86,18 +122,52 @@
                 border-radius: 999px;
                 border: 1px solid transparent;
                 color: var(--muted);
-                transition: border .2s ease, color .2s ease;
+                transition: border .2s ease, color .2s ease, background .2s ease;
             }
 
             nav a:hover,
             nav a:focus {
                 color: var(--fg);
-                border-color: rgba(255,255,255,.12);
+                background: var(--surface-soft);
+                border-color: var(--surface-border);
             }
 
-        .badge {
+        .mode-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 999px;
+            border: 1px solid var(--surface-border);
+            background: var(--surface);
+            color: var(--muted);
+            padding: 10px 16px;
             font-size: 14px;
-            color: var(--muted)
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s ease, color .2s ease, border .2s ease, box-shadow .2s ease;
+            box-shadow: 0 10px 20px var(--shadow);
+        }
+
+            .mode-toggle span {
+                display: inline-flex;
+                align-items: center;
+            }
+
+        #theme-toggle-icon {
+            font-size: 16px;
+        }
+
+        #theme-toggle-text {
+            font-size: 14px;
+        }
+
+        .mode-toggle:hover,
+        .mode-toggle:focus {
+            outline: none;
+            color: var(--fg);
+            background: var(--surface-strong);
+            border-color: rgba(31,92,255,.35);
+            box-shadow: 0 14px 28px var(--shadow);
         }
 
         .title {
@@ -129,21 +199,21 @@
             padding: 16px 22px;
             font-weight: 700;
             letter-spacing: .3px;
-            box-shadow: 0 6px 18px rgba(0,0,0,.35)
+            box-shadow: 0 6px 18px var(--shadow)
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--accent), #1bc7c3);
+            background: linear-gradient(135deg, var(--accent), var(--accent-alt));
             color: #041313
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, var(--accent-2), #ffb0cf);
+            background: linear-gradient(135deg, var(--accent-2), var(--accent-2-alt));
             color: #2d0f20
         }
 
         .btn:focus {
-            outline: 3px solid rgba(255,255,255,.2);
+            outline: 3px solid var(--focus-outline);
             outline-offset: 2px
         }
 
@@ -155,8 +225,8 @@
         }
 
         .card {
-            background: #121217;
-            border: 1px solid #26262f;
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
             border-radius: 18px;
             padding: 22px
         }
@@ -167,9 +237,61 @@
 
         .divider {
             height: 1px;
-            background: #22242a;
+            background: var(--surface-border);
             margin: 40px 0
         }
+
+        .video-section {
+            margin: 64px 0 32px;
+        }
+
+        .video-card {
+            display: grid;
+            gap: 18px;
+        }
+
+            .video-card h2 {
+                margin: 0;
+                font-size: clamp(28px, 3.6vw, 44px);
+            }
+
+            .video-card p {
+                margin: 0;
+                color: var(--muted);
+                max-width: 65ch;
+            }
+
+        .video-fallback {
+            margin: 12px 0 0;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+            .video-fallback a {
+                font-weight: 600;
+                color: var(--accent);
+            }
+
+            body[data-theme="dark"] .video-fallback a {
+                color: var(--accent-alt);
+            }
+
+        .video-frame {
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 16px 36px var(--shadow);
+            border: 1px solid var(--surface-border);
+        }
+
+            .video-frame iframe {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                border: 0;
+            }
 
         .mic-sprinkle {
             display: flex;
@@ -187,10 +309,10 @@
 
         .coaches {
             margin-top: 72px;
-            background: linear-gradient(135deg, rgba(22,166,163,.12), rgba(44,30,74,.25));
+            background: var(--coaches-bg);
             border-radius: 24px;
             padding: 48px 36px 56px;
-            box-shadow: 0 18px 48px rgba(0,0,0,.35);
+            box-shadow: 0 18px 48px var(--shadow);
         }
 
             .coaches h2 {
@@ -212,8 +334,8 @@
         }
 
         .coach-card {
-            background: rgba(12,12,16,.8);
-            border: 1px solid rgba(255,255,255,.08);
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
             border-radius: 18px;
             padding: 24px;
             display: flex;
@@ -237,7 +359,7 @@
 
             .coach-card p {
                 margin: 0;
-                color: #d9d4cb;
+                color: var(--fg);
                 line-height: 1.6;
             }
 
@@ -249,16 +371,16 @@
                     display: block;
                     width: 100%;
                     border-radius: 14px;
-                    box-shadow: 0 10px 24px rgba(0,0,0,.45);
+                    box-shadow: 0 10px 24px var(--shadow);
                     object-fit: cover;
                     aspect-ratio: 4 / 5;
-                    background: rgba(12,12,16,.85);
+                    background: var(--surface-strong);
                 }
 
         .coach-card.mentor {
-            background: rgba(60,60,68,.45);
-            border-color: rgba(255,255,255,.05);
-            color: #bebebe;
+            background: var(--surface-soft);
+            border-color: var(--surface-border);
+            color: var(--muted);
         }
 
             .coach-card.mentor .role {
@@ -266,7 +388,7 @@
             }
 
             .coach-card.mentor p {
-                color: #c9c9c9;
+                color: var(--fg);
             }
 
             .coach-card.mentor .coach-gallery .coach-photo {
@@ -281,7 +403,7 @@
         }
 
         .footer {
-            color: #9a9791;
+            color: var(--muted);
             font-size: 14px;
             text-align: center;
             margin: 32px 0
@@ -290,9 +412,9 @@
         .pill {
             display: inline-block;
             padding: 6px 10px;
-            border: 1px solid #2c2c33;
+            border: 1px solid var(--surface-border);
             border-radius: 999px;
-            color: #bdb9b2;
+            color: var(--muted);
             font-size: 12px;
             margin-right: 8px
         }
@@ -305,17 +427,17 @@
         }
 
             .list .item {
-                background: #14141b;
-                border: 1px solid #262631;
+                background: var(--list-item-bg);
+                border: 1px solid var(--surface-border);
                 border-radius: 12px;
                 padding: 12px;
                 font-size: 14px;
-                color: #cbc7c0
+                color: var(--fg)
             }
 
         .note {
             font-size: 13px;
-            color: #bdb9b2
+            color: var(--note)
         }
 
         @media (max-width: 880px) {
@@ -389,9 +511,10 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(180deg, rgba(10,10,12,.0), rgba(10,10,12,.8) 30%, rgba(10,10,12,.95));
+            background: linear-gradient(180deg, rgba(246,249,255,.0), rgba(246,249,255,.9) 30%, rgba(246,249,255,.98));
             padding: 12px 16px;
             backdrop-filter: blur(6px);
+            box-shadow: 0 -12px 24px var(--shadow);
         }
 
             .sticky .wrap {
@@ -406,9 +529,13 @@
                 display: none
             }
         }
+
+        body[data-theme="dark"] .sticky {
+            background: linear-gradient(180deg, rgba(10,10,12,.0), rgba(10,10,12,.8) 30%, rgba(10,10,12,.95));
+        }
     </style>
 </head>
-<body>
+<body data-theme="light">
     <div class="container">
         <header class="masthead" aria-label="Site header">
             <div class="logo" aria-label="Endless Vocals">ENDLESS <span style="opacity:.7;font-weight:600">vocals</span></div>
@@ -416,7 +543,10 @@
                 <nav aria-label="Site navigation">
                     <a href="#coaches">Meet the Coaches</a>
                 </nav>
-                <div class="badge">Two‑Month Bootcamps • Free Discord</div>
+                <button id="theme-toggle" class="mode-toggle" type="button" aria-label="Switch to dark mode">
+                    <span id="theme-toggle-icon" aria-hidden="true">🌞</span>
+                    <span id="theme-toggle-text">Light Mode</span>
+                </button>
             </div>
         </header>
 
@@ -435,13 +565,14 @@
             <div class="grid" style="margin-top:32px">
                 <div class="card" aria-labelledby="whatis">
                     <h3 id="whatis">What is Endless Vocals?</h3>
-                    <p>It’s a modern, no‑hype training space for singers. We keep what works, focus on repeatable habits, and measure progress by what you can feel and perform—on stage and in the studio.</p>
+                    <p>It’s a modern training space for singers who want to get straight to the point about improving their singing skill. We keep what works, focus on repeatable habits, and measure progress by what you can feel and perform—on stage and in the studio.</p>
                     <div class="list" aria-label="Highlights">
                         <div class="item">Two‑Month Bootcamps with Ryan or Tiago</div>
                         <div class="item">Live sessions + replays you can follow</div>
                         <div class="item">Free Discord for clips, feedback, and community</div>
                     </div>
-                    <p class="note" style="margin-top:10px">Start in November. Join now to get the prep checklist before the first session.</p>
+                    <p class="note" style="margin-top:10px">First bootcamp starts in December and will be hosted by Coach Ryan. Join now to get the prep checklist before the first session. After Ryan's bootcamp, it will be Coach Tiago's class for 2 months, and the cycle repeats. Stay in the school for consistent vocal training!</p>
+                    <p class="note" style="margin-top:8px">You’ll also learn how to create your own songs from scratch, learn to use a DAW for recording because it's a critical part of becoming a singer, and tackle lyric writing.</p>
                 </div>
                 <div class="card" aria-labelledby="about">
                     <h3 id="about">Why a new school?</h3>
@@ -474,6 +605,24 @@
             </div>
         </section>
 
+        <section class="video-section" aria-labelledby="video-title">
+            <div class="card video-card">
+                <h2 id="video-title">Inside Endless Vocals</h2>
+                <p>Take a look at how we run bootcamps, build vocal habits, and support each other inside the community. Hear
+                    directly from Coach Ryan about how the program unfolds.</p>
+                <div class="video-frame">
+                    <iframe src="https://www.youtube-nocookie.com/embed/s8jAgy2f_5M?rel=0" title="Inside Endless Vocals"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <p class="video-fallback" role="note">
+                    Having trouble with the embedded player? <a href="https://www.youtube.com/watch?v=s8jAgy2f_5M"
+                        target="_blank" rel="noopener noreferrer">Watch the video on YouTube</a> instead.
+                </p>
+            </div>
+        </section>
+
         <section id="coaches" class="coaches" aria-labelledby="coaches-title">
             <h2 id="coaches-title">Meet the Coaches</h2>
             <p class="lead">The Endless Vocals team blends decades of stage experience, technical mastery, and songwriting craft to help you grow as a vocalist and artist. Get to know the coaches guiding each session and the mentor who set the foundations.</p>
@@ -489,7 +638,7 @@
                 <article class="coach-card" aria-labelledby="coach-ryan">
                     <span class="role">Head Coach &amp; Founder</span>
                     <h3 id="coach-ryan">Ryan Wall</h3>
-                    <p>Ryan Wall is a singer, songwriter, and long-time vocal coach who spent a decade teaching alongside Jaime Vendera as Chief Coach of the Vendera Vocal Academy. With over 20 years of songwriting experience and multiple albums to his name, Ryan brings a deep creative perspective to his teaching. Through Endless Vocals, he not only helps singers strengthen and protect their voices but also guides them in the art of writing and producing original music—skills he shares directly with members of the Discord community. His coaching blends technical precision, stage experience, and creative mentorship to help every vocalist find their unique voice and message.</p>
+                    <p>Ryan Wall is a singer, songwriter, and long-time vocal coach who spent a decade teaching alongside Jaime Vendera as his right hand coach of the Vendera Vocal Academy. With over 20 years of songwriting experience and multiple albums to his name, Ryan brings a deep creative perspective to his teaching. Through Endless Vocals, he not only helps singers strengthen and protect their voices but also guides them in the art of writing and producing original music—skills he shares directly with members of the Discord community. His coaching blends technical precision, stage experience, and creative mentorship to help every vocalist find their unique voice and message.</p>
                     <div class="coach-gallery">
                         <img class="coach-photo" src="images/coaches/ryan-wall.png" alt="Photo of Ryan Wall" loading="lazy">
                     </div>
@@ -497,7 +646,7 @@
                 <article class="coach-card" aria-labelledby="coach-tiago">
                     <span class="role">Coach &amp; Artist</span>
                     <h3 id="coach-tiago">Tiago Costa</h3>
-                    <p>Tiago Costa is a dynamic vocalist, guitarist, and multi-instrumentalist known for his work with Firemage and Xeque Mate. His background spans rock, metal, and folk metal, giving him a broad stylistic reach and deep stage experience. Within Endless Vocals, Tiago focuses on expression, authenticity, and turning raw technique into art. His guitar and musicianship training will also play a role in future bootcamps, connecting vocal control with instrumental understanding. Tiago’s goal is to help singers develop tone, emotion, and confidence—on stage, in the studio, and in themselves.</p>
+                    <p>Tiago Costa is a dynamic vocalist, guitarist, and multi-instrumentalist known for his work with Firemage and Xeque Mate. Tiago was also a primary coach at VVA whose clinics and hangouts were valuable resources. His background spans rock, metal, and folk metal, giving him a broad stylistic reach and deep stage experience. Within Endless Vocals, Tiago focuses on expression, authenticity, and turning raw technique into art. His guitar and musicianship training will also play a role in future bootcamps, connecting vocal control with instrumental understanding. Tiago’s goal is to help singers develop tone, emotion, and confidence—on stage, in the studio, and in themselves.</p>
                     <div class="coach-gallery">
                         <img class="coach-photo" src="images/coaches/tiago-costa.png" alt="Photo of Tiago Costa" loading="lazy">
                     </div>
@@ -527,7 +676,55 @@
     </div>
 
     <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const body = document.body;
+    const yearEl = document.getElementById('year');
+    if (yearEl) {
+        yearEl.textContent = new Date().getFullYear();
+    }
+
+    const themeToggle = document.getElementById('theme-toggle');
+    const iconEl = document.getElementById('theme-toggle-icon');
+    const textEl = document.getElementById('theme-toggle-text');
+
+    let savedTheme = null;
+    try {
+        savedTheme = localStorage.getItem('ev-theme');
+    } catch (err) {
+        savedTheme = null;
+    }
+
+    const initialTheme = savedTheme || 'light';
+    applyTheme(initialTheme);
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const nextTheme = body.dataset.theme === 'dark' ? 'light' : 'dark';
+            applyTheme(nextTheme);
+        });
+    }
+
+    function applyTheme(theme) {
+        body.dataset.theme = theme;
+        try {
+            localStorage.setItem('ev-theme', theme);
+        } catch (err) {
+            // localStorage might be unavailable; fail silently
+        }
+        updateToggle(theme);
+    }
+
+    function updateToggle(theme) {
+        if (!themeToggle || !iconEl || !textEl) return;
+        if (theme === 'dark') {
+            iconEl.textContent = '🌙';
+            textEl.textContent = 'Dark Mode';
+            themeToggle.setAttribute('aria-label', 'Switch to light mode');
+        } else {
+            iconEl.textContent = '🌞';
+            textEl.textContent = 'Light Mode';
+            themeToggle.setAttribute('aria-label', 'Switch to dark mode');
+        }
+    }
     </script>
 </body>
 </html>
