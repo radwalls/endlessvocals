@@ -253,7 +253,7 @@
         }
 
         .video-section {
-            margin: 64px 0 32px;
+            margin: 28px 0 32px;
         }
 
         .video-card {
@@ -430,6 +430,15 @@
             margin: 32px 0
         }
 
+        .back-to-top {
+            text-align: center;
+            margin: 12px 0 32px;
+        }
+
+            .back-to-top .btn {
+                min-width: 180px;
+            }
+
         .pill {
             display: inline-block;
             padding: 6px 10px;
@@ -589,7 +598,7 @@
         }
     </style>
 </head>
-<body data-theme="light">
+<body id="top" data-theme="light">
     <div class="container">
         <header class="masthead" aria-label="Site header">
             <div class="logo" aria-label="Endless Vocals">ENDLESS <span style="opacity:.7;font-weight:600">vocals</span></div>
@@ -616,6 +625,23 @@
                     <span>Join the Discord (Free)</span>
                 </a>
             </div>
+
+            <section class="video-section" aria-labelledby="video-title">
+                <div class="card video-card">
+                    <h2 id="video-title">Inside Endless Vocals</h2>
+                    <p>Take a look at how we run bootcamps, build vocal habits, and support each other inside the community. Hear
+                        directly from Coach Ryan about how the program unfolds.</p>
+                    <div class="video-frame">
+                        <iframe id="bootcamp-video" src="https://www.youtube-nocookie.com/embed/B0QLk8mLWQE?rel=0"
+                            title="Inside Endless Vocals" loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <a class="video-watch" href="https://www.youtube.com/watch?v=B0QLk8mLWQE" target="_blank" rel="noopener">
+                        Watch it on YouTube
+                    </a>
+                </div>
+            </section>
 
             <div class="grid" style="margin-top:32px">
                 <div class="card" aria-labelledby="whatis">
@@ -660,23 +686,6 @@
             </div>
         </section>
 
-        <section class="video-section" aria-labelledby="video-title">
-            <div class="card video-card">
-                <h2 id="video-title">Inside Endless Vocals</h2>
-                <p>Take a look at how we run bootcamps, build vocal habits, and support each other inside the community. Hear
-                    directly from Coach Ryan about how the program unfolds.</p>
-                <div class="video-frame">
-                    <iframe id="bootcamp-video" src="https://www.youtube-nocookie.com/embed/B0QLk8mLWQE?rel=0"
-                        title="Inside Endless Vocals" loading="lazy"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                </div>
-                <a class="video-watch" href="https://www.youtube.com/watch?v=B0QLk8mLWQE" target="_blank" rel="noopener">
-                    Watch it on YouTube
-                </a>
-            </div>
-        </section>
-
         <section id="coaches" class="coaches" aria-labelledby="coaches-title">
             <h2 id="coaches-title">Meet the Coaches</h2>
             <p class="lead">The Endless Vocals team blends decades of stage experience, technical mastery, and songwriting craft to help you grow as a vocalist and artist. Get to know the coaches guiding each session and the mentor who set the foundations.</p>
@@ -715,6 +724,10 @@
                 </article>
             </div>
         </section>
+
+        <div class="back-to-top">
+            <a class="btn btn-primary" href="#top" aria-label="Back to the top of the page">Back to the top</a>
+        </div>
 
         <footer class="footer" aria-label="Site footer">
             © <span id="year"></span> Endless Vocals. All rights reserved.
