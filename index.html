@@ -253,7 +253,7 @@
         }
 
         .video-section {
-            margin: 64px 0 32px;
+            margin: 28px 0 32px;
         }
 
         .video-card {
@@ -430,6 +430,29 @@
             margin: 32px 0
         }
 
+        .back-to-top {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 18px;
+            margin: -8px 0 24px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-alt));
+            color: #041313;
+            font-weight: 700;
+            letter-spacing: .3px;
+            box-shadow: 0 12px 28px var(--shadow);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .back-to-top:hover,
+        .back-to-top:focus {
+            outline: none;
+            transform: translateY(-1px);
+            box-shadow: 0 18px 36px var(--shadow);
+        }
+
         .pill {
             display: inline-block;
             padding: 6px 10px;
@@ -589,7 +612,7 @@
         }
     </style>
 </head>
-<body data-theme="light">
+<body data-theme="light" id="top">
     <div class="container">
         <header class="masthead" aria-label="Site header">
             <div class="logo" aria-label="Endless Vocals">ENDLESS <span style="opacity:.7;font-weight:600">vocals</span></div>
@@ -616,6 +639,23 @@
                     <span>Join the Discord (Free)</span>
                 </a>
             </div>
+
+            <section class="video-section" aria-labelledby="video-title">
+                <div class="card video-card">
+                    <h2 id="video-title">Inside Endless Vocals</h2>
+                    <p>Take a look at how we run bootcamps, build vocal habits, and support each other inside the community. Hear
+                        directly from Coach Ryan about how the program unfolds.</p>
+                    <div class="video-frame">
+                        <iframe id="bootcamp-video" src="https://www.youtube-nocookie.com/embed/B0QLk8mLWQE?rel=0"
+                            title="Inside Endless Vocals" loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <a class="video-watch" href="https://www.youtube.com/watch?v=B0QLk8mLWQE" target="_blank" rel="noopener">
+                        Watch it on YouTube
+                    </a>
+                </div>
+            </section>
 
             <div class="grid" style="margin-top:32px">
                 <div class="card" aria-labelledby="whatis">
@@ -657,23 +697,6 @@
                 <img src="images/mics/mic-purple.png" alt="" loading="lazy">
                 <img src="images/mics/mic-turqoise.png" alt="" loading="lazy">
                 <img src="images/mics/pink-mic.png" alt="" loading="lazy">
-            </div>
-        </section>
-
-        <section class="video-section" aria-labelledby="video-title">
-            <div class="card video-card">
-                <h2 id="video-title">Inside Endless Vocals</h2>
-                <p>Take a look at how we run bootcamps, build vocal habits, and support each other inside the community. Hear
-                    directly from Coach Ryan about how the program unfolds.</p>
-                <div class="video-frame">
-                    <iframe id="bootcamp-video" src="https://www.youtube-nocookie.com/embed/B0QLk8mLWQE?rel=0"
-                        title="Inside Endless Vocals" loading="lazy"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                </div>
-                <a class="video-watch" href="https://www.youtube.com/watch?v=B0QLk8mLWQE" target="_blank" rel="noopener">
-                    Watch it on YouTube
-                </a>
             </div>
         </section>
 
@@ -719,6 +742,13 @@
         <footer class="footer" aria-label="Site footer">
             © <span id="year"></span> Endless Vocals. All rights reserved.
         </footer>
+
+        <div style="text-align:center;">
+            <a class="back-to-top" href="#top" aria-label="Back to top">
+                <span aria-hidden="true">↑</span>
+                <span>Back to top</span>
+            </a>
+        </div>
     </div>
 
     <!-- Sticky mobile CTA -->
