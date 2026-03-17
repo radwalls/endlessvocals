@@ -514,8 +514,30 @@
                 padding: 24px;
             }
 
+            .masthead-right {
+                width: 100%;
+                justify-content: flex-end;
+                gap: 10px;
+                flex-wrap: nowrap;
+            }
+
             nav {
-                display: none;
+                display: flex;
+                gap: 8px;
+                align-items: center;
+            }
+
+            nav a {
+                padding: 10px 12px;
+                font-size: 13px;
+                background: var(--surface);
+                border-color: var(--surface-border);
+                color: var(--fg);
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                white-space: nowrap;
+                text-align: center;
             }
 
             .hero {
@@ -553,7 +575,7 @@
             }
 
             .video-section {
-                padding: 0 24px;
+                padding: 0;
             }
 
             .list {
@@ -561,11 +583,18 @@
             }
 
             .video-card {
+                width: 100%;
+                max-width: none;
                 text-align: center;
+                border-radius: 0;
             }
 
             .video-card p {
                 margin: 0 auto;
+            }
+
+            .video-frame {
+                border-radius: 0;
             }
         }
         /* Sticky mobile footer CTA */
@@ -605,7 +634,8 @@
             <div class="masthead-right">
                 <nav aria-label="Site navigation">
                     <a href="faq.html">FAQ</a>
-                    <a href="#coaches">Meet the Coaches</a>
+                    <a href="#coaches">Coaches</a>
+                    <a href="shop.html">Shop</a>
                 </nav>
                 <button id="theme-toggle" class="mode-toggle" type="button" aria-label="Switch to dark mode">
                     <span id="theme-toggle-icon" aria-hidden="true">🌞</span>
@@ -652,7 +682,7 @@
                         <div class="item">Live sessions + replays you can follow</div>
                         <div class="item">Free Discord for clips, feedback, and community</div>
                     </div>
-                    <p class="note" style="margin-top:10px">First bootcamp starts in December and will be hosted by Coach Ryan. Join now to get the prep checklist before the first session. After Ryan's bootcamp, it will be Coach Tiago's class for 2 months, and the cycle repeats. Stay in the school for consistent vocal training!</p>
+                    <p class="note" style="margin-top:10px">The bootcamp has begun, but you can still join mid-bootcamp. Join ASAP to get the most out of Ryan's bootcamp taking place from Dec 1st to January 31st. After Ryan's bootcamp, it will be Coach Tiago's class for 2 months, and the cycle repeats. Stay in the school for consistent vocal training!</p>
                     <p class="note" style="margin-top:8px">You’ll also learn how to create your own songs from scratch, learn to use a DAW for recording because it's a critical part of becoming a singer, and tackle lyric writing.</p>
                 </div>
                 <div class="card" aria-labelledby="about">

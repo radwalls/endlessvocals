@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Endless Vocals — Shop</title>
+    <meta name="description" content="Shop Endless Vocals training products and membership access." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+    <style>
+        :root {
+            --bg: #f6f9ff;
+            --fg: #0c182b;
+            --muted: #50627a;
+            --surface: #ffffff;
+            --surface-border: rgba(37, 74, 140, 0.18);
+            --surface-soft: rgba(246, 249, 255, 0.9);
+            --accent: #1f5cff;
+            --shadow: rgba(15, 51, 120, 0.12);
+            --hero-bg: radial-gradient(1200px 600px at 10% -10%, rgba(31,92,255,.18), transparent 60%), radial-gradient(900px 600px at 100% 0%, rgba(255,122,26,.15), transparent 60%), linear-gradient(135deg, #fdfcff, #f0f5ff 60%, #f9fbff 100%);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--fg);
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 28px 20px 72px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .logo { font-weight: 800; letter-spacing: 2px; font-size: 24px; }
+
+        nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--surface-border);
+            background: var(--surface-soft);
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        nav a[aria-current="page"] { color: var(--fg); }
+
+        .hero {
+            background: var(--hero-bg);
+            border-radius: 24px;
+            padding: 36px 24px;
+            box-shadow: 0 18px 44px var(--shadow);
+            margin-bottom: 28px;
+        }
+
+        .hero h1 { margin: 0 0 10px; font-size: clamp(34px, 6vw, 50px); }
+        .hero p { margin: 0; color: var(--muted); max-width: 70ch; line-height: 1.6; }
+
+        .shop-grid {
+            display: grid;
+            gap: 18px;
+        }
+
+        .product {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 14px 28px var(--shadow);
+        }
+
+        .product h2 { margin: 0 0 8px; font-size: 24px; }
+        .price { font-weight: 800; color: var(--accent); margin-bottom: 10px; }
+        .product p { margin: 0 0 14px; line-height: 1.6; color: var(--muted); }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .links a {
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--surface-border);
+            background: var(--surface-soft);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">ENDLESS <span style="opacity:.7;font-weight:600">vocals</span></div>
+            <nav aria-label="Site navigation">
+                <a href="index.html">Home</a>
+                <a href="faq.html">FAQ</a>
+                <a href="index.html#coaches">Coaches</a>
+                <a href="shop.html" aria-current="page">Shop</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1>SHOP</h1>
+            <p>Three ways to train with Endless Vocals right now: two focused products and full monthly membership. The next bootcamp is starting soon, so jump in now and get ahead.</p>
+        </section>
+
+        <section class="shop-grid" aria-label="Shop products">
+            <article class="product">
+                <h2>EV Warm-up + EV Warm-down Combo Pack</h2>
+                <div class="price">$20</div>
+                <p>These two exercises will help get your voice ready before singing and help minimize strain. The EV Warm-up also incorporates vibrato exercises so you can train vibrato without even thinking about it. The Warm-down is a harmonically inverted version of the warm-up to make sure you are taking your voice downscale.</p>
+                <stripe-buy-button
+                    buy-button-id="buy_btn_1TC1nyAW8JEteMATL2BK8Oa8"
+                    publishable-key="pk_live_51S6OXAAW8JEteMATvLLzcptgTXX2VdrZiTWTQzDfSm0YYnk5x7KM4ZMDxbTbFQ8CbuTeR1tAFp9tdO4KrU6WadQt00iK47zwrB">
+                </stripe-buy-button>
+            </article>
+
+            <article class="product">
+                <h2>Endless Vocals | Full Workout Example with Jaime Vendera’s ISO Method</h2>
+                <div class="price">$20</div>
+                <p>This full ISO Method video shows a complete workout from start to finish. It also includes a clean, readable PDF with everything you need to follow along. Warm-up files are not included because they are sped up 8x in this lesson and should be purchased separately.</p>
+                <stripe-buy-button
+                    buy-button-id="buy_btn_1TC1sSAW8JEteMATSG1uC5vk"
+                    publishable-key="pk_live_51S6OXAAW8JEteMATvLLzcptgTXX2VdrZiTWTQzDfSm0YYnk5x7KM4ZMDxbTbFQ8CbuTeR1tAFp9tdO4KrU6WadQt00iK47zwrB">
+                </stripe-buy-button>
+            </article>
+
+            <article class="product">
+                <h2>Endless Vocals Membership</h2>
+                <div class="price">$24 / month</div>
+                <p>Get access to the Endless Vocals school: live bootcamp classes, replays, vocal training structure, community feedback, and ongoing support from coaches Ryan and Tiago. The next bootcamp is starting soon, so now is the best time to join and lock in your progress.</p>
+                <div class="links">
+                    <a href="https://ko-fi.com/endlessvocals" target="_blank" rel="noopener noreferrer">Join on Ko-fi</a>
+                    <a href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener noreferrer">Join Discord</a>
+                </div>
+            </article>
+        </section>
+    </div>
+</body>
+</html>
