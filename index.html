@@ -4,16 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Endless Vocals — Your Vocals Don’t Expire</title>
-    <meta name="description" content="Endless Vocals is a practical, modern vocal school by Ryan Wall and Tiago Costa. Two‑month bootcamps, live sessions + replays, and a free Discord community." />
+    <meta name="description" content="Phase Cycle 2 is live from April 6, 2026 through May 31, 2026. Join Endless Vocals for an intensified two-month bootcamp with weekly clinics, replays, and community support." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://endlessvocals.com/" />
     <meta property="og:title" content="Endless Vocals — Your Vocals Don’t Expire" />
-    <meta property="og:description" content="Endless Vocals is a practical, modern vocal school by Ryan Wall and Tiago Costa. Two‑month bootcamps, live sessions + replays, and a free Discord community." />
+    <meta property="og:description" content="Phase Cycle 2 is live from April 6, 2026 through May 31, 2026. Join Endless Vocals for an intensified two-month bootcamp with weekly clinics, replays, and community support." />
     <meta property="og:image" content="https://endlessvocals.com/images/endless_thumbnail.png" />
     <meta property="og:image:alt" content="Endless Vocals brand illustration" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Endless Vocals — Your Vocals Don’t Expire" />
-    <meta name="twitter:description" content="Endless Vocals is a practical, modern vocal school by Ryan Wall and Tiago Costa. Two‑month bootcamps, live sessions + replays, and a free Discord community." />
+    <meta name="twitter:description" content="Phase Cycle 2 is live from April 6, 2026 through May 31, 2026. Join Endless Vocals for an intensified two-month bootcamp with weekly clinics, replays, and community support." />
     <meta name="twitter:image" content="https://endlessvocals.com/images/endless_thumbnail.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,6 +63,28 @@
             --focus-outline: rgba(255,255,255,.2);
         }
 
+        body[data-theme="phase"] {
+            color-scheme: dark;
+            --bg: #041226;
+            --fg: #e7f8ff;
+            --muted: #9ad8ff;
+            --surface: rgba(6, 24, 44, 0.9);
+            --surface-strong: #09213f;
+            --surface-border: rgba(110, 218, 255, 0.34);
+            --surface-soft: rgba(7, 33, 60, 0.92);
+            --accent: #43c8ff;
+            --accent-2: #8df4ff;
+            --accent-3: #1f79ff;
+            --accent-alt: #63e6ff;
+            --accent-2-alt: #57b3ff;
+            --shadow: rgba(0, 35, 74, 0.5);
+            --hero-bg: radial-gradient(1200px 600px at 10% -10%, rgba(67,200,255,.35), transparent 60%), radial-gradient(1000px 700px at 100% 0%, rgba(91,160,255,.3), transparent 60%), linear-gradient(135deg, #07192e, #041226 58%, #08325a 100%);
+            --coaches-bg: linear-gradient(135deg, rgba(44,133,255,.22), rgba(18,87,169,.34));
+            --list-item-bg: rgba(7, 30, 53, 0.92);
+            --note: #afe8ff;
+            --focus-outline: rgba(106, 229, 255, .45);
+        }
+
         * {
             box-sizing: border-box
         }
@@ -96,6 +118,41 @@
             padding: 60px 24px;
             background: var(--hero-bg);
             box-shadow: 0 20px 60px var(--shadow);
+        }
+
+            .hero::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                pointer-events: none;
+                background: radial-gradient(1200px 460px at 15% 0%, rgba(255,255,255,.18), transparent 55%);
+                mix-blend-mode: screen;
+                opacity: .45;
+            }
+
+        #phase-background {
+            display: none;
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: .9;
+        }
+
+        body[data-theme="phase"] #phase-background {
+            display: block;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero > * {
+            position: relative;
+            z-index: 1;
         }
 
         .masthead {
@@ -194,6 +251,22 @@
             max-width: 60ch
         }
 
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--surface-border);
+            background: var(--surface);
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: .7px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
         .cta-row {
             display: flex;
             flex-wrap: wrap;
@@ -245,6 +318,81 @@
             .card h3 {
                 margin: 0 0 8px
             }
+
+        .phase-hero-image {
+            width: 100%;
+            border-radius: 18px;
+            border: 1px solid var(--surface-border);
+            box-shadow: 0 16px 30px var(--shadow);
+            object-fit: cover;
+            max-height: 500px;
+        }
+
+        .phase-visuals {
+            display: grid;
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .phase-mini-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+            .phase-mini-grid img {
+                width: 100%;
+                border-radius: 12px;
+                border: 1px solid var(--surface-border);
+                box-shadow: 0 8px 20px var(--shadow);
+                object-fit: cover;
+                aspect-ratio: 1 / 1;
+            }
+
+        .phase-logo-overlay {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--surface-border);
+            box-shadow: 0 8px 20px var(--shadow);
+            aspect-ratio: 1 / 1;
+            background: #061e39;
+        }
+
+            .phase-logo-overlay > .phase-bg-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                filter: saturate(1.15) contrast(1.08);
+            }
+
+            .phase-logo-overlay .phase-logo {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: min(82%, 280px);
+                max-width: 100%;
+                height: auto;
+                object-fit: contain;
+                aspect-ratio: auto;
+                border: 0;
+                border-radius: 0;
+                box-shadow: none;
+                display: block;
+                transform: translate(-50%, -50%);
+                animation: floatLogo 3.2s ease-in-out infinite;
+                filter: drop-shadow(0 12px 28px rgba(28, 206, 255, 0.42));
+            }
+
+        @keyframes floatLogo {
+            0%, 100% {
+                transform: translate(-50%, -50%);
+            }
+
+            50% {
+                transform: translate(-50%, calc(-50% - 10px));
+            }
+        }
 
         .divider {
             height: 1px;
@@ -478,6 +626,29 @@
                     color: var(--accent);
                 }
 
+        .clinic-list {
+            margin: 12px 0 0;
+            padding-left: 0;
+            list-style: none;
+            display: grid;
+            gap: 10px;
+        }
+
+            .clinic-list li {
+                border: 1px solid var(--surface-border);
+                background: var(--list-item-bg);
+                border-radius: 14px;
+                padding: 12px 14px;
+                line-height: 1.45;
+            }
+
+            .clinic-list strong {
+                display: block;
+                font-size: 14px;
+                color: var(--accent);
+                margin-bottom: 2px;
+            }
+
         .note {
             font-size: 13px;
             color: var(--note)
@@ -607,6 +778,7 @@
             padding: 12px 16px;
             backdrop-filter: blur(6px);
             box-shadow: 0 -12px 24px var(--shadow);
+            z-index: 9999;
         }
 
             .sticky .wrap {
@@ -625,9 +797,14 @@
         body[data-theme="dark"] .sticky {
             background: linear-gradient(180deg, rgba(10,10,12,.0), rgba(10,10,12,.8) 30%, rgba(10,10,12,.95));
         }
+
+        body[data-theme="phase"] .sticky {
+            background: linear-gradient(180deg, rgba(3,14,30,.0), rgba(3,14,30,.82) 30%, rgba(3,14,30,.95));
+        }
     </style>
 </head>
 <body id="top" data-theme="light">
+    <canvas id="phase-background" aria-hidden="true"></canvas>
     <div class="container">
         <header class="masthead" aria-label="Site header">
             <div class="logo" aria-label="Endless Vocals">ENDLESS <span style="opacity:.7;font-weight:600">vocals</span></div>
@@ -645,11 +822,12 @@
         </header>
 
         <section class="hero" aria-labelledby="h1">
-            <h1 id="h1" class="title">Your Vocals Don’t Expire</h1>
-            <p class="subtitle">Practical training, clear structure, steady progress. Two‑month bootcamps with Ryan Wall and Tiago Costa. Live sessions, replays, and a friendly Discord to keep you moving.</p>
+            <span class="hero-kicker">Now Live • Phase Cycle 2 Bootcamp</span>
+            <h1 id="h1" class="title">Step Through the Phase Cycle</h1>
+            <p class="subtitle">Stepping through the Phase Cycle is like walking through a blue energy field that resets and reshapes your voice—but once you pass through it, you don’t just arrive, you begin a new training arc at a higher level.</p>
             <div class="cta-row" role="group" aria-label="Primary actions">
                 <a class="btn btn-primary" href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener noreferrer" aria-label="Sign up at Ko‑fi">
-                    <span>Sign Up at Ko‑fi — $24/mo</span>
+                    <span>Join Phase Cycle 2 — $24/mo</span>
                 </a>
                 <a class="btn btn-secondary" href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener noreferrer" aria-label="Join the Discord">
                     <span>Join the Discord (Free)</span>
@@ -675,27 +853,46 @@
 
             <div class="grid" style="margin-top:32px">
                 <div class="card" aria-labelledby="whatis">
-                    <h3 id="whatis">What is Endless Vocals?</h3>
-                    <p>It’s a modern training space for singers who want to get straight to the point about improving their singing skill. We keep what works, focus on repeatable habits, and measure progress by what you can feel and perform—on stage and in the studio.</p>
+                    <h3 id="whatis">Phase Cycle 2 • April 6, 2026 → May 31, 2026</h3>
+                    <p>Once you step through the Phase Cycle there is no going back. This is where we begin a new training arc and an intensified 2 month bootcamp with focused weekly clinics, practical assignments, and momentum you can feel in your voice right away.</p>
                     <div class="list" aria-label="Highlights">
-                        <div class="item">Two‑Month Bootcamps with Ryan or Tiago</div>
-                        <div class="item">Live sessions + replays you can follow</div>
-                        <div class="item">Free Discord for clips, feedback, and community</div>
+                        <div class="item">8 live Monday clinics at 6:00 PM</div>
+                        <div class="item">Intensified 2‑month structure + replays</div>
+                        <div class="item">ISO Method, vocal health, DAWs, runs, and grit</div>
                     </div>
-                    <p class="note" style="margin-top:10px">The bootcamp has begun, but you can still join mid-bootcamp. Join ASAP to get the most out of Ryan's bootcamp taking place from Dec 1st to January 31st. After Ryan's bootcamp, it will be Coach Tiago's class for 2 months, and the cycle repeats. Stay in the school for consistent vocal training!</p>
+                    <p class="note" style="margin-top:10px">Bootcamp starts today on Monday, April 6, 2026 and runs through the final day of May 2026. If you jump in now, you’ll train inside the full arc with weekly progression checkpoints.</p>
                     <p class="note" style="margin-top:8px">You’ll also learn how to create your own songs from scratch, learn to use a DAW for recording because it's a critical part of becoming a singer, and tackle lyric writing.</p>
                 </div>
                 <div class="card" aria-labelledby="about">
-                    <h3 id="about">Why a new school?</h3>
-                    <p><strong>Vendera Vocal Academy has sadly come to a close.</strong> Jaime graciously encouraged us to continue helping singers in a new format. Endless Vocals is our way forward—built with care by Ryan Wall and Tiago Costa.</p>
-                    <p class="note">“Jaime has given us his full blessing to continue teaching his ISO Method to help singers raise their voice in a different format.”</p>
+                    <h3 id="about">Weekly Clinics — Phase Cycle 2</h3>
+                    <ul class="clinic-list">
+                        <li><strong>Week 1 — Enter the Phase Cycle — Reset</strong>Monday, April 6, 2026 at 6:00 PM</li>
+                        <li><strong>Week 2 — Powering Up the Voice</strong>Warm Ups + Vocal Health + Fitness • Monday, April 13, 2026 at 6:00 PM</li>
+                        <li><strong>Week 3 — The ISO Method and the ISO Exercises</strong>Monday, April 20, 2026 at 6:00 PM</li>
+                        <li><strong>Week 4 — Singing Songs</strong>Playlist + Genre Expansion • Monday, April 27, 2026 at 6:00 PM</li>
+                        <li><strong>Week 5 — Recap &amp; Reinforcement — Test Day</strong>Monday, May 4, 2026 at 6:00 PM</li>
+                        <li><strong>Week 6 — Vocal Tech — Runs &amp; Vibrato</strong>Monday, May 11, 2026 at 6:00 PM</li>
+                        <li><strong>Week 7 — Vocal Tech — Grit &amp; Screams</strong>Monday, May 18, 2026 at 6:00 PM</li>
+                        <li><strong>Week 8 — Tech Talk (DAWs, Plugins, Apps)</strong>Monday, May 25, 2026 at 6:00 PM</li>
+                    </ul>
                     <div style="margin-top:8px">
-                        <span class="pill">Live • Practical • Friendly</span>
-                        <span class="pill">Start/Stop Anytime</span>
+                        <span class="pill">Phase Cycle Mode</span>
+                        <span class="pill">Weekly Progress</span>
                         <span class="pill">Beginner → Pro</span>
                     </div>
                 </div>
             </div>
+
+            <section class="card phase-visuals" aria-label="Phase cycle visuals">
+                <img class="phase-hero-image" src="images/EV_PC2_optimized.jpg" alt="Phase Cycle 2 blue energy visual" loading="lazy">
+                <div class="phase-mini-grid">
+                    <img src="images/phase cycle square_optimized.jpg" alt="Phase Cycle visual artwork square format" loading="lazy">
+                    <div class="phase-logo-overlay">
+                        <img class="phase-bg-image" src="images/compressed_image.jpg" alt="Compressed Phase Cycle visual background" loading="lazy" onerror="this.onerror=null;this.src='images/phase_mobile_cycle_optimized.jpg';">
+                        <img class="phase-logo" src="images/Endless vocals logo 2026 april.png" alt="Endless Vocals logo floating over Phase Cycle visual" loading="lazy">
+                    </div>
+                </div>
+            </section>
 
             <div class="divider"></div>
 
@@ -767,7 +964,7 @@
     <!-- Sticky mobile CTA -->
     <div class="sticky" role="group" aria-label="Mobile actions">
         <div class="wrap">
-            <a class="btn btn-primary" style="flex:1" href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener">Sign Up — Ko‑fi</a>
+            <a class="btn btn-primary" style="flex:1" href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener">Join Phase Cycle 2</a>
             <a class="btn btn-secondary" style="flex:1" href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener">Join Discord</a>
         </div>
     </div>
@@ -790,12 +987,14 @@
         savedTheme = null;
     }
 
-    const initialTheme = savedTheme || 'light';
+    const themes = ['light', 'dark', 'phase'];
+    const initialTheme = themes.includes(savedTheme) ? savedTheme : 'light';
     applyTheme(initialTheme);
 
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
-            const nextTheme = body.dataset.theme === 'dark' ? 'light' : 'dark';
+            const currentIndex = themes.indexOf(body.dataset.theme);
+            const nextTheme = themes[(currentIndex + 1) % themes.length];
             applyTheme(nextTheme);
         });
     }
@@ -815,12 +1014,122 @@
         if (theme === 'dark') {
             iconEl.textContent = '🌙';
             textEl.textContent = 'Dark Mode';
+            themeToggle.setAttribute('aria-label', 'Switch to phase cycle mode');
+        } else if (theme === 'phase') {
+            iconEl.textContent = '⚡';
+            textEl.textContent = 'Phase Cycle Mode';
             themeToggle.setAttribute('aria-label', 'Switch to light mode');
         } else {
             iconEl.textContent = '🌞';
             textEl.textContent = 'Light Mode';
             themeToggle.setAttribute('aria-label', 'Switch to dark mode');
         }
+    }
+
+    const particleCanvas = document.getElementById('phase-background');
+    const ctx = particleCanvas ? particleCanvas.getContext('2d') : null;
+    const phaseParticles = [];
+    const lightningTrails = [];
+    const particleCount = 36;
+
+    function setupParticleCanvas() {
+        if (!particleCanvas || !ctx) return;
+        const bounds = { width: window.innerWidth, height: window.innerHeight };
+        const ratio = window.devicePixelRatio || 1;
+        particleCanvas.width = Math.max(1, Math.floor(bounds.width * ratio));
+        particleCanvas.height = Math.max(1, Math.floor(bounds.height * ratio));
+        particleCanvas.style.width = `${bounds.width}px`;
+        particleCanvas.style.height = `${bounds.height}px`;
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    }
+
+    function seedParticles() {
+        if (!particleCanvas) return;
+        phaseParticles.length = 0;
+        const w = window.innerWidth || 1;
+        const h = window.innerHeight || 1;
+        for (let i = 0; i < particleCount; i++) {
+            phaseParticles.push({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                vx: (Math.random() - 0.5) * 1.3,
+                vy: (Math.random() - 0.5) * 1.3,
+                size: Math.random() * 2.4 + 0.8,
+                glow: Math.random() * 0.6 + 0.4
+            });
+        }
+    }
+
+    function buildLightningPath(x, y, len) {
+        const points = [{ x, y }];
+        let currentX = x;
+        let currentY = y;
+        for (let i = 0; i < 4; i++) {
+            currentX += (Math.random() - 0.5) * 20;
+            currentY += len / 4;
+            points.push({ x: currentX, y: currentY });
+        }
+        return points;
+    }
+
+    function drawLightning(points, alpha = 1) {
+        if (!ctx || !points.length) return;
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) {
+            ctx.lineTo(points[i].x, points[i].y);
+        }
+        ctx.strokeStyle = `rgba(106, 229, 255, ${0.45 * alpha})`;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+    }
+
+    function animateParticles() {
+        if (!particleCanvas || !ctx) return;
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        ctx.fillStyle = 'rgba(2, 10, 26, 0.20)';
+        ctx.fillRect(0, 0, w, h);
+        if (body.dataset.theme === 'phase') {
+            for (const p of phaseParticles) {
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0 || p.x > w) p.vx *= -1;
+                if (p.y < 0 || p.y > h) p.vy *= -1;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(99, 230, 255, ${p.glow})`;
+                ctx.fill();
+                if (Math.random() < 0.02) {
+                    lightningTrails.push({
+                        points: buildLightningPath(p.x, p.y, Math.random() * 90 + 40),
+                        life: 1
+                    });
+                }
+            }
+            for (let i = lightningTrails.length - 1; i >= 0; i--) {
+                const trail = lightningTrails[i];
+                drawLightning(trail.points, trail.life);
+                trail.life -= 0.04;
+                if (trail.life <= 0) {
+                    lightningTrails.splice(i, 1);
+                }
+            }
+        } else {
+            lightningTrails.length = 0;
+            ctx.clearRect(0, 0, w, h);
+        }
+        requestAnimationFrame(animateParticles);
+    }
+
+    if (particleCanvas && ctx) {
+        setupParticleCanvas();
+        seedParticles();
+        animateParticles();
+        window.addEventListener('resize', () => {
+            setupParticleCanvas();
+            seedParticles();
+        });
     }
     </script>
 </body>
