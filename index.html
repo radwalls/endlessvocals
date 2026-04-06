@@ -63,6 +63,28 @@
             --focus-outline: rgba(255,255,255,.2);
         }
 
+        body[data-theme="phase"] {
+            color-scheme: dark;
+            --bg: #030816;
+            --fg: #e8f8ff;
+            --muted: #a7c6e4;
+            --surface: rgba(6, 18, 42, 0.8);
+            --surface-strong: rgba(8, 25, 56, 0.92);
+            --surface-border: rgba(120, 208, 255, 0.35);
+            --surface-soft: rgba(8, 30, 70, 0.75);
+            --accent: #58d9ff;
+            --accent-2: #7ba4ff;
+            --accent-3: #1c4ddf;
+            --accent-alt: #90e9ff;
+            --accent-2-alt: #9ab6ff;
+            --shadow: rgba(0, 34, 102, 0.38);
+            --hero-bg: radial-gradient(1000px 520px at 8% -5%, rgba(88,217,255,.34), transparent 60%), radial-gradient(800px 460px at 95% 0%, rgba(110,155,255,.24), transparent 65%), linear-gradient(145deg, #040c22 5%, #071839 45%, #0a2550 100%);
+            --coaches-bg: linear-gradient(135deg, rgba(62,132,255,.22), rgba(9,33,76,.65));
+            --list-item-bg: rgba(6, 24, 60, 0.84);
+            --note: #b9daf9;
+            --focus-outline: rgba(137, 226, 255, 0.4);
+        }
+
         * {
             box-sizing: border-box
         }
@@ -483,6 +505,76 @@
             color: var(--note)
         }
 
+        .phase-lightning {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity .35s ease;
+            z-index: 0;
+        }
+
+        .phase-lightning span {
+            position: absolute;
+            width: 2px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, rgba(173,239,255,.2), rgba(108,225,255,.95), rgba(122,159,255,.2));
+            filter: drop-shadow(0 0 12px rgba(115,225,255,.9));
+            animation: lightningPulse 3.5s ease-in-out infinite;
+        }
+
+        .phase-lightning span:nth-child(1) { height: 180px; top: 8%; left: 12%; transform: rotate(12deg); animation-delay: .1s; }
+        .phase-lightning span:nth-child(2) { height: 230px; top: 22%; left: 28%; transform: rotate(-14deg); animation-delay: .8s; }
+        .phase-lightning span:nth-child(3) { height: 160px; top: 16%; right: 18%; transform: rotate(16deg); animation-delay: 1.2s; }
+        .phase-lightning span:nth-child(4) { height: 210px; bottom: 18%; left: 46%; transform: rotate(-10deg); animation-delay: 1.8s; }
+        .phase-lightning span:nth-child(5) { height: 140px; bottom: 12%; right: 10%; transform: rotate(8deg); animation-delay: 2.4s; }
+
+        @keyframes lightningPulse {
+            0%, 100% { opacity: .12; }
+            20% { opacity: .3; }
+            40% { opacity: .92; }
+            55% { opacity: .2; }
+            70% { opacity: .82; }
+        }
+
+        body[data-theme="phase"] .phase-lightning {
+            opacity: .9;
+        }
+
+        .hero > *:not(.phase-lightning) {
+            position: relative;
+            z-index: 1;
+        }
+
+        .phase-showcase {
+            margin-top: 22px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .phase-showcase img {
+            width: 100%;
+            border-radius: 14px;
+            border: 1px solid var(--surface-border);
+            box-shadow: 0 12px 26px var(--shadow);
+            object-fit: cover;
+            aspect-ratio: 4 / 3;
+        }
+
+        .schedule {
+            margin-top: 12px;
+            padding-left: 18px;
+            display: grid;
+            gap: 6px;
+        }
+
+        .schedule li {
+            line-height: 1.5;
+            color: var(--fg);
+        }
+
         @media (max-width: 880px) {
             .masthead {
                 flex-direction: column;
@@ -596,6 +688,10 @@
             .video-frame {
                 border-radius: 0;
             }
+
+            .phase-showcase {
+                grid-template-columns: 1fr;
+            }
         }
         /* Sticky mobile footer CTA */
         .sticky {
@@ -625,6 +721,10 @@
         body[data-theme="dark"] .sticky {
             background: linear-gradient(180deg, rgba(10,10,12,.0), rgba(10,10,12,.8) 30%, rgba(10,10,12,.95));
         }
+
+        body[data-theme="phase"] .sticky {
+            background: linear-gradient(180deg, rgba(3,8,22,.0), rgba(3,8,22,.84) 35%, rgba(3,8,22,.96));
+        }
     </style>
 </head>
 <body id="top" data-theme="light">
@@ -645,15 +745,22 @@
         </header>
 
         <section class="hero" aria-labelledby="h1">
-            <h1 id="h1" class="title">Your Vocals Don’t Expire</h1>
-            <p class="subtitle">Practical training, clear structure, steady progress. Two‑month bootcamps with Ryan Wall and Tiago Costa. Live sessions, replays, and a friendly Discord to keep you moving.</p>
+            <div class="phase-lightning" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+            <h1 id="h1" class="title">Phase Cycle 2 Bootcamp Is Live</h1>
+            <p class="subtitle">Step through the Phase Cycle like walking through a blue energy field that resets and reshapes your voice. Once you pass through it, you begin a new training arc at a higher level — and an intensified 2‑month bootcamp starts now.</p>
             <div class="cta-row" role="group" aria-label="Primary actions">
                 <a class="btn btn-primary" href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener noreferrer" aria-label="Sign up at Ko‑fi">
-                    <span>Sign Up at Ko‑fi — $24/mo</span>
+                    <span>Join Phase Cycle 2 — $24/mo</span>
                 </a>
                 <a class="btn btn-secondary" href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener noreferrer" aria-label="Join the Discord">
                     <span>Join the Discord (Free)</span>
                 </a>
+            </div>
+
+            <div class="phase-showcase" aria-label="Phase Cycle visuals">
+                <img src="images/EV_PC2_optimized.jpg" alt="Phase Cycle 2 bootcamp visual" loading="lazy">
+                <img src="images/phase cycle square_optimized.jpg" alt="Blue phase cycle energy visual" loading="lazy">
+                <img src="images/phase_mobile_cycle_optimized.jpg" alt="Phase cycle mobile visual" loading="lazy">
             </div>
 
             <section class="video-section" aria-labelledby="video-title">
@@ -675,20 +782,24 @@
 
             <div class="grid" style="margin-top:32px">
                 <div class="card" aria-labelledby="whatis">
-                    <h3 id="whatis">What is Endless Vocals?</h3>
-                    <p>It’s a modern training space for singers who want to get straight to the point about improving their singing skill. We keep what works, focus on repeatable habits, and measure progress by what you can feel and perform—on stage and in the studio.</p>
-                    <div class="list" aria-label="Highlights">
-                        <div class="item">Two‑Month Bootcamps with Ryan or Tiago</div>
-                        <div class="item">Live sessions + replays you can follow</div>
-                        <div class="item">Free Discord for clips, feedback, and community</div>
-                    </div>
-                    <p class="note" style="margin-top:10px">The bootcamp has begun, but you can still join mid-bootcamp. Join ASAP to get the most out of Ryan's bootcamp taking place from Dec 1st to January 31st. After Ryan's bootcamp, it will be Coach Tiago's class for 2 months, and the cycle repeats. Stay in the school for consistent vocal training!</p>
-                    <p class="note" style="margin-top:8px">You’ll also learn how to create your own songs from scratch, learn to use a DAW for recording because it's a critical part of becoming a singer, and tackle lyric writing.</p>
+                    <h3 id="whatis">Phase Cycle 2 Schedule (Apr 6 — May 31, 2026)</h3>
+                    <p>Weekly clinics are every Monday at 6:00 PM and run as a progressive arc. Enter the Phase Cycle, reset your baseline, and level up each week with guided sessions, drills, and applied song work.</p>
+                    <ol class="schedule" aria-label="Phase Cycle 2 weekly clinics">
+                        <li><strong>Week 1 — Enter the Phase Cycle — Reset</strong> · Monday, April 6, 2026 at 6:00 PM</li>
+                        <li><strong>Week 2 — Powering Up the Voice</strong> (Warm Ups + Vocal Health + Fitness) · Monday, April 13, 2026 at 6:00 PM</li>
+                        <li><strong>Week 3 — The ISO Method and the ISO Exercises</strong> · Monday, April 20, 2026 at 6:00 PM</li>
+                        <li><strong>Week 4 — Singing Songs</strong> (Playlist + Genre Expansion) · Monday, April 27, 2026 at 6:00 PM</li>
+                        <li><strong>Week 5 — Recap &amp; Reinforcement — Test Day</strong> · Monday, May 4, 2026 at 6:00 PM</li>
+                        <li><strong>Week 6 — Vocal Tech — Runs &amp; Vibrato</strong> · Monday, May 11, 2026 at 6:00 PM</li>
+                        <li><strong>Week 7 — Vocal Tech — Grit &amp; Screams</strong> · Monday, May 18, 2026 at 6:00 PM</li>
+                        <li><strong>Week 8 — Tech Talk</strong> (DAWs, Plugins, Apps) · Monday, May 25, 2026 at 6:00 PM</li>
+                    </ol>
+                    <p class="note" style="margin-top:10px">Phase Cycle 2 starts Monday, April 6, 2026 and runs through the last day of May 2026. Once you step through this cycle, there’s no going back — your next arc starts at a higher level.</p>
                 </div>
                 <div class="card" aria-labelledby="about">
-                    <h3 id="about">Why a new school?</h3>
-                    <p><strong>Vendera Vocal Academy has sadly come to a close.</strong> Jaime graciously encouraged us to continue helping singers in a new format. Endless Vocals is our way forward—built with care by Ryan Wall and Tiago Costa.</p>
-                    <p class="note">“Jaime has given us his full blessing to continue teaching his ISO Method to help singers raise their voice in a different format.”</p>
+                    <h3 id="about">Why Phase Cycle 2?</h3>
+                    <p><strong>Phase Cycle 2 is an intensified two-month reset.</strong> The system blends structure, accountability, and modern vocal training so singers can train harder without losing vocal health.</p>
+                    <p class="note">You’ll train technique, song application, and vocal technology together — from warmups and ISO drills to genre expansion, DAWs, plugins, and creative workflow.</p>
                     <div style="margin-top:8px">
                         <span class="pill">Live • Practical • Friendly</span>
                         <span class="pill">Start/Stop Anytime</span>
@@ -700,11 +811,11 @@
             <div class="divider"></div>
 
             <section class="card" aria-labelledby="how">
-                <h3 id="how">How it works</h3>
+                <h3 id="how">How to join Phase Cycle 2</h3>
                 <ol>
-                    <li style="margin:8px 0">Join the <a href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener">Discord</a> (free) to see schedules, share clips, and meet the community.</li>
-                    <li style="margin:8px 0">When you’re ready, enroll in a <a href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener">Two‑Month Bootcamp</a> ($24/month via Ko‑fi). Attend live or watch replays—your pace.</li>
-                    <li style="margin:8px 0">Follow the weekly checklist. Short, repeatable sessions beat long, rare ones.</li>
+                    <li style="margin:8px 0">Join the <a href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener">Discord</a> (free) to get weekly reminders, post clips, and stay accountable with the class.</li>
+                    <li style="margin:8px 0">Enroll in <a href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener">Phase Cycle 2 Bootcamp</a> ($24/month via Ko‑fi). Attend live on Mondays at 6:00 PM or catch the replay.</li>
+                    <li style="margin:8px 0">Follow each weekly clinic and stack the drills between sessions. Consistency across these eight weeks is where the transformation happens.</li>
                 </ol>
             </section>
 
@@ -790,12 +901,14 @@
         savedTheme = null;
     }
 
-    const initialTheme = savedTheme || 'light';
+    const themes = ['light', 'dark', 'phase'];
+    const initialTheme = themes.includes(savedTheme) ? savedTheme : 'light';
     applyTheme(initialTheme);
 
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
-            const nextTheme = body.dataset.theme === 'dark' ? 'light' : 'dark';
+            const currentIndex = themes.indexOf(body.dataset.theme || 'light');
+            const nextTheme = themes[(currentIndex + 1) % themes.length];
             applyTheme(nextTheme);
         });
     }
@@ -815,6 +928,10 @@
         if (theme === 'dark') {
             iconEl.textContent = '🌙';
             textEl.textContent = 'Dark Mode';
+            themeToggle.setAttribute('aria-label', 'Switch to phase cycle mode');
+        } else if (theme === 'phase') {
+            iconEl.textContent = '⚡';
+            textEl.textContent = 'Phase Cycle Mode';
             themeToggle.setAttribute('aria-label', 'Switch to light mode');
         } else {
             iconEl.textContent = '🌞';
