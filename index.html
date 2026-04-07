@@ -856,7 +856,7 @@
                     <h3 id="whatis">Phase Cycle 2 • April 6, 2026 → May 31, 2026</h3>
                     <p>Once you step through the Phase Cycle there is no going back. This is where we begin a new training arc and an intensified 2 month bootcamp with focused weekly clinics, practical assignments, and momentum you can feel in your voice right away.</p>
                     <div class="list" aria-label="Highlights">
-                        <div class="item">8 live Monday clinics at 6:00 PM</div>
+                        <div class="item">8 live Monday clinics at <span class="js-local-time" data-utc="2026-04-07T01:00:00Z">6:00 PM PT</span></div>
                         <div class="item">Intensified 2‑month structure + replays</div>
                         <div class="item">ISO Method, vocal health, DAWs, runs, and grit</div>
                     </div>
@@ -866,14 +866,14 @@
                 <div class="card" aria-labelledby="about">
                     <h3 id="about">Weekly Clinics — Phase Cycle 2</h3>
                     <ul class="clinic-list">
-                        <li><strong>Week 1 — Enter the Phase Cycle — Reset</strong>Monday, April 6, 2026 at 6:00 PM</li>
-                        <li><strong>Week 2 — Powering Up the Voice</strong>Warm Ups + Vocal Health + Fitness • Monday, April 13, 2026 at 6:00 PM</li>
-                        <li><strong>Week 3 — The ISO Method and the ISO Exercises</strong>Monday, April 20, 2026 at 6:00 PM</li>
-                        <li><strong>Week 4 — Singing Songs</strong>Playlist + Genre Expansion • Monday, April 27, 2026 at 6:00 PM</li>
-                        <li><strong>Week 5 — Recap &amp; Reinforcement — Test Day</strong>Monday, May 4, 2026 at 6:00 PM</li>
-                        <li><strong>Week 6 — Vocal Tech — Runs &amp; Vibrato</strong>Monday, May 11, 2026 at 6:00 PM</li>
-                        <li><strong>Week 7 — Vocal Tech — Grit &amp; Screams</strong>Monday, May 18, 2026 at 6:00 PM</li>
-                        <li><strong>Week 8 — Tech Talk (DAWs, Plugins, Apps)</strong>Monday, May 25, 2026 at 6:00 PM</li>
+                        <li><strong>Week 1 — Enter the Phase Cycle — Reset</strong>Monday, April 6, 2026 at <span class="js-local-time" data-utc="2026-04-07T01:00:00Z">6:00 PM PT</span></li>
+                        <li><strong>Week 2 — Powering Up the Voice</strong>Warm Ups + Vocal Health + Fitness • Monday, April 13, 2026 at <span class="js-local-time" data-utc="2026-04-14T01:00:00Z">6:00 PM PT</span></li>
+                        <li><strong>Week 3 — The ISO Method and the ISO Exercises</strong>Monday, April 20, 2026 at <span class="js-local-time" data-utc="2026-04-21T01:00:00Z">6:00 PM PT</span></li>
+                        <li><strong>Week 4 — Singing Songs</strong>Playlist + Genre Expansion • Monday, April 27, 2026 at <span class="js-local-time" data-utc="2026-04-28T01:00:00Z">6:00 PM PT</span></li>
+                        <li><strong>Week 5 — Recap &amp; Reinforcement — Test Day</strong>Monday, May 4, 2026 at <span class="js-local-time" data-utc="2026-05-05T01:00:00Z">6:00 PM PT</span></li>
+                        <li><strong>Week 6 — Vocal Tech — Runs &amp; Vibrato</strong>Monday, May 11, 2026 at <span class="js-local-time" data-utc="2026-05-12T01:00:00Z">6:00 PM PT</span></li>
+                        <li><strong>Week 7 — Vocal Tech — Grit &amp; Screams</strong>Monday, May 18, 2026 at <span class="js-local-time" data-utc="2026-05-19T01:00:00Z">6:00 PM PT</span></li>
+                        <li><strong>Week 8 — Tech Talk (DAWs, Plugins, Apps)</strong>Monday, May 25, 2026 at <span class="js-local-time" data-utc="2026-05-26T01:00:00Z">6:00 PM PT</span></li>
                     </ul>
                     <div style="margin-top:8px">
                         <span class="pill">Phase Cycle Mode</span>
@@ -974,6 +974,29 @@
     const yearEl = document.getElementById('year');
     if (yearEl) {
         yearEl.textContent = new Date().getFullYear();
+    }
+
+    updateLocalClinicTimes();
+
+    function updateLocalClinicTimes() {
+        const timeElements = document.querySelectorAll('.js-local-time[data-utc]');
+        if (!timeElements.length || typeof Intl === 'undefined' || !Intl.DateTimeFormat) return;
+
+        const formatter = new Intl.DateTimeFormat(undefined, {
+            hour: 'numeric',
+            minute: '2-digit',
+            timeZoneName: 'short'
+        });
+
+        timeElements.forEach((timeEl) => {
+            const utcValue = timeEl.getAttribute('data-utc');
+            if (!utcValue) return;
+
+            const eventDate = new Date(utcValue);
+            if (Number.isNaN(eventDate.getTime())) return;
+
+            timeEl.textContent = formatter.format(eventDate);
+        });
     }
 
     const themeToggle = document.getElementById('theme-toggle');
