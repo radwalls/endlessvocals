@@ -61,6 +61,26 @@
       font-size: 0.95rem;
     }
 
+    .back-link {
+      justify-self: start;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid #3b4760;
+      background: #121827;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: filter 0.2s ease;
+    }
+
+    .back-link:hover {
+      filter: brightness(1.08);
+    }
+
     .composer {
       padding: 14px;
       display: grid;
@@ -562,6 +582,7 @@
     <section class="card header">
       <h1>Song Mapper (Desktop)</h1>
       <p>Fast desktop lyric markup: multi-select words, batch apply attributes, and draw enunciation/pitch with your mouse.</p>
+      <a class="back-link" href="../">← Back to Endless Vocals</a>
     </section>
 
     <section id="composer" class="card composer">
@@ -2061,7 +2082,11 @@ function renderMusicRollLabels(line, height, rowBands) {
         const file = event.target.files && event.target.files[0];
         loadSongMapFile(file);
       });
-      clearMapBtn.addEventListener("click", clearMap);
+      clearMapBtn.addEventListener("click", function () {
+        const shouldClear = window.confirm("Are you sure you want to clear map? This will reset everything and you'll lose the current song map.");
+        if (!shouldClear) return;
+        clearMap();
+      });
 
       document.getElementById("applyAbovePresetBtn").addEventListener("click", function () {
         applyAboveValue(aboveSelect.value);
