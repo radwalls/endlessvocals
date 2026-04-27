@@ -687,15 +687,19 @@
 
             .masthead-right {
                 width: 100%;
-                justify-content: flex-end;
+                justify-content: flex-start;
                 gap: 10px;
-                flex-wrap: nowrap;
+                flex-wrap: wrap;
             }
 
             nav {
                 display: flex;
                 gap: 8px;
                 align-items: center;
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 2px;
             }
 
             nav a {
@@ -709,6 +713,11 @@
                 justify-content: center;
                 white-space: nowrap;
                 text-align: center;
+                flex: 0 0 auto;
+            }
+
+            .mode-toggle {
+                margin-left: auto;
             }
 
             .hero {
@@ -813,7 +822,7 @@
                     <a href="faq.html">FAQ</a>
                     <a href="#coaches">Coaches</a>
                     <a href="shop.html">Shop</a>
-                    <a href="/song-mapper">Song Mapper</a>
+                    <a href="song-mapper/">Song Mapper</a>
                 </nav>
                 <button id="theme-toggle" class="mode-toggle" type="button" aria-label="Switch to dark mode">
                     <span id="theme-toggle-icon" aria-hidden="true">🌞</span>
