@@ -61,6 +61,26 @@
       font-size: 0.95rem;
     }
 
+    .back-link {
+      justify-self: start;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid #3b4760;
+      background: #121827;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: filter 0.2s ease;
+    }
+
+    .back-link:hover {
+      filter: brightness(1.08);
+    }
+
     .composer {
       padding: 14px;
       display: grid;
@@ -555,13 +575,144 @@
       color: #d5def0;
       font: 500 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
+
+    @media (max-width: 980px) {
+      .app {
+        padding: 12px;
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .map-wrap {
+        min-height: 420px;
+      }
+
+      #map {
+        min-height: 360px;
+      }
+
+      .side-panel {
+        position: static;
+        top: auto;
+        max-height: none;
+        overflow: visible;
+      }
+
+      .topbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .song-label {
+        justify-self: stretch;
+        grid-column: 1 / -1;
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .app {
+        padding: 10px;
+        gap: 10px;
+      }
+
+      .header h1 {
+        font-size: 1.45rem;
+      }
+
+      .header p {
+        font-size: 0.92rem;
+        line-height: 1.45;
+      }
+
+      .back-link {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 14px;
+      }
+
+      .composer,
+      .map-wrap,
+      .side-panel {
+        padding: 11px;
+      }
+
+      .generate-row {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .generate-row button,
+      .topbar button,
+      .group > button,
+      .row button {
+        min-height: 42px;
+      }
+
+      .mode-row {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+
+      .line-row {
+        grid-template-columns: 30px minmax(0, 1fr);
+        gap: 6px;
+      }
+
+      .line-handle {
+        width: 28px;
+        height: 28px;
+      }
+
+      .line-words {
+        gap: 5px;
+      }
+
+      .word-card {
+        min-width: 64px;
+        max-width: 150px;
+        padding: 5px 7px 7px;
+        grid-template-rows: 20px auto 18px;
+      }
+
+      .annotation {
+        font-size: 10px;
+      }
+
+      .word {
+        font-size: 16px;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .mode-row {
+        grid-template-columns: 1fr;
+      }
+
+      .word-card {
+        min-width: 58px;
+      }
+
+      #exportBox {
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 <body>
   <main class="app">
     <section class="card header">
-      <h1>Song Mapper (Desktop)</h1>
-      <p>Fast desktop lyric markup: multi-select words, batch apply attributes, and draw enunciation/pitch with your mouse.</p>
+      <h1>Song Mapper</h1>
+      <p>Inspired by the Song Mapping process at the end of Jaime Vendera’s Raise Your Voice. Use the different tools to apply markups to your lyrics, helping you break down and learn songs more effectively.</p>
+      <a class="back-link" href="../">← Back to Endless Vocals</a>
     </section>
 
     <section id="composer" class="card composer">
@@ -1437,15 +1588,23 @@
         }
 
         const rows = bands.map(function () { return []; });
+        let hasWordPitchData = false;
         line.wordIndices.forEach(function (idx) {
           const w = words[idx];
+          if (!w || !w.card) return;
+          const pitchValue = clamp(Number(w.pitch), 0, 100);
+          if (Math.abs(pitchValue - 50) < 0.001) return;
+
+          hasWordPitchData = true;
           const cardRect = w.card.getBoundingClientRect();
           const x = (cardRect.left - wrapRect.left) + (cardRect.width / 2);
-          const yRatio = 1 - (clamp(w.pitch, 0, 100) / 100);
+          const yRatio = 1 - (pitchValue / 100);
           const y = (cardRect.top - wrapRect.top) + (yRatio * cardRect.height);
           const rowIndex = nearestRowIndex((cardRect.top - wrapRect.top) + (cardRect.height / 2), bands);
           rows[rowIndex].push({ x, y });
         });
+
+        if (!hasWordPitchData) return [];
         return rows.filter(function (points) { return points.length; });
       }
 
@@ -1660,13 +1819,17 @@ function renderMusicRollLabels(line, height, rowBands) {
         const line = lines.find(function (item) { return item.lineIndex === lineIndex; });
         if (!line || !line.wordIndices.length) return;
         const now = Date.now();
-        if (lastBreathPlacement && (now - lastBreathPlacement.time) < 70) return;
+        if (lastBreathPlacement
+          && (now - lastBreathPlacement.time) < 70
+          && lastBreathPlacement.lineIndex === lineIndex
+          && Math.abs(lastBreathPlacement.x - clientX) < 4
+          && Math.abs(lastBreathPlacement.y - clientY) < 4) return;
 
         const placement = findNearestBreathGap(line, clientX, clientY);
         if (!placement) return;
 
         const tooClose = line.breaths.some(function (breath) {
-          return Math.abs(breath.x - placement.x) < 10;
+          return Math.abs(breath.x - placement.x) < 10 && Math.abs(breath.y - placement.y) < 18;
         });
         if (tooClose) return;
 
@@ -1678,27 +1841,52 @@ function renderMusicRollLabels(line, height, rowBands) {
         };
         line.breaths.push(breath);
         renderBreathMarkers(line);
-        lastBreathPlacement = { time: now, lineIndex: line.lineIndex, x: placement.x };
+        lastBreathPlacement = { time: now, lineIndex: line.lineIndex, x: clientX, y: clientY };
       }
 
-      function findNearestBreathGap(line, clientX) {
+      function findNearestBreathGap(line, clientX, clientY) {
         const wrapRect = line.wordsWrap.getBoundingClientRect();
         const cards = line.wordIndices.map(function (idx) { return words[idx].card; });
         if (!cards.length) return null;
 
         const cardRects = cards.map(function (card) {
           const r = card.getBoundingClientRect();
-          return { left: r.left - wrapRect.left, right: r.right - wrapRect.left, top: r.top - wrapRect.top, height: r.height };
-        }).sort(function (a, b) { return a.left - b.left; });
+          const top = r.top - wrapRect.top;
+          const bottom = r.bottom - wrapRect.top;
+          return {
+            left: r.left - wrapRect.left,
+            right: r.right - wrapRect.left,
+            top,
+            bottom,
+            mid: top + ((bottom - top) / 2)
+          };
+        });
+
+        const rowBands = getVisualRowBands(line, wrapRect);
+        const localY = clamp(clientY - wrapRect.top, 0, wrapRect.height);
+        const rowIndex = rowBands.length ? nearestRowIndex(localY, rowBands) : 0;
+        const targetBand = rowBands[rowIndex] || {
+          top: 0,
+          bottom: wrapRect.height,
+          mid: wrapRect.height / 2
+        };
+
+        const rowRects = cardRects
+          .filter(function (rect) {
+            return rect.mid >= (targetBand.top - 1) && rect.mid <= (targetBand.bottom + 1);
+          })
+          .sort(function (a, b) { return a.left - b.left; });
+
+        if (!rowRects.length) return null;
 
         const gapX = [];
-        const first = cardRects[0];
+        const first = rowRects[0];
         gapX.push(clamp(first.left - 10, 0, wrapRect.width));
 
-        for (let i = 0; i < cardRects.length - 1; i += 1) {
-          gapX.push((cardRects[i].right + cardRects[i + 1].left) / 2);
+        for (let i = 0; i < rowRects.length - 1; i += 1) {
+          gapX.push((rowRects[i].right + rowRects[i + 1].left) / 2);
         }
-        const last = cardRects[cardRects.length - 1];
+        const last = rowRects[rowRects.length - 1];
         gapX.push(clamp(last.right + 10, 0, wrapRect.width));
 
         const localX = clamp(clientX - wrapRect.left, 0, wrapRect.width);
@@ -1706,7 +1894,7 @@ function renderMusicRollLabels(line, height, rowBands) {
           return Math.abs(current - localX) < Math.abs(closest - localX) ? current : closest;
         }, gapX[0]);
 
-        return { x: nearestX, y: first.top + (first.height * 0.55) };
+        return { x: nearestX, y: targetBand.top + ((targetBand.bottom - targetBand.top) * 0.55) };
       }
 
       function renderBreathMarkers(line) {
@@ -2061,7 +2249,11 @@ function renderMusicRollLabels(line, height, rowBands) {
         const file = event.target.files && event.target.files[0];
         loadSongMapFile(file);
       });
-      clearMapBtn.addEventListener("click", clearMap);
+      clearMapBtn.addEventListener("click", function () {
+        const shouldClear = window.confirm("Are you sure you want to clear map? This will reset everything and you'll lose the current song map.");
+        if (!shouldClear) return;
+        clearMap();
+      });
 
       document.getElementById("applyAbovePresetBtn").addEventListener("click", function () {
         applyAboveValue(aboveSelect.value);
