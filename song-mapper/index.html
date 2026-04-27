@@ -1,101 +1,2104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Song Mapper — Endless Vocals</title>
-  <meta name="description" content="Song Mapper by Endless Vocals helps singers map song sections, training goals, and progress." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Song Mapper Desktop Prototype</title>
   <style>
     :root {
-      --bg: #f6f9ff;
-      --fg: #0c182b;
-      --muted: #50627a;
-      --card: #ffffff;
-      --accent: #1f5cff;
-      --border: rgba(37, 74, 140, 0.18);
+      --bg: #0f1117;
+      --panel: #171b24;
+      --panel-2: #1f2533;
+      --line: #313a4f;
+      --text: #eff3ff;
+      --muted: #a7b1c8;
+      --accent: #78f0c2;
+      --accent-soft: rgba(120, 240, 194, 0.2);
+      --above: #9ed8ff;
+      --below: #ffc56e;
+      --warn: #ff8b8b;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--fg);
-      min-height: 100vh;
+      background: radial-gradient(circle at top, #141a28 0, var(--bg) 38%);
+      color: var(--text);
+      font-family: Inter, "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .app {
+      width: min(1320px, 100%);
+      margin: 0 auto;
+      padding: 18px;
       display: grid;
-      place-items: center;
-      padding: 24px;
+      gap: 12px;
     }
 
     .card {
-      width: min(760px, 100%);
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px;
-      box-shadow: 0 18px 45px rgba(15, 51, 120, 0.12);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
     }
 
-    h1 {
-      margin: 0 0 12px;
-      font-size: clamp(28px, 4vw, 44px);
-      line-height: 1.1;
+    .header {
+      padding: 14px;
+      display: grid;
+      gap: 6px;
     }
 
-    p {
-      margin: 0 0 12px;
-      font-size: 18px;
+    .header h1 {
+      margin: 0;
+      font-size: 1.75rem;
+      font-weight: 900;
+    }
+
+    .header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .composer {
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .composer.collapsed textarea,
+    .composer.collapsed .generate-row {
+      display: none;
+    }
+
+    .topbar {
+      display: none;
+      gap: 8px;
+      align-items: center;
+      grid-template-columns: auto auto auto auto auto 1fr;
+    }
+
+    .composer.collapsed .topbar {
+      display: grid;
+    }
+
+    .song-label {
+      justify-self: end;
+      color: var(--muted);
+      border: 1px solid #3c455d;
+      border-radius: 8px;
+      background: #151b28;
+      padding: 8px 10px;
+      min-width: 220px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 170px;
+      border-radius: 10px;
+      border: 1px solid #3f4a63;
+      background: #111623;
+      color: var(--text);
+      padding: 12px;
+      font: 500 15px/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      resize: vertical;
+    }
+
+    .generate-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    button,
+    select,
+    input[type="text"],
+    input[type="number"] {
+      border-radius: 10px;
+      border: 1px solid #414b63;
+      background: var(--panel-2);
+      color: var(--text);
+      font-size: 14px;
+      padding: 9px 11px;
+    }
+
+    button {
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover { filter: brightness(1.08); }
+
+    .danger {
+      border-color: #5d3a47;
+      color: var(--warn);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) clamp(300px, 28vw, 360px);
+      gap: 12px;
+      align-items: start;
+      min-width: 0;
+    }
+
+    .map-wrap {
+      padding: 14px;
+      min-height: 560px;
+    }
+
+    #map {
+      min-height: 500px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .empty-state {
+      padding: 24px;
+      border: 1px dashed #3a435a;
+      border-radius: 10px;
+      text-align: center;
       color: var(--muted);
     }
 
-    .actions {
-      margin-top: 20px;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+    .line-row {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
       gap: 8px;
-      border-radius: 999px;
-      padding: 11px 16px;
-      font-size: 15px;
+      align-items: start;
+      padding: 4px;
+      border-radius: 10px;
+    }
+
+    .line-row:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .line-handle {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      font-size: 12px;
+      background: #141a27;
+      border: 1px solid #374058;
+      color: var(--muted);
+      padding: 0;
+    }
+
+    .line-handle.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-soft);
+    }
+
+    .line-words {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 2px;
+      min-height: 48px;
+    }
+
+    .music-roll {
+      position: absolute;
+      inset: 0;
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(41, 73, 112, 0.08), rgba(21, 34, 58, 0.04));
+      pointer-events: none;
+      z-index: 0;
+      display: none;
+    }
+
+    .music-roll-label {
+      position: absolute;
+      right: 8px;
+      transform: translateY(-50%);
+      font-size: 10px;
+      color: rgba(200, 233, 255, 0.88);
+      white-space: nowrap;
       font-weight: 700;
-      text-decoration: none;
-      border: 1px solid transparent;
-      transition: transform .15s ease, box-shadow .15s ease;
+      text-shadow: 0 1px 2px rgba(5, 11, 20, 0.75);
     }
 
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-      box-shadow: 0 10px 22px rgba(31, 92, 255, .25);
+    .pitch-line-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      pointer-events: none;
+      z-index: 3;
     }
 
-    .btn-secondary {
-      background: transparent;
-      color: var(--fg);
-      border-color: var(--border);
+    .pitch-path {
+      stroke-width: 3.5;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 2px rgba(95, 220, 255, 0.25));
     }
 
-    .btn:hover {
+    .pitch-path.soft {
+      opacity: 0.52;
+    }
+
+    .pitch-path.strong {
+      opacity: 0.96;
+    }
+
+    .pitch-point {
+      fill: #9af2ff;
+      stroke: #163243;
+      stroke-width: 1.5;
+      cursor: pointer;
+      pointer-events: all;
+    }
+
+    .pitch-note-label {
+      font-size: 9px;
+      font-weight: 700;
+      fill: #dff6ff;
+      paint-order: stroke;
+      stroke: rgba(12, 24, 41, 0.7);
+      stroke-width: 2.2;
+      stroke-linejoin: round;
+      pointer-events: none;
+    }
+
+    .breath-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .breath-marker {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      border: 1px solid #9ef5ff;
+      background: rgba(158, 245, 255, 0.2);
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .breath-marker::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 999px;
+      border: 1px solid rgba(158, 245, 255, 0.72);
+      opacity: 0.2;
+      transform: scale(0.9);
+      pointer-events: none;
+      animation: breath-pulse 1.4s ease-out infinite;
+    }
+
+    .breath-marker::after {
+      content: attr(data-breath-label);
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 2px);
+      transform: translateX(-50%);
+      font-size: 9px;
+      line-height: 1;
+      font-weight: 700;
+      color: #d8f7ff;
+      background: rgba(8, 17, 31, 0.82);
+      border: 1px solid rgba(158, 245, 255, 0.4);
+      border-radius: 999px;
+      padding: 1px 4px;
+      white-space: nowrap;
+      pointer-events: none;
+      text-transform: lowercase;
+    }
+
+    .breath-marker.micro {
+      width: 6px;
+      height: 6px;
+      opacity: 0.65;
+    }
+
+    .breath-marker.micro::before {
+      inset: -1px;
+      animation-duration: 0.75s;
+      opacity: 0.28;
+    }
+
+    .breath-marker.quick {
+      width: 8px;
+      height: 8px;
+      opacity: 0.75;
+    }
+
+    .breath-marker.quick::before {
+      inset: -2px;
+      animation-duration: 1s;
+      opacity: 0.24;
+    }
+
+    .breath-marker.normal {
+      width: 10px;
+      height: 10px;
+      opacity: 0.85;
+    }
+
+    .breath-marker.normal::before {
+      inset: -3px;
+      animation-duration: 1.4s;
+      opacity: 0.22;
+    }
+
+    .breath-marker.deep {
+      width: 12px;
+      height: 12px;
+      box-shadow: 0 0 0 2px rgba(158, 245, 255, 0.18);
+      opacity: 0.95;
+    }
+
+    .breath-marker.deep::before {
+      inset: -4px;
+      animation-duration: 1.9s;
+      opacity: 0.2;
+    }
+
+    .breath-marker.maximum {
+      width: 14px;
+      height: 14px;
+      border-width: 2px;
+      box-shadow: 0 0 0 3px rgba(158, 245, 255, 0.24);
+      opacity: 1;
+    }
+
+    .breath-marker.maximum::before {
+      inset: -5px;
+      animation-duration: 2.4s;
+      opacity: 0.24;
+    }
+
+    @keyframes breath-pulse {
+      0% {
+        transform: scale(0.88);
+        opacity: 0.35;
+      }
+      65% {
+        transform: scale(1.6);
+        opacity: 0.04;
+      }
+      100% {
+        transform: scale(1.7);
+        opacity: 0;
+      }
+    }
+
+    .line-break {
+      height: 14px;
+      margin-left: 42px;
+      border-top: 1px dashed #2f3750;
+      opacity: 0.8;
+    }
+
+    .word-card {
+      position: relative;
+      z-index: 2;
+      border: 1px solid #3a4359;
+      background: linear-gradient(180deg, #1b2332 0%, #171e2b 100%);
+      color: var(--text);
+      border-radius: 10px;
+      min-width: 78px;
+      max-width: 190px;
+      padding: 6px 8px 8px;
+      display: grid;
+      grid-template-rows: 22px auto 20px;
+      gap: 4px;
+      user-select: none;
+    }
+
+    .word-card::after {
+      content: attr(data-volume-indicator);
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      min-width: 14px;
+      padding: 1px 4px;
+      border-radius: 999px;
+      font-size: 10px;
+      line-height: 1.1;
+      font-weight: 800;
+      color: rgba(222, 244, 255, 0.92);
+      background: rgba(8, 17, 31, 0.5);
+      border: 1px solid rgba(160, 214, 255, 0.35);
+      opacity: 0;
       transform: translateY(-1px);
+      pointer-events: none;
+      transition: opacity 90ms linear;
+    }
+
+    .word-card.has-volume::after {
+      opacity: 0.9;
+    }
+
+    .word-card:hover {
+      border-color: #58627d;
+      transform: translateY(-1px);
+    }
+
+    .word-card.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-soft);
+      background: linear-gradient(180deg, #203243, #1b2534);
+    }
+
+    .annotation {
+      min-height: 20px;
+      border-radius: 6px;
+      font-size: 11px;
+      line-height: 1.15;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2px;
+      overflow-wrap: anywhere;
+    }
+
+    .annotation.above {
+      color: var(--above);
+      border: 1px dashed rgba(158, 216, 255, 0.35);
+      background: rgba(158, 216, 255, 0.08);
+    }
+
+    .annotation.below {
+      color: var(--below);
+      border: 1px dashed rgba(255, 197, 110, 0.35);
+      background: rgba(255, 197, 110, 0.08);
+    }
+
+    .word {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .side-panel {
+      position: sticky;
+      top: 12px;
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+      max-height: calc(100vh - 28px);
+      overflow: auto;
+    }
+
+    .selection-block {
+      border: 1px solid #363f57;
+      border-radius: 10px;
+      background: #141a27;
+      padding: 10px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .selection-title {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .selection-main {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .mode-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .mode-toggle.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: inset 0 0 0 1px var(--accent-soft);
+    }
+
+    .group {
+      border-top: 1px solid #353e55;
+      padding-top: 10px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .group label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    #exportBox {
+      padding: 12px;
+      margin: 0;
+      min-height: 120px;
+      white-space: pre-wrap;
+      color: #d5def0;
+      font: 500 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
   </style>
 </head>
 <body>
-  <main class="card" aria-labelledby="song-mapper-title">
-    <h1 id="song-mapper-title">Song Mapper</h1>
-    <p>Welcome to the Song Mapper page for Endless Vocals.</p>
-    <p>This route is now live at <strong>https://endlessvocals.com/song-mapper</strong>.</p>
-    <div class="actions">
-      <a class="btn btn-primary" href="/">Back to Home</a>
-      <a class="btn btn-secondary" href="/faq.html">View FAQ</a>
-    </div>
+  <main class="app">
+    <section class="card header">
+      <h1>Song Mapper (Desktop)</h1>
+      <p>Fast desktop lyric markup: multi-select words, batch apply attributes, and draw enunciation/pitch with your mouse.</p>
+    </section>
+
+    <section id="composer" class="card composer">
+      <textarea id="lyricsInput" placeholder="Paste lyrics here..."></textarea>
+      <div class="generate-row">
+        <button id="generateBtn">Generate Song Map</button>
+        <button id="startLoadBtn">Load Song Map</button>
+      </div>
+
+      <div class="topbar">
+        <button id="editLyricsBtn">Edit Lyrics</button>
+        <button id="exportBtn">Export Map</button>
+        <button id="saveBtn">Save .smap</button>
+        <button id="loadBtn">Load .smap</button>
+        <button id="clearMapBtn" class="danger">Clear Map</button>
+        <input id="songTitle" class="song-label" type="text" placeholder="Song title / practice label" />
+        <input id="loadInput" type="file" accept=".smap,application/json,.json" hidden />
+      </div>
+    </section>
+
+    <section class="workspace">
+      <section class="card map-wrap">
+        <div id="map">
+          <div class="empty-state">Paste lyrics and click “Generate Song Map”.</div>
+        </div>
+      </section>
+
+      <aside class="card side-panel">
+        <div class="selection-block">
+          <div class="selection-title">Selection</div>
+          <div id="selectedSummary" class="selection-main">0 words selected</div>
+          <div id="selectedWordName" class="selection-title">No word selected</div>
+        </div>
+
+        <div class="mode-row">
+          <button id="enuncModeBtn" class="mode-toggle">Enunciation Draw</button>
+          <button id="volumeModeBtn" class="mode-toggle">Volume Draw</button>
+          <button id="pitchModeBtn" class="mode-toggle">Pitch Draw</button>
+          <button id="breathModeBtn" class="mode-toggle">Breath Tool</button>
+        </div>
+
+        <div class="group">
+          <label>
+            <input id="trueMusicModeToggle" type="checkbox" />
+            True Music Mode
+          </label>
+        </div>
+
+        <div class="group">
+          <label for="aboveSelect">Vocal mode / tone (above)</label>
+          <div class="row">
+            <select id="aboveSelect">
+              <option value="">None</option>
+              <option>full voice clean</option>
+              <option>mixed voice</option>
+              <option>head mix</option>
+              <option>falsetto</option>
+              <option>airy falsetto</option>
+              <option>breathy</option>
+              <option>grit</option>
+              <option>breathy grit</option>
+              <option>distorted clean</option>
+              <option>power scream</option>
+              <option>growl</option>
+              <option>compressed</option>
+              <option>tiny singing</option>
+              <option>forward placement</option>
+              <option>sean connery</option>
+              <option>soft palate buzz</option>
+            </select>
+            <button id="applyAbovePresetBtn">Apply</button>
+          </div>
+          <div class="row">
+            <input id="customAbove" type="text" placeholder="Custom above note..." />
+            <button id="applyCustomAboveBtn">Apply</button>
+          </div>
+        </div>
+
+        <div class="group">
+          <label for="belowSelect">Performance instruction (below)</label>
+          <div class="row">
+            <select id="belowSelect">
+              <option value="">None</option>
+              <option>support down</option>
+              <option>push down</option>
+              <option>drop jaw</option>
+              <option>breathe</option>
+              <option>lean in</option>
+              <option>clear consonants</option>
+              <option>punch word</option>
+              <option>hold back</option>
+              <option>explode</option>
+              <option>taper off</option>
+              <option>drag timing</option>
+              <option>push timing</option>
+              <option>delay entry</option>
+              <option>early entry</option>
+              <option>hold longer</option>
+              <option>place forward</option>
+              <option>place up</option>
+              <option>stay small</option>
+              <option>add compression</option>
+              <option>release tension</option>
+              <option>lift soft palate</option>
+              <option>stabilize breath</option>
+              <option>connect phrase</option>
+              <option>light onset</option>
+              <option>hard onset</option>
+              <option>palate buzz</option>
+            </select>
+            <button id="applyBelowPresetBtn">Apply</button>
+          </div>
+          <div class="row">
+            <input id="customBelow" type="text" placeholder="Custom below note..." />
+            <button id="applyCustomBelowBtn">Apply</button>
+          </div>
+        </div>
+
+        <div class="group">
+          <label for="volumeInput">Volume (1-10)</label>
+          <div class="row">
+            <input id="volumeInput" type="number" min="1" max="10" placeholder="-" />
+            <button id="applyVolumeBtn">Apply</button>
+          </div>
+          <button id="clearVolumeBtn">Clear Volume</button>
+        </div>
+
+        <div class="group">
+          <label for="breathTypeSelect">Breath type</label>
+          <select id="breathTypeSelect">
+            <option value="micro">micro breath</option>
+            <option value="quick">quick breath</option>
+            <option value="normal" selected>normal breath</option>
+            <option value="deep">deep breath</option>
+            <option value="maximum">maximum breath potential</option>
+          </select>
+        </div>
+
+        <div class="group">
+          <label for="editWordInput">Edit selected word text (single selection)</label>
+          <div class="row">
+            <input id="editWordInput" type="text" placeholder="Correct typo..." />
+            <button id="applyWordEditBtn">Update</button>
+          </div>
+        </div>
+
+        <div class="group">
+          <button id="clearSelectedBtn" class="danger">Clear Selected Markings</button>
+        </div>
+      </aside>
+    </section>
+
+    <pre id="exportBox" class="card">Nothing exported yet.</pre>
   </main>
+
+  <script>
+    (function () {
+      const composer = document.getElementById("composer");
+      const lyricsInput = document.getElementById("lyricsInput");
+      const generateBtn = document.getElementById("generateBtn");
+      const startLoadBtn = document.getElementById("startLoadBtn");
+      const editLyricsBtn = document.getElementById("editLyricsBtn");
+      const exportBtn = document.getElementById("exportBtn");
+      const saveBtn = document.getElementById("saveBtn");
+      const loadBtn = document.getElementById("loadBtn");
+      const loadInput = document.getElementById("loadInput");
+      const clearMapBtn = document.getElementById("clearMapBtn");
+      const songTitleInput = document.getElementById("songTitle");
+      const map = document.getElementById("map");
+      const exportBox = document.getElementById("exportBox");
+      const selectedSummary = document.getElementById("selectedSummary");
+      const selectedWordName = document.getElementById("selectedWordName");
+      const editWordInput = document.getElementById("editWordInput");
+
+      const aboveSelect = document.getElementById("aboveSelect");
+      const belowSelect = document.getElementById("belowSelect");
+      const customAbove = document.getElementById("customAbove");
+      const customBelow = document.getElementById("customBelow");
+      const volumeInput = document.getElementById("volumeInput");
+      const breathTypeSelect = document.getElementById("breathTypeSelect");
+      const trueMusicModeToggle = document.getElementById("trueMusicModeToggle");
+
+      const enuncModeBtn = document.getElementById("enuncModeBtn");
+      const volumeModeBtn = document.getElementById("volumeModeBtn");
+      const pitchModeBtn = document.getElementById("pitchModeBtn");
+      const breathModeBtn = document.getElementById("breathModeBtn");
+
+      let words = [];
+      let lines = [];
+      let selectedIndices = new Set();
+      let lastSelectedIndex = null;
+      let lastLineSelected = null;
+      let drawMode = null;
+      let trueMusicMode = false;
+      let isDrawing = false;
+      let activePitchDrag = null;
+      let pitchPointSeed = 0;
+      let breathSeed = 0;
+      let lastBreathPlacement = null;
+      const NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+      const MUSIC_NOTE_RANGE = buildMusicNoteRange(24, 96); // C1 to C7
+
+      function normalizeLyrics(text) {
+        return text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n");
+      }
+
+      function buildMusicNoteRange(startMidi, endMidi) {
+        const notes = [];
+        for (let midi = startMidi; midi <= endMidi; midi += 1) {
+          const octave = Math.floor(midi / 12) - 1;
+          notes.push({ midi, label: NOTE_NAMES[midi % 12] + String(octave) });
+        }
+        return notes.reverse();
+      }
+
+      function noteIndexFromY(y, height) {
+        const step = Math.max(1, (height - 1) / Math.max(1, MUSIC_NOTE_RANGE.length - 1));
+        return clamp(Math.round(y / step), 0, MUSIC_NOTE_RANGE.length - 1);
+      }
+
+      function snapYToMusicNote(y, height) {
+        const idx = noteIndexFromY(y, height);
+        const step = Math.max(1, (height - 1) / Math.max(1, MUSIC_NOTE_RANGE.length - 1));
+        return idx * step;
+      }
+
+      function musicNoteLabelFromY(y, height) {
+        return MUSIC_NOTE_RANGE[noteIndexFromY(y, height)].label;
+      }
+
+      function createStop(offset, color) {
+        const stop = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+        stop.setAttribute("offset", offset);
+        stop.setAttribute("stop-color", color);
+        return stop;
+      }
+
+      function makeWordData(text, index, lineIndex) {
+        return {
+          index,
+          lineIndex,
+          text,
+          above: "",
+          below: "",
+          volume: null,
+          enunciation: 50,
+          letterLevels: [],
+          pitch: 50,
+          card: null,
+          aboveNode: null,
+          belowNode: null,
+          wordNode: null,
+          volNode: null,
+          volBarNode: null,
+          volFillNode: null
+        };
+      }
+
+      function clearModel() {
+        words = [];
+        lines = [];
+        selectedIndices = new Set();
+        lastSelectedIndex = null;
+        lastLineSelected = null;
+        lastBreathPlacement = null;
+      }
+
+      function renderEmpty(message) {
+        map.innerHTML = "";
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.textContent = message;
+        map.appendChild(empty);
+      }
+
+      function generateMap() {
+        clearModel();
+        exportBox.textContent = "Nothing exported yet.";
+        const raw = lyricsInput.value;
+
+        if (!raw.trim()) {
+          renderEmpty("Paste lyrics and click “Generate Song Map”.");
+          return;
+        }
+
+        map.innerHTML = "";
+        const parsedLines = normalizeLyrics(raw);
+        let globalIndex = 0;
+
+        parsedLines.forEach(function (lineText, lineIndex) {
+          if (!lineText.trim()) {
+            const breakNode = document.createElement("div");
+            breakNode.className = "line-break";
+            map.appendChild(breakNode);
+            lines.push({ lineIndex, wordIndices: [], handle: null, raw: "" });
+            return;
+          }
+
+          const row = document.createElement("div");
+          row.className = "line-row";
+
+          const handle = document.createElement("button");
+          handle.type = "button";
+          handle.className = "line-handle";
+          handle.textContent = String(lineIndex + 1);
+
+          const wordsWrap = document.createElement("div");
+          wordsWrap.className = "line-words";
+          const musicRoll = document.createElement("div");
+          musicRoll.className = "music-roll";
+          wordsWrap.appendChild(musicRoll);
+          const pitchSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          pitchSvg.classList.add("pitch-line-layer");
+          const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+          const gradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+          const gradientId = "pitch-gradient-" + lineIndex + "-" + Date.now();
+          gradient.setAttribute("id", gradientId);
+          gradient.setAttribute("x1", "0%");
+          gradient.setAttribute("y1", "100%");
+          gradient.setAttribute("x2", "0%");
+          gradient.setAttribute("y2", "0%");
+          gradient.appendChild(createStop("0%", "#4b7bff"));
+          gradient.appendChild(createStop("50%", "#67dfff"));
+          gradient.appendChild(createStop("100%", "#ffe667"));
+
+          const clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
+          const clipId = "pitch-gap-clip-" + lineIndex + "-" + Date.now();
+          clipPath.setAttribute("id", clipId);
+          defs.append(gradient, clipPath);
+
+          const pitchSoftGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+          pitchSoftGroup.classList.add("pitch-soft-group");
+          pitchSoftGroup.setAttribute("stroke", "url(#" + gradientId + ")");
+
+          const pitchStrongGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+          pitchStrongGroup.classList.add("pitch-strong-group");
+          pitchStrongGroup.setAttribute("stroke", "url(#" + gradientId + ")");
+          pitchStrongGroup.setAttribute("clip-path", "url(#" + clipId + ")");
+
+          pitchSvg.append(defs, pitchSoftGroup, pitchStrongGroup);
+          wordsWrap.appendChild(pitchSvg);
+          const breathLayer = document.createElement("div");
+          breathLayer.className = "breath-layer";
+          wordsWrap.appendChild(breathLayer);
+
+          const wordIndices = [];
+
+          lineText.trim().split(/\s+/).forEach(function (wordText) {
+            const data = makeWordData(wordText, globalIndex, lineIndex);
+            const card = createWordCard(data);
+            data.card = card;
+            words.push(data);
+            wordIndices.push(globalIndex);
+            wordsWrap.appendChild(card);
+            globalIndex += 1;
+          });
+
+          handle.addEventListener("click", function (event) {
+            handleLineSelection(lineIndex, event);
+          });
+
+          wordsWrap.addEventListener("mousedown", function (event) {
+            if (drawMode === "pitch") {
+              handlePitchMouseDown(lineIndex, event);
+              return;
+            }
+            if (drawMode === "breath" && event.button === 0) {
+              isDrawing = true;
+              placeBreathMarker(lineIndex, event.clientX, event.clientY);
+              event.preventDefault();
+            }
+          });
+
+          wordsWrap.addEventListener("mousemove", function (event) {
+            if (drawMode === "pitch") {
+              handlePitchMouseMove(lineIndex, event);
+              return;
+            }
+            if (!isDrawing || drawMode !== "breath") return;
+            placeBreathMarker(lineIndex, event.clientX, event.clientY);
+          });
+
+          wordsWrap.addEventListener("contextmenu", function (event) {
+            if (drawMode !== "pitch") return;
+            const line = getLine(lineIndex);
+            if (!line) return;
+            const target = findPitchPointTarget(line, event.target);
+            if (!target) return;
+            event.preventDefault();
+            deletePitchPoint(line, target.point.id);
+          });
+
+          row.append(handle, wordsWrap);
+          map.appendChild(row);
+          lines.push({
+            lineIndex,
+            wordIndices,
+            handle,
+            raw: lineText,
+            wordsWrap,
+            musicRoll,
+            pitchSvg,
+            pitchSoftGroup,
+            pitchStrongGroup,
+            clipPath,
+            pitchPoints: [],
+            breaths: [],
+            breathLayer
+          });
+        });
+
+        composer.classList.add("collapsed");
+        updateSelectionUI();
+        syncPitchLayerVisibility();
+      }
+
+      function createWordCard(wordData) {
+        const card = document.createElement("div");
+        card.className = "word-card";
+        card.dataset.index = String(wordData.index);
+
+        const above = document.createElement("div");
+        above.className = "annotation above";
+        above.textContent = "\u00a0";
+
+        const wordNode = document.createElement("div");
+        wordNode.className = "word";
+
+        const below = document.createElement("div");
+        below.className = "annotation below";
+        below.textContent = "\u00a0";
+
+        card.append(above, wordNode, below);
+
+        wordData.aboveNode = above;
+        wordData.belowNode = below;
+        wordData.wordNode = wordNode;
+        wordData.volNode = null;
+        wordData.volBarNode = null;
+        wordData.volFillNode = null;
+
+        applyWordVisual(wordData);
+
+        card.addEventListener("click", function (event) {
+          handleWordSelection(wordData.index, event);
+        });
+
+        card.addEventListener("mousedown", function (event) {
+          if ((drawMode !== "enunciation" && drawMode !== "volume") || event.button !== 0) return;
+          isDrawing = true;
+          applyDrawAtPoint(wordData.index, event.clientX, event.clientY, event);
+          event.preventDefault();
+        });
+
+        card.addEventListener("mousemove", function (event) {
+          if (!isDrawing || (drawMode !== "enunciation" && drawMode !== "volume")) return;
+          applyDrawAtPoint(wordData.index, event.clientX, event.clientY, event);
+        });
+
+        card.addEventListener("dblclick", function () {
+          selectOnly(wordData.index);
+          editWordInput.value = wordData.text;
+          editWordInput.focus();
+          editWordInput.select();
+        });
+
+        return card;
+      }
+
+      function handleWordSelection(index, event) {
+        const isMultiToggle = event.ctrlKey || event.metaKey;
+        const isRange = event.shiftKey;
+
+        if (isRange && lastSelectedIndex !== null) {
+          const [start, end] = [lastSelectedIndex, index].sort(function (a, b) { return a - b; });
+          if (!isMultiToggle) selectedIndices.clear();
+          for (let i = start; i <= end; i += 1) selectedIndices.add(i);
+        } else if (isMultiToggle) {
+          if (selectedIndices.has(index)) selectedIndices.delete(index);
+          else selectedIndices.add(index);
+          lastSelectedIndex = index;
+        } else {
+          selectOnly(index);
+        }
+
+        if (isRange) lastSelectedIndex = index;
+        updateSelectionUI();
+      }
+
+      function handleLineSelection(lineIndex, event) {
+        const line = lines.find(function (item) { return item.lineIndex === lineIndex; });
+        if (!line || !line.wordIndices.length) return;
+
+        const isShift = event.shiftKey;
+        const isMulti = event.ctrlKey || event.metaKey;
+
+        if (isShift && lastLineSelected !== null) {
+          const [start, end] = [lastLineSelected, lineIndex].sort(function (a, b) { return a - b; });
+          if (!isMulti) selectedIndices.clear();
+          lines.forEach(function (item) {
+            if (item.lineIndex < start || item.lineIndex > end) return;
+            item.wordIndices.forEach(function (idx) { selectedIndices.add(idx); });
+          });
+        } else {
+          if (!isMulti) selectedIndices.clear();
+          line.wordIndices.forEach(function (idx) {
+            if (isMulti && selectedIndices.has(idx)) selectedIndices.delete(idx);
+            else selectedIndices.add(idx);
+          });
+        }
+
+        lastLineSelected = lineIndex;
+        if (line.wordIndices.length) lastSelectedIndex = line.wordIndices[line.wordIndices.length - 1];
+        updateSelectionUI();
+      }
+
+      function selectOnly(index) {
+        selectedIndices.clear();
+        selectedIndices.add(index);
+        lastSelectedIndex = index;
+      }
+
+      function updateSelectionUI() {
+        words.forEach(function (word) {
+          word.card.classList.toggle("selected", selectedIndices.has(word.index));
+        });
+
+        lines.forEach(function (line) {
+          if (!line.handle || !line.wordIndices.length) return;
+          const allSelected = line.wordIndices.every(function (idx) { return selectedIndices.has(idx); });
+          line.handle.classList.toggle("active", allSelected);
+        });
+
+        const count = selectedIndices.size;
+        if (count === 0) {
+          selectedSummary.textContent = "0 words selected";
+          selectedWordName.textContent = "No word selected";
+          editWordInput.value = "";
+          return;
+        }
+
+        if (count === 1) {
+          const selectedIndex = Array.from(selectedIndices)[0];
+          const w = words[selectedIndex];
+          selectedSummary.textContent = "1 word selected";
+          selectedWordName.textContent = "Word: " + w.text;
+          editWordInput.value = w.text;
+          return;
+        }
+
+        selectedSummary.textContent = String(count) + " words selected";
+        selectedWordName.textContent = "Batch edit active";
+        editWordInput.value = "";
+      }
+
+      function applyToSelected(fn) {
+        if (!selectedIndices.size) return;
+        selectedIndices.forEach(function (idx) {
+          const w = words[idx];
+          if (!w) return;
+          fn(w);
+          applyWordVisual(w);
+        });
+        updateSelectionUI();
+      }
+
+      function applyWordVisual(word) {
+        word.aboveNode.textContent = word.above || "\u00a0";
+        word.belowNode.textContent = word.below || "\u00a0";
+
+        normalizeLetterLevels(word);
+        renderWordLetters(word);
+
+        applyVolumeVisual(word);
+        if (isPitchToolActive()) redrawPitchLine(word.lineIndex);
+      }
+
+      function applyVolumeVisual(word) {
+        if (!word || !word.card) return;
+        if (word.volume == null) {
+          word.card.style.background = "linear-gradient(180deg, #1b2332 0%, #171e2b 100%)";
+          word.card.classList.remove("has-volume");
+          delete word.card.dataset.volumeIndicator;
+          return;
+        }
+        const vol = clamp(Math.round(word.volume), 1, 10);
+        const tintTop = volumeColor(vol, 0.42);
+        const tintBottom = volumeColor(vol, 0.68);
+        word.card.style.background =
+          "linear-gradient(180deg, " + tintTop + " 0%, " + tintBottom + " 100%)";
+        word.card.classList.add("has-volume");
+        word.card.dataset.volumeIndicator = String(vol);
+      }
+
+      function isPitchToolActive() {
+        return drawMode === "pitch";
+      }
+
+      function syncPitchLayerVisibility() {
+        lines.forEach(function (line) {
+          if (!line || !line.pitchSvg) return;
+          const showPitchLayer = isPitchToolActive();
+          line.pitchSvg.style.display = showPitchLayer ? "block" : "none";
+          if (line.wordsWrap) line.wordsWrap.classList.toggle("music-mode", showPitchLayer && trueMusicMode);
+          if (line.musicRoll) line.musicRoll.style.display = (showPitchLayer && trueMusicMode) ? "block" : "none";
+        });
+      }
+
+      function setDrawMode(mode) {
+        drawMode = drawMode === mode ? null : mode;
+        activePitchDrag = null;
+        enuncModeBtn.classList.toggle("active", drawMode === "enunciation");
+        volumeModeBtn.classList.toggle("active", drawMode === "volume");
+        pitchModeBtn.classList.toggle("active", drawMode === "pitch");
+        breathModeBtn.classList.toggle("active", drawMode === "breath");
+        syncPitchLayerVisibility();
+        if (isPitchToolActive()) redrawAllPitchLines();
+      }
+
+      function setTrueMusicMode(enabled) {
+        trueMusicMode = Boolean(enabled);
+        syncPitchLayerVisibility();
+        if (isPitchToolActive()) redrawAllPitchLines();
+      }
+
+      function applyDrawAtPoint(index, clientX, clientY, event) {
+        const w = words[index];
+        if (!w || !w.card) return;
+        const rect = w.card.getBoundingClientRect();
+        const ratio = clamp((clientY - rect.top) / rect.height, 0, 1);
+        const value = Math.round((1 - ratio) * 100);
+
+        if (drawMode === "enunciation") {
+          paintLetterLevels(w, clientX, value);
+        } else if (drawMode === "volume") {
+          if (event && (event.altKey || event.shiftKey)) {
+            w.volume = null;
+          } else {
+            w.volume = clamp(Math.round(1 + ((1 - ratio) * 9)), 1, 10);
+          }
+        }
+        applyWordVisual(w);
+      }
+
+      function getLine(lineIndex) {
+        return lines.find(function (item) { return item.lineIndex === lineIndex; });
+      }
+
+      function findPitchPointTarget(line, target) {
+        if (!line || !target || !target.closest) return null;
+        const pointNode = target.closest(".pitch-point");
+        if (!pointNode) return null;
+        const pointId = pointNode.dataset.pitchPointId;
+        if (!pointId) return null;
+        const point = line.pitchPoints.find(function (item) { return item.id === pointId; });
+        if (!point) return null;
+        return { point, pointNode };
+      }
+
+      function getLocalPointPosition(line, clientX, clientY) {
+        const wrapRect = line.wordsWrap.getBoundingClientRect();
+        return {
+          x: clamp(clientX - wrapRect.left, 0, wrapRect.width),
+          y: clamp(clientY - wrapRect.top, 0, wrapRect.height),
+          width: Math.max(1, wrapRect.width),
+          height: Math.max(1, wrapRect.height)
+        };
+      }
+
+      function snapYToMusicNoteInRow(y, rowBands) {
+        if (!rowBands || !rowBands.length) return y;
+        const rowIndex = nearestRowIndex(y, rowBands);
+        const row = rowBands[rowIndex];
+        const rowHeight = Math.max(1, row.bottom - row.top);
+        const localY = clamp(y - row.top, 0, rowHeight);
+        return row.top + snapYToMusicNote(localY, rowHeight);
+      }
+
+      function musicNoteLabelFromLineY(y, rowBands) {
+        if (!rowBands || !rowBands.length) return musicNoteLabelFromY(y, 1);
+        const rowIndex = nearestRowIndex(y, rowBands);
+        const row = rowBands[rowIndex];
+        const rowHeight = Math.max(1, row.bottom - row.top);
+        const localY = clamp(y - row.top, 0, rowHeight);
+        return musicNoteLabelFromY(localY, rowHeight);
+      }
+
+      function canCreatePitchPoint(line, x, y, ignoredPointId) {
+        const minSpacingPx = 4;
+        return !line.pitchPoints.some(function (item) {
+          if (ignoredPointId && item.id === ignoredPointId) return false;
+          const dx = item.x - x;
+          const dy = item.y - y;
+          return Math.sqrt((dx * dx) + (dy * dy)) < minSpacingPx;
+        });
+      }
+
+      function createPitchPoint(line, x, y) {
+        if (!canCreatePitchPoint(line, x, y)) return null;
+        const point = { id: "p-" + (pitchPointSeed += 1), x, y };
+        line.pitchPoints.push(point);
+        sortLinePitchPoints(line);
+        return point;
+      }
+
+      function sortLinePitchPoints(line) {
+        line.pitchPoints.sort(function (a, b) { return a.x - b.x; });
+      }
+
+      function deletePitchPoint(line, pointId) {
+        line.pitchPoints = line.pitchPoints.filter(function (point) { return point.id !== pointId; });
+        redrawPitchLine(line.lineIndex);
+      }
+
+      function handlePitchMouseDown(lineIndex, event) {
+        if (event.button !== 0 && event.button !== 2) return;
+        const line = getLine(lineIndex);
+        if (!line || !line.wordsWrap) return;
+        const target = findPitchPointTarget(line, event.target);
+
+        if (event.button === 2 || (event.button === 0 && event.ctrlKey)) {
+          if (target) {
+            deletePitchPoint(line, target.point.id);
+            event.preventDefault();
+          }
+          return;
+        }
+
+        if (event.button !== 0) return;
+        const local = getLocalPointPosition(line, event.clientX, event.clientY);
+        if (trueMusicMode) {
+          const rowBands = getVisualRowBands(line, line.wordsWrap.getBoundingClientRect());
+          local.y = snapYToMusicNoteInRow(local.y, rowBands);
+        }
+        let point = target ? target.point : createPitchPoint(line, local.x, local.y);
+        if (!point) return;
+        if (!target) {
+          point.x = local.x;
+          point.y = local.y;
+          sortLinePitchPoints(line);
+        }
+
+        activePitchDrag = { lineIndex: line.lineIndex, pointId: point.id };
+        redrawPitchLine(line.lineIndex);
+        event.preventDefault();
+      }
+
+      function handlePitchMouseMove(lineIndex, event) {
+        if (!activePitchDrag || activePitchDrag.lineIndex !== lineIndex || (event.buttons & 1) !== 1) return;
+        const line = getLine(lineIndex);
+        if (!line) return;
+        const point = line.pitchPoints.find(function (item) { return item.id === activePitchDrag.pointId; });
+        if (!point) return;
+        const local = getLocalPointPosition(line, event.clientX, event.clientY);
+        const rowBands = trueMusicMode ? getVisualRowBands(line, line.wordsWrap.getBoundingClientRect()) : [];
+        point.x = local.x;
+        point.y = trueMusicMode ? snapYToMusicNoteInRow(local.y, rowBands) : local.y;
+        sortLinePitchPoints(line);
+        redrawPitchLine(line.lineIndex);
+        event.preventDefault();
+      }
+
+      function normalizeLetterLevels(word) {
+        const len = word.text.length;
+        if (!len) {
+          word.letterLevels = [];
+          word.enunciation = 50;
+          return;
+        }
+        if (!Array.isArray(word.letterLevels) || word.letterLevels.length !== len) {
+          word.letterLevels = Array.from({ length: len }, function () {
+            return clamp(word.enunciation, 0, 100);
+          });
+        }
+      }
+
+      function renderWordLetters(word) {
+        word.wordNode.innerHTML = "";
+        if (!word.text.length) return;
+
+        let total = 0;
+        Array.from(word.text).forEach(function (char, idx) {
+          const level = clamp(word.letterLevels[idx], 0, 100);
+          total += level;
+
+          const span = document.createElement("span");
+          span.style.display = "inline-block";
+          span.style.transition = "font-size 60ms linear, opacity 60ms linear, transform 60ms linear";
+
+          let renderedChar = char;
+          let fontSize = 18;
+          let fontWeight = 700;
+          let opacity = 0.9;
+
+          if (level < 35) {
+            renderedChar = char.toLowerCase();
+            fontSize = 16;
+            fontWeight = 600;
+            opacity = 0.72;
+          } else if (level > 70) {
+            renderedChar = char.toUpperCase();
+            fontSize = 20;
+            fontWeight = 900;
+            opacity = 1;
+          }
+
+          span.textContent = renderedChar;
+          span.style.fontSize = String(fontSize) + "px";
+          span.style.fontWeight = String(fontWeight);
+          span.style.opacity = String(opacity);
+          span.style.transform = level > 70 ? "translateY(-0.5px)" : "none";
+          word.wordNode.appendChild(span);
+        });
+
+        word.enunciation = Math.round(total / word.text.length);
+      }
+
+      function paintLetterLevels(word, clientX, value) {
+        normalizeLetterLevels(word);
+        const textRect = word.wordNode.getBoundingClientRect();
+        const ratioX = clamp((clientX - textRect.left) / Math.max(textRect.width, 1), 0, 1);
+        const center = Math.round(ratioX * (word.text.length - 1));
+
+        word.letterLevels = word.letterLevels.map(function (existing, idx) {
+          const dist = Math.abs(idx - center);
+          const influence = Math.max(0, 1 - dist / 2.2);
+          if (influence <= 0) return existing;
+          return Math.round(existing * (1 - influence) + value * influence);
+        });
+      }
+
+      function redrawAllPitchLines() {
+        if (!isPitchToolActive()) return;
+        lines.forEach(function (line) {
+          redrawPitchLine(line.lineIndex);
+        });
+      }
+
+      function redrawPitchLine(lineIndex) {
+        if (!isPitchToolActive()) return;
+        const line = lines.find(function (item) { return item.lineIndex === lineIndex; });
+        if (!line || !line.pitchSoftGroup || !line.pitchStrongGroup || !line.wordsWrap || !line.wordIndices.length) return;
+
+        const wrapRect = line.wordsWrap.getBoundingClientRect();
+        const width = Math.max(1, wrapRect.width);
+        const height = Math.max(1, wrapRect.height);
+        const rowBands = getVisualRowBands(line, wrapRect);
+        line.pitchSvg.setAttribute("viewBox", "0 0 " + width + " " + height);
+        line.pitchSvg.setAttribute("preserveAspectRatio", "none");
+        renderMusicGuides(line, width, height, rowBands);
+        const rowPointSets = getPitchRows(line, wrapRect, rowBands);
+        renderPitchPathRows(line.pitchSoftGroup, rowPointSets, "soft");
+        renderPitchPathRows(line.pitchStrongGroup, rowPointSets, "strong");
+        updatePitchGapClip(line, width, height);
+        renderPitchPoints(line, rowBands);
+      }
+
+      function getPitchRows(line, wrapRect, rowBands) {
+        const bands = rowBands || getVisualRowBands(line, wrapRect);
+        if (!bands.length) return [];
+
+        if (line.pitchPoints && line.pitchPoints.length) {
+          const rows = bands.map(function () { return []; });
+          line.pitchPoints.forEach(function (point) {
+            const rowIndex = nearestRowIndex(point.y, bands);
+            rows[rowIndex].push({ x: point.x, y: point.y });
+          });
+          return rows
+            .map(function (points) {
+              return points.slice().sort(function (a, b) { return a.x - b.x; });
+            })
+            .filter(function (points) { return points.length; });
+        }
+
+        const rows = bands.map(function () { return []; });
+        line.wordIndices.forEach(function (idx) {
+          const w = words[idx];
+          const cardRect = w.card.getBoundingClientRect();
+          const x = (cardRect.left - wrapRect.left) + (cardRect.width / 2);
+          const yRatio = 1 - (clamp(w.pitch, 0, 100) / 100);
+          const y = (cardRect.top - wrapRect.top) + (yRatio * cardRect.height);
+          const rowIndex = nearestRowIndex((cardRect.top - wrapRect.top) + (cardRect.height / 2), bands);
+          rows[rowIndex].push({ x, y });
+        });
+        return rows.filter(function (points) { return points.length; });
+      }
+
+      function getVisualRowBands(line, wrapRect) {
+        const bands = [];
+        line.wordIndices.forEach(function (idx) {
+          const card = words[idx] && words[idx].card;
+          if (!card) return;
+          const r = card.getBoundingClientRect();
+          const top = r.top - wrapRect.top;
+          const bottom = r.bottom - wrapRect.top;
+          const middle = top + ((bottom - top) / 2);
+          let target = null;
+          for (let i = 0; i < bands.length; i += 1) {
+            if (Math.abs(bands[i].mid - middle) < 8) {
+              target = bands[i];
+              break;
+            }
+          }
+          if (!target) {
+            target = { top, bottom, mid: middle };
+            bands.push(target);
+          } else {
+            target.top = Math.min(target.top, top);
+            target.bottom = Math.max(target.bottom, bottom);
+            target.mid = target.top + ((target.bottom - target.top) / 2);
+          }
+        });
+        return bands.sort(function (a, b) { return a.top - b.top; });
+      }
+
+      function nearestRowIndex(y, rowBands) {
+        let bestIndex = 0;
+        let bestDistance = Number.POSITIVE_INFINITY;
+        rowBands.forEach(function (band, idx) {
+          const distance = Math.abs(band.mid - y);
+          if (distance < bestDistance) {
+            bestDistance = distance;
+            bestIndex = idx;
+          }
+        });
+        return bestIndex;
+      }
+
+      function renderPitchPathRows(group, rowPointSets, strengthClass) {
+        while (group.firstChild) group.removeChild(group.firstChild);
+        rowPointSets.forEach(function (points) {
+          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          path.setAttribute("d", buildPitchPath(points));
+          path.setAttribute("class", "pitch-path " + strengthClass);
+          group.appendChild(path);
+        });
+      }
+
+      function buildPitchPath(points) {
+        if (!points.length) return "";
+        if (points.length === 1) {
+          const single = points[0];
+          return "M " + single.x + " " + single.y + " L " + (single.x + 1) + " " + single.y;
+        }
+        let d = "M " + points[0].x + " " + points[0].y;
+        for (let i = 1; i < points.length; i += 1) {
+          const prev = points[i - 1];
+          const curr = points[i];
+          const midX = (prev.x + curr.x) / 2;
+          const midY = (prev.y + curr.y) / 2;
+          d += " Q " + prev.x + " " + prev.y + " " + midX + " " + midY;
+        }
+        const last = points[points.length - 1];
+        d += " T " + last.x + " " + last.y;
+        return d;
+      }
+
+ function renderMusicGuides(line, width, height, rowBands) {
+  if (!line || !line.pitchSvg) return;
+
+  // Always remove ALL existing grids (fix stacking)
+  line.pitchSvg.querySelectorAll(".music-guides").forEach(el => el.remove());
+
+  // If music mode is OFF → clear labels and stop
+  if (!trueMusicMode) {
+    if (line.musicRoll) line.musicRoll.innerHTML = "";
+    return;
+  }
+
+  // Create grid once
+  const guides = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  guides.setAttribute("class", "music-guides");
+
+  const step = Math.max(1, (height - 1) / Math.max(1, MUSIC_NOTE_RANGE.length - 1));
+
+  MUSIC_NOTE_RANGE.forEach(function (note, idx) {
+    const isNatural = !note.label.includes("#");
+    if (!isNatural) return;
+
+    const isC = note.label.startsWith("C");
+    const isG = note.label.startsWith("G");
+    if (!isC && !isG) return;
+
+    const y = idx * step;
+
+    const guide = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    guide.setAttribute("x1", "0");
+    guide.setAttribute("x2", String(width));
+    guide.setAttribute("y1", String(y));
+    guide.setAttribute("y2", String(y));
+    guide.setAttribute("stroke", isC ? "rgba(154, 209, 255, 0.24)" : "rgba(154, 209, 255, 0.12)");
+    guide.setAttribute("stroke-width", isC ? "1.2" : "0.8");
+
+    guides.appendChild(guide);
+  });
+
+  line.pitchSvg.insertBefore(guides, line.pitchSoftGroup);
+
+  // Render labels AFTER grid
+  // renderMusicRollLabels(line, height, rowBands);
+}
+
+function renderMusicRollLabels(line, height, rowBands) {
+  if (!line || !line.musicRoll) return;
+
+  // Always clear first
+  line.musicRoll.innerHTML = "";
+
+  // Only render if enabled
+  if (!trueMusicMode) return;
+
+  const step = Math.max(1, (height - 1) / Math.max(1, MUSIC_NOTE_RANGE.length - 1));
+
+  MUSIC_NOTE_RANGE.forEach(function (note, idx) {
+    if (!note.label.startsWith("C")) return;
+
+    const label = document.createElement("span");
+    label.className = "music-roll-label";
+    label.textContent = note.label;
+    label.style.top = (idx * step) + "px";
+
+    line.musicRoll.appendChild(label);
+  });
+}
+
+      function renderPitchPoints(line, rowBands) {
+        if (!line || !line.pitchSvg) return;
+        const existing = line.pitchSvg.querySelector(".pitch-points");
+        if (existing) existing.remove();
+        const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        group.setAttribute("class", "pitch-points");
+        (line.pitchPoints || []).forEach(function (point) {
+          const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          circle.setAttribute("cx", String(point.x));
+          circle.setAttribute("cy", String(point.y));
+          circle.setAttribute("r", "4.2");
+          circle.setAttribute("class", "pitch-point");
+          circle.setAttribute("data-pitch-point-id", point.id);
+          group.appendChild(circle);
+          if (trueMusicMode) {
+            const noteLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            noteLabel.setAttribute("x", String(point.x + 6));
+            noteLabel.setAttribute("y", String(point.y - 6));
+            noteLabel.setAttribute("class", "pitch-note-label");
+            noteLabel.textContent = musicNoteLabelFromLineY(point.y, rowBands);
+            group.appendChild(noteLabel);
+          }
+        });
+        line.pitchSvg.appendChild(group);
+      }
+
+      function updatePitchGapClip(line, width, height) {
+        while (line.clipPath.firstChild) line.clipPath.removeChild(line.clipPath.firstChild);
+
+        const gaps = getLineGapRects(line, width, height);
+        gaps.forEach(function (gap) {
+          const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          rect.setAttribute("x", String(gap.x));
+          rect.setAttribute("y", "0");
+          rect.setAttribute("width", String(gap.width));
+          rect.setAttribute("height", String(height));
+          line.clipPath.appendChild(rect);
+        });
+      }
+
+      function getLineGapRects(line, width, height) {
+        const wrapRect = line.wordsWrap.getBoundingClientRect();
+        const cards = line.wordIndices.map(function (idx) { return words[idx].card; });
+        const wordRects = cards.map(function (card) {
+          const r = card.getBoundingClientRect();
+          return { left: r.left - wrapRect.left, right: r.right - wrapRect.left, top: r.top - wrapRect.top, bottom: r.bottom - wrapRect.top };
+        }).sort(function (a, b) { return a.left - b.left; });
+
+        const gapRects = [];
+        let cursorX = 0;
+        wordRects.forEach(function (wr) {
+          if (wr.left > cursorX + 1) {
+            gapRects.push({ x: cursorX, width: wr.left - cursorX });
+          }
+          cursorX = Math.max(cursorX, wr.right);
+        });
+        if (cursorX < width) {
+          gapRects.push({ x: cursorX, width: width - cursorX });
+        }
+        if (!wordRects.length) {
+          gapRects.push({ x: 0, width: width, height: height });
+        }
+        return gapRects;
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function placeBreathMarker(lineIndex, clientX, clientY) {
+        const line = lines.find(function (item) { return item.lineIndex === lineIndex; });
+        if (!line || !line.wordIndices.length) return;
+        const now = Date.now();
+        if (lastBreathPlacement && (now - lastBreathPlacement.time) < 70) return;
+
+        const placement = findNearestBreathGap(line, clientX, clientY);
+        if (!placement) return;
+
+        const tooClose = line.breaths.some(function (breath) {
+          return Math.abs(breath.x - placement.x) < 10;
+        });
+        if (tooClose) return;
+
+        const breath = {
+          id: "b-" + (breathSeed += 1),
+          type: breathTypeSelect.value || "normal",
+          x: placement.x,
+          y: placement.y
+        };
+        line.breaths.push(breath);
+        renderBreathMarkers(line);
+        lastBreathPlacement = { time: now, lineIndex: line.lineIndex, x: placement.x };
+      }
+
+      function findNearestBreathGap(line, clientX) {
+        const wrapRect = line.wordsWrap.getBoundingClientRect();
+        const cards = line.wordIndices.map(function (idx) { return words[idx].card; });
+        if (!cards.length) return null;
+
+        const cardRects = cards.map(function (card) {
+          const r = card.getBoundingClientRect();
+          return { left: r.left - wrapRect.left, right: r.right - wrapRect.left, top: r.top - wrapRect.top, height: r.height };
+        }).sort(function (a, b) { return a.left - b.left; });
+
+        const gapX = [];
+        const first = cardRects[0];
+        gapX.push(clamp(first.left - 10, 0, wrapRect.width));
+
+        for (let i = 0; i < cardRects.length - 1; i += 1) {
+          gapX.push((cardRects[i].right + cardRects[i + 1].left) / 2);
+        }
+        const last = cardRects[cardRects.length - 1];
+        gapX.push(clamp(last.right + 10, 0, wrapRect.width));
+
+        const localX = clamp(clientX - wrapRect.left, 0, wrapRect.width);
+        const nearestX = gapX.reduce(function (closest, current) {
+          return Math.abs(current - localX) < Math.abs(closest - localX) ? current : closest;
+        }, gapX[0]);
+
+        return { x: nearestX, y: first.top + (first.height * 0.55) };
+      }
+
+      function renderBreathMarkers(line) {
+        if (!line || !line.breathLayer) return;
+        line.breathLayer.innerHTML = "";
+        line.breaths.forEach(function (breath) {
+          const marker = document.createElement("button");
+          marker.type = "button";
+          marker.className = "breath-marker " + breath.type;
+          marker.title = breath.type.replace("-", " ");
+          marker.dataset.breathLabel = breath.type;
+          marker.style.left = breath.x + "px";
+          marker.style.top = breath.y + "px";
+          marker.addEventListener("click", function (event) {
+            event.preventDefault();
+            editBreathMarker(line, breath.id);
+          });
+          line.breathLayer.appendChild(marker);
+        });
+      }
+
+      function editBreathMarker(line, breathId) {
+        const breath = line.breaths.find(function (item) { return item.id === breathId; });
+        if (!breath) return;
+        const value = window.prompt(
+          "Breath type: micro, quick, normal, deep, maximum. Type 'delete' to remove.",
+          breath.type
+        );
+        if (value == null) return;
+        const normalized = value.trim().toLowerCase();
+        if (normalized === "delete") {
+          line.breaths = line.breaths.filter(function (item) { return item.id !== breathId; });
+        } else if (["micro", "quick", "normal", "deep", "maximum"].includes(normalized)) {
+          breath.type = normalized;
+        }
+        renderBreathMarkers(line);
+      }
+
+      function applyAboveValue(value) {
+        const normalized = (value || "").trim();
+        applyToSelected(function (w) { w.above = normalized; });
+      }
+
+      function applyBelowValue(value) {
+        const normalized = (value || "").trim();
+        applyToSelected(function (w) { w.below = normalized; });
+      }
+
+      function applyVolumeValue(value) {
+        if (value === "" || value == null) return;
+        const numeric = clamp(Number(value) || 1, 1, 10);
+        applyToSelected(function (w) { w.volume = numeric; });
+      }
+
+      function clearVolumeValue() {
+        applyToSelected(function (w) { w.volume = null; });
+      }
+
+      function volumeColor(volume, alpha) {
+        const t = (clamp(volume, 1, 10) - 1) / 9;
+        const hue = 192 + (t * 28);
+        const sat = 68 + (t * 22);
+        const light = 78 - (t * 52);
+        const a = alpha == null ? 1 : clamp(alpha, 0, 1);
+        return "hsla(" + hue + ", " + sat + "%, " + light + "%, " + a + ")";
+      }
+
+      function clearSelectedMarkings() {
+        applyToSelected(function (w) {
+          w.above = "";
+          w.below = "";
+          w.volume = null;
+          w.enunciation = 50;
+          w.letterLevels = Array.from({ length: w.text.length }, function () { return 50; });
+          w.pitch = 50;
+        });
+      }
+
+      function applyWordEdit() {
+        if (selectedIndices.size !== 1) return;
+        const value = editWordInput.value.trim();
+        if (!value) return;
+        const idx = Array.from(selectedIndices)[0];
+        const w = words[idx];
+        if (!w) return;
+        w.text = value;
+        w.letterLevels = Array.from({ length: w.text.length }, function () { return w.enunciation; });
+        applyWordVisual(w);
+        updateSelectionUI();
+      }
+
+      function editLyrics() {
+        composer.classList.remove("collapsed");
+      }
+
+      function clearMap() {
+        clearModel();
+        drawMode = null;
+        activePitchDrag = null;
+        trueMusicMode = false;
+        trueMusicModeToggle.checked = false;
+        enuncModeBtn.classList.remove("active");
+        volumeModeBtn.classList.remove("active");
+        pitchModeBtn.classList.remove("active");
+        breathModeBtn.classList.remove("active");
+        lyricsInput.value = "";
+        composer.classList.remove("collapsed");
+        exportBox.textContent = "Nothing exported yet.";
+        renderEmpty("Paste lyrics and click “Generate Song Map”.");
+        updateSelectionUI();
+      }
+
+      function exportMap() {
+        if (!words.length) {
+          exportBox.textContent = "Nothing to export yet.";
+          return;
+        }
+
+        const chunks = [];
+
+        lines.forEach(function (line) {
+          if (!line.wordIndices.length) {
+            chunks.push("");
+            return;
+          }
+
+          const lineWords = line.wordIndices.map(function (idx) { return words[idx]; });
+
+          const above = lineWords.map(function (w) { return w.above || "-"; }).join(" | ");
+          const lyric = lineWords.map(function (w) { return w.text; }).join(" ");
+          const below = lineWords.map(function (w) { return w.below || "-"; }).join(" | ");
+          const volume = lineWords.map(function (w) {
+            return w.volume == null ? "-" : String(Math.round(w.volume));
+          }).join(" | ");
+          const enunciation = lineWords.map(function (w) { return String(Math.round(w.enunciation)); }).join(" | ");
+          const pitch = lineWords.map(function (w) { return String(Math.round(w.pitch)); }).join(" | ");
+          const breaths = (line.breaths || [])
+            .slice()
+            .sort(function (a, b) { return a.x - b.x; })
+            .map(function (b) { return b.type; })
+            .join(" | ") || "-";
+
+          chunks.push(
+            "ABOVE:\n" + above + "\n\n" +
+            "LYRIC:\n" + lyric + "\n\n" +
+            "BELOW:\n" + below + "\n\n" +
+            "VOLUME:\n" + volume + "\n\n" +
+            "ENUNCIATION:\n" + enunciation + "\n\n" +
+            "PITCH RANGE:\n" + pitch + "\n\n" +
+            "BREATHS:\n" + breaths + "\n"
+          );
+        });
+
+        exportBox.textContent = chunks.join("\n").trim() || "Nothing to export yet.";
+      }
+
+      function buildSongMapPayload() {
+        const lyrics = normalizeLyrics(lyricsInput.value);
+        const wordsPayload = words.map(function (w) {
+          return {
+            index: w.index,
+            lineIndex: w.lineIndex,
+            text: w.text,
+            above: w.above,
+            below: w.below,
+            volume: w.volume,
+            enunciation: w.enunciation,
+            letterLevels: Array.isArray(w.letterLevels) ? w.letterLevels.slice() : [],
+            pitch: w.pitch
+          };
+        });
+
+        const linesPayload = lines.map(function (line) {
+          return {
+            lineIndex: line.lineIndex,
+            raw: line.raw,
+            wordIndices: Array.isArray(line.wordIndices) ? line.wordIndices.slice() : [],
+            pitchPoints: Array.isArray(line.pitchPoints) ? line.pitchPoints.map(function (point) {
+              return { id: point.id, x: point.x, y: point.y };
+            }) : [],
+            breaths: Array.isArray(line.breaths) ? line.breaths.map(function (breath) {
+              return { id: breath.id, type: breath.type, x: breath.x, y: breath.y };
+            }) : []
+          };
+        });
+
+        return {
+          songTitle: (songTitleInput.value || "").trim(),
+          lyrics,
+          words: wordsPayload,
+          lines: linesPayload
+        };
+      }
+
+      function sanitizeFilename(base) {
+        const cleaned = (base || "song")
+          .trim()
+          .replace(/[<>:\"/\\|?*\x00-\x1F]/g, "")
+          .replace(/\s+/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, "");
+        return cleaned || "song";
+      }
+
+      function validateSongMapPayload(payload) {
+        if (!payload || typeof payload !== "object") return "Invalid file format.";
+        if (!Array.isArray(payload.lyrics)) return "Missing or invalid lyrics field.";
+        if (!Array.isArray(payload.words)) return "Missing or invalid words field.";
+        if (!Array.isArray(payload.lines)) return "Missing or invalid lines field.";
+        return "";
+      }
+
+      function applyLoadedSongMap(payload) {
+        lyricsInput.value = payload.lyrics.join("\n");
+        if (typeof payload.songTitle === "string") {
+          songTitleInput.value = payload.songTitle;
+        } else {
+          songTitleInput.value = "";
+        }
+
+        generateMap();
+
+        const wordsByIndex = new Map(payload.words.map(function (item) {
+          return [item.index, item];
+        }));
+
+        words.forEach(function (word) {
+          const loaded = wordsByIndex.get(word.index);
+          if (!loaded) return;
+          if (typeof loaded.text === "string") word.text = loaded.text;
+          word.above = typeof loaded.above === "string" ? loaded.above : "";
+          word.below = typeof loaded.below === "string" ? loaded.below : "";
+          word.volume = loaded.volume == null ? null : clamp(Number(loaded.volume) || 1, 1, 10);
+          word.pitch = loaded.pitch == null ? 50 : clamp(Number(loaded.pitch) || 50, 0, 100);
+          word.enunciation = loaded.enunciation == null ? 50 : clamp(Number(loaded.enunciation) || 50, 0, 100);
+          if (Array.isArray(loaded.letterLevels)) {
+            word.letterLevels = loaded.letterLevels.map(function (level) {
+              return clamp(Number(level) || 50, 0, 100);
+            });
+          } else {
+            word.letterLevels = Array.from({ length: word.text.length }, function () { return word.enunciation; });
+          }
+          applyWordVisual(word);
+        });
+
+        const lineByIndex = new Map(payload.lines.map(function (item) {
+          return [item.lineIndex, item];
+        }));
+
+        lines.forEach(function (line) {
+          const loaded = lineByIndex.get(line.lineIndex);
+          if (!loaded) return;
+          line.pitchPoints = Array.isArray(loaded.pitchPoints)
+            ? loaded.pitchPoints.map(function (point) {
+              return {
+                id: String(point.id || ("p-" + (pitchPointSeed += 1))),
+                x: Number(point.x) || 0,
+                y: Number(point.y) || 0
+              };
+            })
+            : [];
+          line.breaths = Array.isArray(loaded.breaths)
+            ? loaded.breaths.map(function (breath) {
+              return {
+                id: String(breath.id || ("b-" + (breathSeed += 1))),
+                type: typeof breath.type === "string" ? breath.type : "normal",
+                x: Number(breath.x) || 0,
+                y: Number(breath.y) || 0
+              };
+            })
+            : [];
+          renderBreathMarkers(line);
+        });
+
+        redrawAllPitchLines();
+        syncPitchLayerVisibility();
+      }
+
+      function loadSongMapFile(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function () {
+          try {
+            const payload = JSON.parse(String(reader.result || ""));
+            const validationError = validateSongMapPayload(payload);
+            if (validationError) {
+              exportBox.textContent = "Load failed: " + validationError;
+              return;
+            }
+            clearMap();
+            applyLoadedSongMap(payload);
+            exportBox.textContent = "Loaded song map from " + file.name;
+          } catch (error) {
+            exportBox.textContent = "Load failed: Invalid .smap JSON file.";
+          }
+        };
+        reader.onerror = function () {
+          exportBox.textContent = "Load failed: Unable to read file.";
+        };
+        reader.readAsText(file, "utf-8");
+      }
+
+      function saveSongMap() {
+        if (!words.length && !lines.length) {
+          exportBox.textContent = "Nothing to save yet.";
+          return;
+        }
+        const payload = buildSongMapPayload();
+        const json = JSON.stringify(payload, null, 2);
+        const blob = new Blob([json], { type: "application/json;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = sanitizeFilename(songTitleInput.value || "song") + ".smap";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function openLoadPicker() {
+        loadInput.value = "";
+        loadInput.click();
+      }
+
+      document.addEventListener("mouseup", function () {
+        isDrawing = false;
+        activePitchDrag = null;
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          drawMode = null;
+          activePitchDrag = null;
+          enuncModeBtn.classList.remove("active");
+          volumeModeBtn.classList.remove("active");
+          pitchModeBtn.classList.remove("active");
+          breathModeBtn.classList.remove("active");
+          syncPitchLayerVisibility();
+        }
+      });
+
+      window.addEventListener("resize", redrawAllPitchLines);
+
+      generateBtn.addEventListener("click", generateMap);
+      startLoadBtn.addEventListener("click", openLoadPicker);
+      editLyricsBtn.addEventListener("click", editLyrics);
+      exportBtn.addEventListener("click", exportMap);
+      saveBtn.addEventListener("click", saveSongMap);
+      loadBtn.addEventListener("click", openLoadPicker);
+      loadInput.addEventListener("change", function (event) {
+        const file = event.target.files && event.target.files[0];
+        loadSongMapFile(file);
+      });
+      clearMapBtn.addEventListener("click", clearMap);
+
+      document.getElementById("applyAbovePresetBtn").addEventListener("click", function () {
+        applyAboveValue(aboveSelect.value);
+      });
+
+      document.getElementById("applyCustomAboveBtn").addEventListener("click", function () {
+        applyAboveValue(customAbove.value);
+      });
+
+      document.getElementById("applyBelowPresetBtn").addEventListener("click", function () {
+        applyBelowValue(belowSelect.value);
+      });
+
+      document.getElementById("applyCustomBelowBtn").addEventListener("click", function () {
+        applyBelowValue(customBelow.value);
+      });
+
+      document.getElementById("applyVolumeBtn").addEventListener("click", function () {
+        applyVolumeValue(volumeInput.value);
+      });
+      document.getElementById("clearVolumeBtn").addEventListener("click", clearVolumeValue);
+
+      document.getElementById("clearSelectedBtn").addEventListener("click", clearSelectedMarkings);
+      document.getElementById("applyWordEditBtn").addEventListener("click", applyWordEdit);
+
+      enuncModeBtn.addEventListener("click", function () { setDrawMode("enunciation"); });
+      volumeModeBtn.addEventListener("click", function () { setDrawMode("volume"); });
+      pitchModeBtn.addEventListener("click", function () { setDrawMode("pitch"); });
+      breathModeBtn.addEventListener("click", function () { setDrawMode("breath"); });
+      trueMusicModeToggle.addEventListener("change", function (event) {
+        setTrueMusicMode(event.target.checked);
+      });
+
+      trueMusicMode = false;
+      trueMusicModeToggle.checked = false;
+      renderEmpty("Paste lyrics and click “Generate Song Map”.");
+    })();
+  </script>
 </body>
 </html>
