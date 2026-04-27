@@ -61,6 +61,26 @@
       font-size: 0.95rem;
     }
 
+    .back-link {
+      justify-self: start;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid #3b4760;
+      background: #121827;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: filter 0.2s ease;
+    }
+
+    .back-link:hover {
+      filter: brightness(1.08);
+    }
+
     .composer {
       padding: 14px;
       display: grid;
@@ -555,13 +575,152 @@
       color: #d5def0;
       font: 500 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
+
+
+    @media (max-width: 960px) {
+      .app {
+        padding: 14px;
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .side-panel {
+        position: static;
+        top: auto;
+        max-height: none;
+      }
+
+      .map-wrap {
+        min-height: 0;
+      }
+
+      #map {
+        min-height: 360px;
+      }
+
+      .mode-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        padding: 10px;
+        gap: 10px;
+      }
+
+      .card {
+        border-radius: 12px;
+      }
+
+      .header {
+        gap: 8px;
+      }
+
+      .header h1 {
+        font-size: 1.45rem;
+      }
+
+      .header p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      .back-link {
+        width: 100%;
+        justify-content: center;
+      }
+
+      textarea {
+        min-height: 150px;
+      }
+
+      .generate-row {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .composer.collapsed .topbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .topbar button,
+      .topbar .song-label {
+        width: 100%;
+      }
+
+      .song-label {
+        min-width: 0;
+        justify-self: stretch;
+        grid-column: 1 / -1;
+      }
+
+      button,
+      select,
+      input[type="text"],
+      input[type="number"] {
+        font-size: 16px;
+      }
+
+      .line-row {
+        grid-template-columns: 28px minmax(0, 1fr);
+        gap: 6px;
+      }
+
+      .line-handle {
+        width: 26px;
+        height: 26px;
+      }
+
+      .line-break {
+        margin-left: 34px;
+      }
+
+      .line-words {
+        gap: 5px;
+      }
+
+      .word-card {
+        min-width: 66px;
+        max-width: 160px;
+      }
+
+      .word {
+        font-size: 16px;
+      }
+
+      .side-panel {
+        padding: 12px;
+      }
+
+      .mode-row {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+
+      .row button {
+        width: 100%;
+      }
+
+      #exportBox {
+        min-height: 90px;
+        max-height: 210px;
+        overflow: auto;
+      }
+    }
   </style>
 </head>
 <body>
   <main class="app">
     <section class="card header">
-      <h1>Song Mapper (Desktop)</h1>
-      <p>Fast desktop lyric markup: multi-select words, batch apply attributes, and draw enunciation/pitch with your mouse.</p>
+      <h1>Song Mapper</h1>
+      <p>Inspired by the Song Mapping process at the end of Jaime Vendera’s Raise Your Voice. Use the different tools to apply markups to your lyrics, helping you break down and learn songs more effectively.</p>
+      <a class="back-link" href="../">← Back to Endless Vocals</a>
     </section>
 
     <section id="composer" class="card composer">
@@ -2061,7 +2220,11 @@ function renderMusicRollLabels(line, height, rowBands) {
         const file = event.target.files && event.target.files[0];
         loadSongMapFile(file);
       });
-      clearMapBtn.addEventListener("click", clearMap);
+      clearMapBtn.addEventListener("click", function () {
+        const shouldClear = window.confirm("Are you sure you want to clear map? This will reset everything and you'll lose the current song map.");
+        if (!shouldClear) return;
+        clearMap();
+      });
 
       document.getElementById("applyAbovePresetBtn").addEventListener("click", function () {
         applyAboveValue(aboveSelect.value);
