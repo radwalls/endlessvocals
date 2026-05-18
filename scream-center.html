@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scream Center — Endless Vocals</title>
+    <meta name="description" content="Scream Center is an upcoming Endless Vocals course for grit, screams, harsh vocals, aggressive singing, safety checks, and genre application." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://endlessvocals.com/scream-center.html" />
+    <meta property="og:title" content="Scream Center — Endless Vocals" />
+    <meta property="og:description" content="An upcoming vocal training course focused on grit, screams, harsh vocals, aggressive singing, and building safe scream ingredients into real music." />
+    <meta property="og:image" content="https://endlessvocals.com/images/endless_thumbnail.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Scream Center — Endless Vocals" />
+    <meta name="twitter:description" content="Break the scream into trainable pieces, then connect those pieces into real singing." />
+    <meta name="twitter:image" content="https://endlessvocals.com/images/endless_thumbnail.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: dark;
+            --fg: #fff7ef;
+            --muted: #ffd7c2;
+            --muted-space: #c9d1ff;
+            --surface: rgba(24, 4, 7, 0.72);
+            --surface-space: rgba(10, 11, 42, 0.74);
+            --border: rgba(255, 205, 174, 0.2);
+            --border-space: rgba(153, 177, 255, 0.25);
+            --red: #ff1d25;
+            --ember: #ff7a18;
+            --gold: #ffd166;
+            --blue: #0900ff;
+            --purple: #8b35ff;
+            --shadow: rgba(0, 0, 0, 0.42);
+        }
+
+        * { box-sizing: border-box; }
+
+        html {
+            min-height: 100%;
+            scroll-behavior: smooth;
+            background: #060313;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--fg);
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+            background:
+                radial-gradient(circle at 12% 8%, rgba(255, 123, 24, 0.8), transparent 18rem),
+                radial-gradient(circle at 84% 10%, rgba(255, 29, 37, 0.56), transparent 22rem),
+                linear-gradient(180deg, #250205 0%, #5c0710 22%, #170212 44%, #090722 54%, #121047 72%, #341159 100%);
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::before {
+            background:
+                radial-gradient(circle at 18% 20%, rgba(255, 210, 102, 0.2) 0 0.45rem, transparent 0.55rem),
+                radial-gradient(circle at 86% 24%, rgba(255, 122, 24, 0.22) 0 0.35rem, transparent 0.45rem),
+                radial-gradient(circle at 48% 38%, rgba(255, 255, 255, 0.1) 0 0.2rem, transparent 0.3rem),
+                linear-gradient(180deg, rgba(255, 77, 0, 0.26), transparent 47%);
+            animation: emberHaze 8s ease-in-out infinite alternate;
+            mix-blend-mode: screen;
+        }
+
+        body::after {
+            opacity: 0.82;
+            background:
+                radial-gradient(circle at 78% 58%, rgba(242, 238, 255, 0.95) 0 3rem, rgba(131, 119, 174, 0.5) 3.08rem 3.35rem, transparent 3.45rem),
+                radial-gradient(circle at 14% 74%, rgba(230, 240, 255, 0.8) 0 1.55rem, rgba(111, 128, 172, 0.42) 1.62rem 1.78rem, transparent 1.9rem),
+                radial-gradient(circle at 30% 62%, rgba(255,255,255,0.92) 0 1px, transparent 2px),
+                radial-gradient(circle at 42% 82%, rgba(255,255,255,0.72) 0 1px, transparent 2px),
+                radial-gradient(circle at 67% 70%, rgba(255,255,255,0.84) 0 1px, transparent 2px),
+                radial-gradient(circle at 88% 86%, rgba(255,255,255,0.78) 0 1px, transparent 2px),
+                radial-gradient(circle at 10% 58%, rgba(120, 103, 255, 0.24), transparent 18rem),
+                radial-gradient(circle at 82% 82%, rgba(154, 47, 255, 0.35), transparent 22rem);
+            mask-image: linear-gradient(180deg, transparent 0%, transparent 42%, #000 54%, #000 100%);
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        .particle-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            mix-blend-mode: screen;
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+        }
+
+        .container {
+            width: min(1180px, calc(100% - 40px));
+            margin: 0 auto;
+        }
+
+        .masthead {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 28px 0;
+        }
+
+        .logo {
+            font-weight: 900;
+            letter-spacing: 2px;
+            font-size: clamp(20px, 3vw, 28px);
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        nav a {
+            padding: 10px 14px;
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 999px;
+            background: rgba(0,0,0,0.22);
+            color: #ffe5d4;
+            backdrop-filter: blur(12px);
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+        }
+
+        nav a:hover,
+        nav a:focus,
+        nav a[aria-current="page"] {
+            transform: translateY(-1px);
+            border-color: rgba(255, 209, 102, 0.65);
+            background: rgba(255, 77, 0, 0.18);
+            outline: none;
+        }
+
+        .hero {
+            min-height: 78vh;
+            display: grid;
+            align-items: center;
+            padding: clamp(48px, 8vw, 100px) 0;
+        }
+
+        .hero-panel {
+            max-width: 920px;
+            padding: clamp(28px, 5vw, 54px);
+            border: 1px solid rgba(255, 210, 102, 0.22);
+            border-radius: 34px;
+            background:
+                linear-gradient(135deg, rgba(255, 29, 37, 0.28), rgba(255, 122, 24, 0.08)),
+                rgba(20, 2, 5, 0.62);
+            box-shadow: 0 30px 80px var(--shadow), inset 0 1px rgba(255,255,255,0.1);
+            backdrop-filter: blur(14px);
+        }
+
+        .kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 18px;
+            padding: 8px 14px;
+            border: 1px solid rgba(255, 209, 102, 0.42);
+            border-radius: 999px;
+            color: var(--gold);
+            background: rgba(255, 92, 0, 0.14);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        h1,
+        h2,
+        h3 { line-height: 1.05; }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(54px, 10vw, 132px);
+            letter-spacing: -0.08em;
+            text-transform: uppercase;
+            text-shadow: 0 0 24px rgba(255, 51, 0, 0.52), 0 10px 34px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            margin: 20px 0 0;
+            max-width: 68ch;
+            color: var(--muted);
+            font-size: clamp(18px, 2.2vw, 24px);
+            line-height: 1.55;
+        }
+
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 20px;
+            border-radius: 16px;
+            font-weight: 900;
+            letter-spacing: 0.2px;
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow: 0 14px 34px rgba(0,0,0,0.26);
+        }
+
+        .btn-primary {
+            color: #240304;
+            background: linear-gradient(135deg, var(--gold), var(--ember), var(--red));
+        }
+
+        .btn-secondary {
+            color: #f5f8ff;
+            background: linear-gradient(135deg, rgba(9, 0, 255, 0.8), rgba(139, 53, 255, 0.86));
+        }
+
+        .section {
+            padding: clamp(58px, 9vw, 112px) 0;
+        }
+
+        .section.space {
+            color: #f7f6ff;
+        }
+
+        .section-heading {
+            display: grid;
+            gap: 14px;
+            margin-bottom: 26px;
+            max-width: 850px;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            font-size: clamp(34px, 6vw, 72px);
+            letter-spacing: -0.045em;
+        }
+
+        .section-heading p,
+        .card p,
+        .feature p,
+        .coming-soon p {
+            color: var(--muted);
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .space .section-heading p,
+        .space .card p,
+        .space .feature p,
+        .space .coming-soon p { color: var(--muted-space); }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .card,
+        .feature,
+        .coming-soon,
+        .scale-panel {
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            background: var(--surface);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            backdrop-filter: blur(14px);
+        }
+
+        .space .card,
+        .space .feature,
+        .space .coming-soon {
+            border-color: var(--border-space);
+            background: var(--surface-space);
+        }
+
+        .card { padding: clamp(22px, 3vw, 32px); }
+
+        .card h3,
+        .feature h3 {
+            margin: 0 0 10px;
+            font-size: clamp(22px, 3vw, 34px);
+        }
+
+        .ingredient-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 26px;
+        }
+
+        .feature {
+            min-height: 100%;
+            padding: 22px;
+        }
+
+        .feature h3 { font-size: 22px; }
+
+        .scale-panel {
+            margin: clamp(60px, 9vw, 110px) auto 0;
+            padding: clamp(22px, 4vw, 42px);
+            color: #050505;
+            background: rgba(255,255,255,0.94);
+            border-color: rgba(215,215,215,0.72);
+        }
+
+        .scale-panel h2 {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: clamp(42px, 7vw, 96px);
+            line-height: 1;
+            margin: 0 0 34px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .scale {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            align-items: end;
+            min-height: 600px;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            min-width: 0;
+        }
+
+        .label {
+            min-height: 120px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: clamp(24px, 3vw, 52px);
+            line-height: 1.15;
+            font-weight: 400;
+            margin-bottom: 24px;
+            white-space: pre-line;
+        }
+
+        .bar-wrap {
+            height: 430px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .bar {
+            width: 100%;
+            height: var(--h);
+            min-height: 28px;
+            background: var(--blue);
+            border-radius: 54px;
+            cursor: ns-resize;
+            position: relative;
+            user-select: none;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: box-shadow 0.12s ease, filter 0.12s ease;
+            touch-action: none;
+        }
+
+        .bar:hover,
+        .bar.dragging {
+            filter: brightness(1.08);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+        }
+
+        .value {
+            position: absolute;
+            left: 50%;
+            bottom: 14px;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            opacity: 0.95;
+            pointer-events: none;
+        }
+
+        .controls {
+            margin-top: 30px;
+            padding: 18px;
+            background: #f3f3f3;
+            border: 1px solid #d7d7d7;
+            border-radius: 18px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .controls button {
+            border: 1px solid #bbb;
+            background: white;
+            color: #111;
+            border-radius: 999px;
+            padding: 10px 16px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .controls button:hover,
+        .controls button:focus {
+            background: #eaeaea;
+            outline: 2px solid rgba(9, 0, 255, 0.18);
+            outline-offset: 2px;
+        }
+
+        .hint {
+            margin: 12px auto 0;
+            color: #666;
+            text-align: center;
+            font-size: 15px;
+            max-width: 90ch;
+        }
+
+        .style-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 0;
+            margin: 24px 0 0;
+            list-style: none;
+        }
+
+        .style-list li {
+            border: 1px solid rgba(177, 195, 255, 0.28);
+            border-radius: 999px;
+            padding: 10px 14px;
+            color: #edf0ff;
+            background: rgba(255,255,255,0.07);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .coming-soon {
+            padding: clamp(28px, 5vw, 52px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .coming-soon::after {
+            content: "";
+            position: absolute;
+            right: -8rem;
+            bottom: -8rem;
+            width: 22rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.9), rgba(162, 145, 223, 0.46) 38%, transparent 39%);
+            opacity: 0.32;
+        }
+
+        .coming-soon h2 {
+            margin: 0 0 14px;
+            font-size: clamp(38px, 6vw, 80px);
+            letter-spacing: -0.06em;
+        }
+
+        .footer {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: var(--muted-space);
+            padding: 42px 20px 56px;
+        }
+
+        @keyframes emberHaze {
+            from { transform: translate3d(-1%, -1%, 0) scale(1); opacity: 0.72; }
+            to { transform: translate3d(1%, 1%, 0) scale(1.04); opacity: 1; }
+        }
+
+        @media (max-width: 900px) {
+            .masthead { align-items: flex-start; flex-direction: column; }
+            nav { justify-content: flex-start; }
+            .grid,
+            .ingredient-grid { grid-template-columns: 1fr; }
+            .scale { gap: 10px; min-height: 520px; }
+            .label { min-height: 96px; font-size: 22px; }
+            .bar-wrap { height: 360px; }
+            .bar { border-radius: 34px; }
+        }
+
+        @media (max-width: 620px) {
+            .container { width: min(100% - 24px, 1180px); }
+            .scale-panel { border-radius: 18px; padding: 16px 10px 20px; }
+            .scale { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
+            .label { min-height: 58px; margin-bottom: 12px; font-size: 18px; }
+            .bar-wrap { height: 260px; }
+            .controls button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="particle-canvas" id="particle-canvas" aria-hidden="true"></canvas>
+    <div class="page">
+        <header class="masthead container" aria-label="Site header">
+            <div class="logo" aria-label="Endless Vocals">ENDLESS <span style="opacity:.72;font-weight:700">vocals</span></div>
+            <nav aria-label="Site navigation">
+                <a href="index.html">Home</a>
+                <a href="scream-center.html" aria-current="page">Scream Center</a>
+                <a href="faq.html">FAQ</a>
+                <a href="shop.html">Shop</a>
+                <a href="song-mapper/">Song Mapper</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero container" aria-labelledby="scream-center-title">
+                <div class="hero-panel">
+                    <span class="kicker">Upcoming Endless Vocals Course • Preview inside Phase Cycle II</span>
+                    <h1 id="scream-center-title">Scream Center</h1>
+                    <p>Scream Center is an upcoming vocal training course focused on grit, screams, harsh vocals, and aggressive singing. It breaks the scream into trainable pieces, then shows how those pieces connect into real singing.</p>
+                    <div class="cta-row" role="group" aria-label="Scream Center actions">
+                        <a class="btn btn-primary" href="#course-map">Explore the course map</a>
+                        <a class="btn btn-secondary" href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener noreferrer">Join Phase Cycle II preview</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section container" id="course-map" aria-labelledby="course-map-title">
+                <div class="section-heading">
+                    <h2 id="course-map-title">Understand how screams actually work.</h2>
+                    <p>This course is being built for singers who want to understand how screams actually work instead of forcing loud sounds and hoping for the best. Scream Center is not about copying one scream style. It is about understanding the ingredients behind different screams so singers can build their own sound safely and confidently.</p>
+                </div>
+
+                <div class="grid">
+                    <article class="card">
+                        <h3>What the course will cover</h3>
+                        <p>The course will cover vocal fry, fry screams, frustrated sigh, low grit, grit slides, breathing, support, placement, warm-ups, resets, safety checks, and how to apply these sounds to different genres of music.</p>
+                    </article>
+                    <article class="card">
+                        <h3>A clear map instead of guessing</h3>
+                        <p>Each sound is treated like a trainable ingredient. You learn where it starts, how to shape it, how to return to clean singing, and how to combine it with musical phrasing instead of chasing random volume.</p>
+                    </article>
+                </div>
+
+                <div class="ingredient-grid" aria-label="Scream Center course ingredients">
+                    <article class="feature">
+                        <h3>Vocal Fry + Fry Screams</h3>
+                        <p>Students will learn how to start with basic groggy fry, shape it with support and placement, sustain it, and eventually move toward fry scream textures.</p>
+                    </article>
+                    <article class="feature">
+                        <h3>Frustrated Sigh Technique</h3>
+                        <p>The frustrated sigh is one of the most natural gateways into aggressive vocals, including phrases, barks, panting sighs, sustained sighs, and heavier scream connections.</p>
+                    </article>
+                    <article class="feature">
+                        <h3>Low Grit</h3>
+                        <p>Low grit is one of the centerpieces of the course. Students learn how to place grit onto an actual note, return to clean singing, and keep the sound musical.</p>
+                    </article>
+                    <article class="feature">
+                        <h3>Grit Slides</h3>
+                        <p>Students will learn how to move grit through small slides, downward slides, longer slides, and eventually more advanced scream shapes.</p>
+                    </article>
+                </div>
+
+                <section class="scale-panel" aria-labelledby="scale-title">
+                    <h2 id="scale-title">Scream Heaviness</h2>
+
+                    <div class="scale" id="scale" aria-label="Interactive scream heaviness scale">
+                        <section class="column">
+                            <div class="label">Vocal Fry<br>+ Fry Scream</div>
+                            <div class="bar-wrap">
+                                <div class="bar" data-name="fry" style="--h: 88%;" title="Drag up or down" role="slider" aria-label="Vocal fry and fry scream" aria-valuemin="6" aria-valuemax="100" aria-valuenow="88" tabindex="0">
+                                    <span class="value">88</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="column">
+                            <div class="label">Frustrated Sigh</div>
+                            <div class="bar-wrap">
+                                <div class="bar" data-name="sigh" style="--h: 58%;" title="Drag up or down" role="slider" aria-label="Frustrated sigh" aria-valuemin="6" aria-valuemax="100" aria-valuenow="58" tabindex="0">
+                                    <span class="value">58</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="column">
+                            <div class="label">Low Grit</div>
+                            <div class="bar-wrap">
+                                <div class="bar" data-name="lowgrit" style="--h: 38%;" title="Drag up or down" role="slider" aria-label="Low grit" aria-valuemin="6" aria-valuemax="100" aria-valuenow="38" tabindex="0">
+                                    <span class="value">38</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="column">
+                            <div class="label">Grit Slides</div>
+                            <div class="bar-wrap">
+                                <div class="bar" data-name="slides" style="--h: 53%;" title="Drag up or down" role="slider" aria-label="Grit slides" aria-valuemin="6" aria-valuemax="100" aria-valuenow="53" tabindex="0">
+                                    <span class="value">53</span>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="controls" aria-label="Scream heaviness presets">
+                        <button type="button" data-preset="alexi">Children of Bodom / Wintersun</button>
+                        <button type="button" data-preset="corpse">Death Metal / Cannibal Corpse</button>
+                        <button type="button" data-preset="opeth">Opeth-ish Mix</button>
+                        <button type="button" data-preset="screamo">Fry-heavy Screamo</button>
+                        <button type="button" data-preset="black">Black Metal</button>
+                        <button type="button" data-preset="reset">Reset</button>
+                    </div>
+
+                    <p class="hint">Drag any blue box up or down to adjust the amount of that ingredient. Use presets to quickly show different scream-style blends in class.</p>
+                </section>
+            </section>
+
+            <section class="section space container" aria-labelledby="application-title">
+                <div class="section-heading">
+                    <h2 id="application-title">From fire into orbit: apply the ingredients to music.</h2>
+                    <p>Halfway down the page, the course shifts from raw ingredients into the bigger universe of style, safety, recovery, and musical use. Different screams are different balances of the same trainable tools.</p>
+                </div>
+
+                <div class="grid">
+                    <article class="card">
+                        <h3>Style Application</h3>
+                        <p>The course will explore how different scream styles use different balances of vocal fry, frustrated sigh, low grit, and slides. This can apply to styles inspired by black metal, melodic death metal, death metal, screamo, Opeth-style harsh vocals, In Flames-style vocals, Children of Bodom, Wintersun, and more.</p>
+                        <ul class="style-list" aria-label="Example style inspirations">
+                            <li>Black Metal</li>
+                            <li>Melodic Death Metal</li>
+                            <li>Death Metal</li>
+                            <li>Screamo</li>
+                            <li>Opeth-style harsh vocals</li>
+                            <li>In Flames-style vocals</li>
+                            <li>Children of Bodom</li>
+                            <li>Wintersun</li>
+                        </ul>
+                    </article>
+                    <article class="card">
+                        <h3>Safety and Reset Tools</h3>
+                        <p>Scream Center will also focus on how to stop, reset, and rebuild the sound when tension builds or the voice starts feeling tired. Gargling tone resets, warm-downs, clean-note checks, and hot water / throat care routines will be part of the training.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section space container" aria-labelledby="who-title">
+                <div class="grid">
+                    <article class="card">
+                        <h3 id="who-title">Who it’s for</h3>
+                        <p>Scream Center is for singers who want to sing with grit, learn harsh vocals, explore metal vocals, or understand aggressive singing in a more structured way.</p>
+                    </article>
+                    <article class="card">
+                        <h3>Especially useful if...</h3>
+                        <p>You feel confused by online scream advice, have tried fry screams but feel stuck, lose your voice after harsh vocal sessions, or want a clearer path from exercises into real songs.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section space container" aria-labelledby="coming-soon-title">
+                <div class="coming-soon">
+                    <h2 id="coming-soon-title">Coming Soon</h2>
+                    <p>Scream Center is currently in development through Endless Vocals, and the preview is currently inside the Phase Cycle II Bootcamp available for VOD and replaying.</p>
+                    <p style="margin-top:16px">This is where we break the scream into pieces, learn how those pieces work, and start building a scream that can actually live inside music.</p>
+                    <div class="cta-row" role="group" aria-label="Coming soon actions">
+                        <a class="btn btn-secondary" href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener noreferrer">Get the Phase Cycle II preview</a>
+                        <a class="btn btn-primary" href="index.html">Back to Endless Vocals</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer" aria-label="Site footer">
+            © <span id="year"></span> Endless Vocals. All rights reserved.
+        </footer>
+    </div>
+
+    <script>
+        const yearEl = document.getElementById('year');
+        if (yearEl) {
+            yearEl.textContent = new Date().getFullYear();
+        }
+
+        const bars = Array.from(document.querySelectorAll('.bar'));
+        const min = 6;
+        const max = 100;
+
+        function setBar(bar, value) {
+            const clamped = Math.max(min, Math.min(max, Math.round(value)));
+            bar.style.setProperty('--h', clamped + '%');
+            bar.querySelector('.value').textContent = clamped;
+            bar.setAttribute('aria-valuenow', String(clamped));
+        }
+
+        function updateFromPointer(bar, clientY) {
+            const wrap = bar.parentElement;
+            const rect = wrap.getBoundingClientRect();
+            const percent = ((rect.bottom - clientY) / rect.height) * 100;
+            setBar(bar, percent);
+        }
+
+        bars.forEach((bar) => {
+            bar.addEventListener('pointerdown', (event) => {
+                bar.setPointerCapture(event.pointerId);
+                bar.classList.add('dragging');
+                updateFromPointer(bar, event.clientY);
+            });
+
+            bar.addEventListener('pointermove', (event) => {
+                if (bar.classList.contains('dragging')) {
+                    updateFromPointer(bar, event.clientY);
+                }
+            });
+
+            bar.addEventListener('pointerup', () => {
+                bar.classList.remove('dragging');
+            });
+
+            bar.addEventListener('pointercancel', () => {
+                bar.classList.remove('dragging');
+            });
+
+            bar.addEventListener('keydown', (event) => {
+                const current = Number(bar.getAttribute('aria-valuenow')) || min;
+                if (event.key === 'ArrowUp' || event.key === 'ArrowRight') {
+                    event.preventDefault();
+                    setBar(bar, current + 2);
+                }
+                if (event.key === 'ArrowDown' || event.key === 'ArrowLeft') {
+                    event.preventDefault();
+                    setBar(bar, current - 2);
+                }
+                if (event.key === 'Home') {
+                    event.preventDefault();
+                    setBar(bar, min);
+                }
+                if (event.key === 'End') {
+                    event.preventDefault();
+                    setBar(bar, max);
+                }
+            });
+        });
+
+        const presets = {
+            alexi: { fry: 78, sigh: 62, lowgrit: 68, slides: 88 },
+            corpse: { fry: 38, sigh: 92, lowgrit: 82, slides: 35 },
+            opeth: { fry: 58, sigh: 74, lowgrit: 72, slides: 45 },
+            screamo: { fry: 95, sigh: 35, lowgrit: 25, slides: 45 },
+            black: { fry: 72, sigh: 44, lowgrit: 30, slides: 62 },
+            reset: { fry: 88, sigh: 58, lowgrit: 38, slides: 53 },
+        };
+
+        function setPreset(name) {
+            const preset = presets[name];
+            if (!preset) return;
+            bars.forEach((bar) => {
+                const key = bar.dataset.name;
+                setBar(bar, preset[key]);
+            });
+        }
+
+        document.querySelectorAll('[data-preset]').forEach((button) => {
+            button.addEventListener('click', () => setPreset(button.dataset.preset));
+        });
+
+        const canvas = document.getElementById('particle-canvas');
+        const context = canvas ? canvas.getContext('2d') : null;
+        const particles = [];
+        const particleTotal = 120;
+
+        function resizeCanvas() {
+            if (!canvas || !context) return;
+            const ratio = window.devicePixelRatio || 1;
+            canvas.width = Math.floor(window.innerWidth * ratio);
+            canvas.height = Math.floor(window.innerHeight * ratio);
+            canvas.style.width = `${window.innerWidth}px`;
+            canvas.style.height = `${window.innerHeight}px`;
+            context.setTransform(ratio, 0, 0, ratio, 0, 0);
+        }
+
+        function seedParticles() {
+            particles.length = 0;
+            for (let index = 0; index < particleTotal; index += 1) {
+                particles.push({
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    vx: (Math.random() - 0.5) * 0.45,
+                    vy: -(Math.random() * 0.9 + 0.25),
+                    size: Math.random() * 2.4 + 0.7,
+                    phase: Math.random() * Math.PI * 2,
+                    twinkle: Math.random() * 0.7 + 0.25,
+                });
+            }
+        }
+
+        function drawParticles() {
+            if (!canvas || !context) return;
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const scrollProgress = Math.min(1, window.scrollY / Math.max(1, document.body.scrollHeight - height));
+            const spaceMode = scrollProgress > 0.43;
+
+            context.clearRect(0, 0, width, height);
+            particles.forEach((particle) => {
+                particle.phase += 0.02;
+                particle.x += particle.vx + Math.sin(particle.phase) * 0.08;
+                particle.y += spaceMode ? particle.vy * -0.25 : particle.vy;
+
+                if (particle.x < -10) particle.x = width + 10;
+                if (particle.x > width + 10) particle.x = -10;
+                if (!spaceMode && particle.y < -12) particle.y = height + 12;
+                if (spaceMode && particle.y > height + 12) particle.y = -12;
+                if (spaceMode && particle.y < -12) particle.y = height + 12;
+
+                const alpha = spaceMode ? particle.twinkle * (0.55 + Math.sin(particle.phase) * 0.35) : particle.twinkle;
+                context.beginPath();
+                context.arc(particle.x, particle.y, spaceMode ? particle.size * 0.62 : particle.size, 0, Math.PI * 2);
+                context.fillStyle = spaceMode
+                    ? `rgba(205, 220, 255, ${Math.max(0.16, alpha)})`
+                    : `rgba(255, ${Math.floor(90 + particle.twinkle * 140)}, 24, ${alpha})`;
+                context.shadowBlur = spaceMode ? 10 : 18;
+                context.shadowColor = spaceMode ? 'rgba(122, 120, 255, 0.9)' : 'rgba(255, 80, 0, 0.95)';
+                context.fill();
+            });
+            context.shadowBlur = 0;
+            requestAnimationFrame(drawParticles);
+        }
+
+        if (canvas && context) {
+            resizeCanvas();
+            seedParticles();
+            drawParticles();
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                seedParticles();
+            });
+        }
+    </script>
+</body>
+</html>
