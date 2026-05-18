@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scream Center — Endless Vocals</title>
+    <meta name="description" content="Scream Center is an upcoming Endless Vocals course for grit, screams, harsh vocals, fry screams, low grit, safety checks, and aggressive singing." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://endlessvocals.com/scream-center.html" />
+    <meta property="og:title" content="Scream Center — Endless Vocals" />
+    <meta property="og:description" content="Break screams into trainable pieces, then connect grit, fry, sigh, slides, support, placement, and reset tools into real singing." />
+    <meta property="og:image" content="https://endlessvocals.com/images/endless_thumbnail.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Scream Center — Endless Vocals" />
+    <meta name="twitter:description" content="An upcoming vocal screaming course for safe, confident harsh vocals and aggressive singing." />
+    <meta name="twitter:image" content="https://endlessvocals.com/images/endless_thumbnail.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: dark;
+            --ink: #fff4ec;
+            --muted: rgba(255, 238, 226, 0.76);
+            --panel: rgba(28, 8, 16, 0.72);
+            --panel-strong: rgba(8, 10, 32, 0.82);
+            --border: rgba(255, 184, 124, 0.28);
+            --blue: #1500ff;
+            --red: #ff2d1f;
+            --orange: #ff8a24;
+            --purple: #8b5cff;
+            --cyan: #63e6ff;
+            --shadow: rgba(0, 0, 0, 0.42);
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #08030a;
+            color: var(--ink);
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -3;
+            background:
+                radial-gradient(circle at 16% 9%, rgba(255, 118, 28, 0.56), transparent 25%),
+                radial-gradient(circle at 72% 18%, rgba(255, 35, 21, 0.34), transparent 28%),
+                linear-gradient(180deg, #330609 0%, #14000b 39%, #050719 51%, #070221 72%, #16042e 100%);
+        }
+
+        #scream-particles {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .space-backdrop {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 45%;
+            bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 82% 11%, rgba(126, 93, 255, .36), transparent 24%),
+                radial-gradient(circle at 18% 35%, rgba(68, 204, 255, .2), transparent 28%),
+                radial-gradient(circle at 50% 72%, rgba(166, 79, 255, .22), transparent 36%);
+            opacity: .95;
+        }
+
+        .space-backdrop::before,
+        .space-backdrop::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 34% 32%, #fff 0 4%, #d5d9ff 5% 11%, #77799e 12% 13%, #2b2d47 14% 28%, transparent 29%);
+            filter: drop-shadow(0 0 42px rgba(210, 215, 255, .42));
+            opacity: .86;
+        }
+
+        .space-backdrop::before {
+            width: clamp(150px, 18vw, 270px);
+            aspect-ratio: 1;
+            right: 7%;
+            top: 10%;
+        }
+
+        .space-backdrop::after {
+            width: clamp(90px, 11vw, 170px);
+            aspect-ratio: 1;
+            left: 8%;
+            top: 45%;
+            opacity: .62;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        .container {
+            width: min(1160px, calc(100% - 40px));
+            margin: 0 auto;
+        }
+
+        .masthead {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 26px 0;
+            flex-wrap: wrap;
+        }
+
+        .logo { font-size: 26px; font-weight: 900; letter-spacing: 2px; }
+
+        nav { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        nav a {
+            padding: 10px 14px;
+            border: 1px solid rgba(255, 255, 255, .16);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .07);
+            color: rgba(255, 255, 255, .78);
+            font-weight: 700;
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+        }
+
+        nav a:hover,
+        nav a:focus,
+        nav a[aria-current="page"] {
+            color: #fff;
+            border-color: rgba(255, 149, 84, .6);
+            background: rgba(255, 89, 28, .16);
+        }
+
+        .hero {
+            min-height: 76vh;
+            display: grid;
+            align-items: center;
+            padding: 54px 0 80px;
+        }
+
+        .hero-card {
+            position: relative;
+            overflow: hidden;
+            max-width: 940px;
+            padding: clamp(28px, 6vw, 72px);
+            border: 1px solid rgba(255, 139, 61, .34);
+            border-radius: 34px;
+            background:
+                linear-gradient(135deg, rgba(70, 7, 12, .84), rgba(27, 4, 10, .76)),
+                radial-gradient(circle at 20% 20%, rgba(255, 151, 51, .32), transparent 34%);
+            box-shadow: 0 30px 80px var(--shadow), inset 0 1px 0 rgba(255, 255, 255, .12);
+        }
+
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            inset: auto -12% -28% 8%;
+            height: 48%;
+            background: radial-gradient(ellipse, rgba(255, 83, 26, .36), transparent 64%);
+            filter: blur(12px);
+            pointer-events: none;
+        }
+
+        .kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 14px;
+            margin-bottom: 18px;
+            border-radius: 999px;
+            background: rgba(255, 78, 30, .18);
+            color: #ffd2b5;
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(54px, 11vw, 138px);
+            line-height: .85;
+            text-transform: uppercase;
+            letter-spacing: -.07em;
+            text-shadow: 0 0 30px rgba(255, 38, 26, .34);
+        }
+
+        .hero p {
+            max-width: 760px;
+            margin: 24px 0 0;
+            color: var(--muted);
+            font-size: clamp(18px, 2.3vw, 24px);
+            line-height: 1.55;
+        }
+
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px 20px;
+            border-radius: 16px;
+            font-weight: 900;
+            border: 1px solid rgba(255, 255, 255, .16);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, .28);
+        }
+
+        .btn-primary { background: linear-gradient(135deg, #ff2d1f, #ff9d28); color: #240405; }
+        .btn-ghost { background: rgba(255, 255, 255, .08); color: #fff; }
+
+        .section {
+            padding: 76px 0;
+            position: relative;
+        }
+
+        .section.space { padding-top: 110px; }
+
+        .eyebrow {
+            color: #ffb371;
+            font-weight: 900;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        .space .eyebrow { color: #9eeeff; }
+
+        h2 {
+            margin: 10px 0 18px;
+            font-size: clamp(34px, 6vw, 72px);
+            line-height: .98;
+            letter-spacing: -.045em;
+        }
+
+        .lead {
+            color: rgba(255, 255, 255, .78);
+            font-size: clamp(18px, 2.1vw, 22px);
+            line-height: 1.65;
+            max-width: 860px;
+        }
+
+        .panel-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 32px;
+        }
+
+        .panel,
+        .scale-shell {
+            border: 1px solid var(--border);
+            border-radius: 26px;
+            background: var(--panel);
+            box-shadow: 0 22px 46px rgba(0, 0, 0, .28);
+            backdrop-filter: blur(14px);
+        }
+
+        .panel { padding: 24px; }
+
+        .space .panel,
+        .space .scale-shell {
+            border-color: rgba(116, 224, 255, .24);
+            background: var(--panel-strong);
+        }
+
+        .panel h3 {
+            margin: 0 0 10px;
+            font-size: 24px;
+        }
+
+        .panel p,
+        .panel li {
+            color: rgba(255, 255, 255, .74);
+            line-height: 1.62;
+        }
+
+        .panel p { margin: 0; }
+        .panel ul { margin: 0; padding-left: 20px; }
+
+        .scale-shell {
+            margin-top: 36px;
+            padding: clamp(18px, 4vw, 36px);
+        }
+
+        .scale-title {
+            margin: 0 0 28px;
+            text-align: center;
+            font-size: clamp(38px, 7vw, 92px);
+            font-weight: 500;
+            letter-spacing: -.05em;
+        }
+
+        .scale {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            align-items: end;
+            min-height: 560px;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            min-width: 0;
+        }
+
+        .label {
+            min-height: 112px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            text-align: center;
+            font-size: clamp(21px, 3vw, 42px);
+            line-height: 1.12;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .bar-wrap {
+            height: 410px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .bar {
+            width: 100%;
+            height: var(--h);
+            min-height: 28px;
+            background: linear-gradient(180deg, #4438ff, var(--blue));
+            border-radius: 54px;
+            cursor: ns-resize;
+            position: relative;
+            user-select: none;
+            box-shadow: 0 0 24px rgba(78, 111, 255, .42), inset 0 1px 0 rgba(255, 255, 255, .42);
+            transition: box-shadow .12s ease, filter .12s ease;
+            touch-action: none;
+        }
+
+        .bar:hover,
+        .bar.dragging {
+            filter: brightness(1.12);
+            box-shadow: 0 0 34px rgba(98, 230, 255, .5), inset 0 1px 0 rgba(255, 255, 255, .5);
+        }
+
+        .value {
+            position: absolute;
+            left: 50%;
+            bottom: 14px;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 22px;
+            font-weight: 900;
+            pointer-events: none;
+        }
+
+        .controls {
+            margin-top: 28px;
+            padding: 16px;
+            background: rgba(255, 255, 255, .07);
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 18px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .controls button {
+            border: 1px solid rgba(255, 255, 255, .18);
+            background: rgba(255, 255, 255, .1);
+            color: #fff;
+            border-radius: 999px;
+            padding: 10px 16px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .controls button:hover,
+        .controls button:focus {
+            background: rgba(99, 230, 255, .16);
+            outline: none;
+        }
+
+        .hint {
+            margin: 12px auto 0;
+            color: rgba(255, 255, 255, .64);
+            text-align: center;
+            font-size: 15px;
+            max-width: 900px;
+            line-height: 1.5;
+        }
+
+        .coming-soon {
+            margin-top: 36px;
+            padding: clamp(24px, 5vw, 44px);
+            border-radius: 30px;
+            border: 1px solid rgba(167, 105, 255, .34);
+            background:
+                radial-gradient(circle at 76% 18%, rgba(99, 230, 255, .18), transparent 34%),
+                linear-gradient(135deg, rgba(10, 20, 68, .82), rgba(38, 8, 72, .86));
+            box-shadow: 0 26px 70px rgba(0, 0, 0, .38);
+        }
+
+        .coming-soon p {
+            color: rgba(255, 255, 255, .78);
+            line-height: 1.7;
+            font-size: 18px;
+            margin: 0 0 16px;
+        }
+
+        .footer {
+            padding: 36px 0 56px;
+            color: rgba(255, 255, 255, .54);
+            text-align: center;
+        }
+
+        @media (max-width: 820px) {
+            .container { width: min(100% - 28px, 1160px); }
+            .hero { min-height: auto; padding-top: 32px; }
+            .panel-grid { grid-template-columns: 1fr; }
+            .scale { gap: 10px; min-height: 500px; }
+            .label { min-height: 92px; font-size: 20px; }
+            .bar-wrap { height: 340px; }
+            .bar { border-radius: 34px; }
+            nav a { font-size: 13px; padding: 9px 12px; }
+        }
+
+        @media (max-width: 560px) {
+            .scale-shell { margin-left: -8px; margin-right: -8px; }
+            .scale { grid-template-columns: repeat(2, 1fr); min-height: 0; row-gap: 26px; }
+            .label { min-height: 58px; margin-bottom: 12px; }
+            .bar-wrap { height: 260px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="scream-particles" aria-hidden="true"></canvas>
+    <div class="space-backdrop" aria-hidden="true"></div>
+
+    <div class="container">
+        <header class="masthead" aria-label="Site header">
+            <a class="logo" href="index.html" aria-label="Endless Vocals home">ENDLESS <span style="opacity:.7;font-weight:700">vocals</span></a>
+            <nav aria-label="Site navigation">
+                <a href="index.html">Home</a>
+                <a href="faq.html">FAQ</a>
+                <a href="index.html#coaches">Coaches</a>
+                <a href="shop.html">Shop</a>
+                <a href="song-mapper/">Song Mapper</a>
+                <a href="scream-center.html" aria-current="page">Scream Center</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero" aria-labelledby="scream-center-title">
+                <div class="hero-card">
+                    <span class="kicker">Upcoming Course • Harsh Vocals Without Guesswork</span>
+                    <h1 id="scream-center-title">Scream Center</h1>
+                    <p>Scream Center is an upcoming vocal training course focused on grit, screams, harsh vocals, and aggressive singing. It is being built for singers who want to understand how screams actually work instead of just forcing loud sounds and hoping for the best.</p>
+                    <div class="cta-row" role="group" aria-label="Scream Center actions">
+                        <a class="btn btn-primary" href="#heaviness-scale">Try the heaviness scale</a>
+                        <a class="btn btn-ghost" href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener noreferrer">Preview in Phase Cycle II</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" aria-labelledby="breakdown-title">
+                <span class="eyebrow">Break the scream into pieces</span>
+                <h2 id="breakdown-title">A clear map for aggressive vocals.</h2>
+                <p class="lead">The goal is to break the scream into trainable pieces, then show how those pieces connect into real singing. Scream Center is not about copying one scream style. It is about understanding the ingredients behind different screams so singers can build their own sound safely and confidently.</p>
+
+                <div class="panel-grid" aria-label="Scream Center fundamentals">
+                    <article class="panel">
+                        <h3>Technique ingredients</h3>
+                        <p>The course will cover vocal fry, fry screams, frustrated sigh, low grit, grit slides, breathing, support, placement, warm-ups, resets, safety checks, and how to apply these sounds to different genres of music.</p>
+                    </article>
+                    <article class="panel">
+                        <h3>Who it is for</h3>
+                        <p>Scream Center is for singers who want to sing with grit, learn harsh vocals, explore metal vocals, or understand aggressive singing in a more structured way.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section id="heaviness-scale" class="section space" aria-labelledby="scale-heading">
+                <span class="eyebrow">Halfway point</span>
+                <h2>Mix the ingredients.</h2>
+                <p class="lead">This scream heaviness scale shows the main ingredients as adjustable parts, so singers can see different style balances instead of treating every scream as one mysterious sound.</p>
+
+                <div class="scale-shell">
+                    <h2 id="scale-heading" class="scale-title">Scream Heaviness</h2>
+                    <div class="scale" id="scale">
+                        <section class="column">
+                            <div class="label">Vocal Fry<br>+ Fry Scream</div>
+                            <div class="bar-wrap">
+                                <div class="bar" data-name="fry" style="--h: 88%;" title="Drag up or down" role="slider" aria-label="Vocal Fry and Fry Scream" aria-valuemin="6" aria-valuemax="100" aria-valuenow="88" tabindex="0">
+                                    <span class="value">88</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="column">
+                            <div class="label">Frustrated Sigh</div>
+                            <div class="bar-wrap">
+                                <div class="bar" data-name="sigh" style="--h: 58%;" title="Drag up or down" role="slider" aria-label="Frustrated Sigh" aria-valuemin="6" aria-valuemax="100" aria-valuenow="58" tabindex="0">
+                                    <span class="value">58</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="column">
+                            <div class="label">Low Grit</div>
+                            <div class="bar-wrap">
+                                <div class="bar" data-name="lowgrit" style="--h: 38%;" title="Drag up or down" role="slider" aria-label="Low Grit" aria-valuemin="6" aria-valuemax="100" aria-valuenow="38" tabindex="0">
+                                    <span class="value">38</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="column">
+                            <div class="label">Grit Slides</div>
+                            <div class="bar-wrap">
+                                <div class="bar" data-name="slides" style="--h: 53%;" title="Drag up or down" role="slider" aria-label="Grit Slides" aria-valuemin="6" aria-valuemax="100" aria-valuenow="53" tabindex="0">
+                                    <span class="value">53</span>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="controls">
+                        <button type="button" data-preset="alexi">Children of Bodom / Wintersun</button>
+                        <button type="button" data-preset="corpse">Death Metal / Cannibal Corpse</button>
+                        <button type="button" data-preset="opeth">Opeth-ish Mix</button>
+                        <button type="button" data-preset="screamo">Fry-heavy Screamo</button>
+                        <button type="button" data-preset="black">Black Metal</button>
+                        <button type="button" data-preset="reset">Reset</button>
+                    </div>
+
+                    <p class="hint">Drag any blue box up or down to adjust the amount of that ingredient. Use presets to quickly show different scream-style blends in class.</p>
+                </div>
+            </section>
+
+            <section class="section space" aria-labelledby="cover-title">
+                <span class="eyebrow">What the course will cover</span>
+                <h2 id="cover-title">From clean checks to heavy textures.</h2>
+                <div class="panel-grid">
+                    <article class="panel">
+                        <h3>Vocal Fry and Fry Screams</h3>
+                        <p>Students will learn how to start with basic groggy fry, shape it with support and placement, sustain it, and eventually move toward fry scream textures.</p>
+                    </article>
+                    <article class="panel">
+                        <h3>Frustrated Sigh Technique</h3>
+                        <p>The frustrated sigh is one of the most natural gateways into aggressive vocals. The course will explore frustrated sigh phrases, barks, panting sighs, sustained sighs, and how this sound connects to heavier screams.</p>
+                    </article>
+                    <article class="panel">
+                        <h3>Low Grit</h3>
+                        <p>Low grit is one of the centerpieces of the course. Students will learn how to place grit onto an actual note, return to clean singing, and build a gritty sound that still feels musical.</p>
+                    </article>
+                    <article class="panel">
+                        <h3>Grit Slides</h3>
+                        <p>Students will learn how to move grit through small slides, downward slides, longer slides, and eventually more advanced scream shapes. This gives singers a clear map instead of leaving them guessing.</p>
+                    </article>
+                    <article class="panel">
+                        <h3>Style Application</h3>
+                        <p>The course will explore how different scream styles use different balances of vocal fry, frustrated sigh, low grit, and slides. This can apply to styles inspired by black metal, melodic death metal, death metal, screamo, Opeth-style harsh vocals, In Flames-style vocals, Children of Bodom, Wintersun, and more.</p>
+                    </article>
+                    <article class="panel">
+                        <h3>Safety and Reset Tools</h3>
+                        <p>Scream Center will also focus on how to stop, reset, and rebuild the sound when tension builds or the voice starts feeling tired. Gargling tone resets, warm-downs, clean-note checks, and hot water / throat care routines will be part of the training.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section space" aria-labelledby="coming-title">
+                <div class="coming-soon">
+                    <span class="eyebrow">Coming Soon</span>
+                    <h2 id="coming-title">Built inside Endless Vocals.</h2>
+                    <p>Scream Center is currently in development through Endless Vocals, and the preview is currently inside the Phase Cycle II Bootcamp available for VOD and replaying.</p>
+                    <p>It is especially useful for singers who feel confused by online scream advice, have tried fry screams but feel stuck, lose their voice after harsh vocal sessions, or want a clearer path from exercises into real songs.</p>
+                    <p>This is where we break the scream into pieces, learn how those pieces work, and start building a scream that can actually live inside music.</p>
+                    <div class="cta-row">
+                        <a class="btn btn-primary" href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener noreferrer">Join Phase Cycle II</a>
+                        <a class="btn btn-ghost" href="index.html">Back to Endless Vocals</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            © <span id="year"></span> Endless Vocals. All rights reserved.
+        </footer>
+    </div>
+
+    <script>
+        const yearEl = document.getElementById('year');
+        if (yearEl) {
+            yearEl.textContent = new Date().getFullYear();
+        }
+
+        const canvas = document.getElementById('scream-particles');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+        const particles = [];
+        const particleTotal = 120;
+
+        function resizeCanvas() {
+            if (!canvas || !ctx) return;
+            const ratio = window.devicePixelRatio || 1;
+            canvas.width = Math.max(1, Math.floor(window.innerWidth * ratio));
+            canvas.height = Math.max(1, Math.floor(window.innerHeight * ratio));
+            canvas.style.width = `${window.innerWidth}px`;
+            canvas.style.height = `${window.innerHeight}px`;
+            ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        }
+
+        function seedParticles() {
+            particles.length = 0;
+            const fireCount = Math.floor(particleTotal * 0.55);
+            for (let i = 0; i < particleTotal; i++) {
+                const isFire = i < fireCount;
+                particles.push({
+                    type: isFire ? 'fire' : 'space',
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    vx: isFire ? (Math.random() - 0.5) * 0.45 : (Math.random() - 0.5) * 0.22,
+                    vy: isFire ? -(Math.random() * 1.4 + 0.4) : Math.random() * 0.35 + 0.05,
+                    size: isFire ? Math.random() * 4 + 1.5 : Math.random() * 2.1 + 0.6,
+                    alpha: isFire ? Math.random() * 0.5 + 0.28 : Math.random() * 0.7 + 0.25
+                });
+            }
+        }
+
+        function drawParticles() {
+            if (!canvas || !ctx) return;
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            const scrollProgress = Math.min(1, window.scrollY / Math.max(1, document.body.scrollHeight - h));
+            ctx.clearRect(0, 0, w, h);
+
+            particles.forEach((p) => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < -20) p.x = w + 20;
+                if (p.x > w + 20) p.x = -20;
+
+                if (p.type === 'fire') {
+                    if (p.y < -20) {
+                        p.y = h + Math.random() * 80;
+                        p.x = Math.random() * w;
+                    }
+                    const visibility = Math.max(0, 1 - scrollProgress * 2.15);
+                    if (visibility > 0.02) {
+                        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 4.2);
+                        gradient.addColorStop(0, `rgba(255, 235, 166, ${p.alpha * visibility})`);
+                        gradient.addColorStop(0.35, `rgba(255, 101, 31, ${p.alpha * 0.9 * visibility})`);
+                        gradient.addColorStop(1, 'rgba(255, 36, 18, 0)');
+                        ctx.fillStyle = gradient;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size * 4.2, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                } else {
+                    if (p.y > h + 20) {
+                        p.y = -20;
+                        p.x = Math.random() * w;
+                    }
+                    const visibility = Math.min(1, Math.max(0, (scrollProgress - 0.28) * 2.8));
+                    if (visibility > 0.02) {
+                        ctx.fillStyle = `rgba(${p.size > 1.7 ? '157, 236, 255' : '255, 255, 255'}, ${p.alpha * visibility})`;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            });
+
+            requestAnimationFrame(drawParticles);
+        }
+
+        if (canvas && ctx) {
+            resizeCanvas();
+            seedParticles();
+            drawParticles();
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                seedParticles();
+            });
+        }
+
+        const bars = [...document.querySelectorAll('.bar')];
+        const min = 6;
+        const max = 100;
+
+        function setBar(bar, value) {
+            const clamped = Math.max(min, Math.min(max, Math.round(value)));
+            bar.style.setProperty('--h', `${clamped}%`);
+            bar.querySelector('.value').textContent = clamped;
+            bar.setAttribute('aria-valuenow', String(clamped));
+        }
+
+        function updateFromPointer(bar, clientY) {
+            const wrap = bar.parentElement;
+            const rect = wrap.getBoundingClientRect();
+            const percent = ((rect.bottom - clientY) / rect.height) * 100;
+            setBar(bar, percent);
+        }
+
+        bars.forEach((bar) => {
+            bar.addEventListener('pointerdown', (event) => {
+                bar.setPointerCapture(event.pointerId);
+                bar.classList.add('dragging');
+                updateFromPointer(bar, event.clientY);
+            });
+
+            bar.addEventListener('pointermove', (event) => {
+                if (bar.classList.contains('dragging')) {
+                    updateFromPointer(bar, event.clientY);
+                }
+            });
+
+            bar.addEventListener('pointerup', () => {
+                bar.classList.remove('dragging');
+            });
+
+            bar.addEventListener('pointercancel', () => {
+                bar.classList.remove('dragging');
+            });
+
+            bar.addEventListener('keydown', (event) => {
+                const current = Number(bar.getAttribute('aria-valuenow')) || min;
+                if (event.key === 'ArrowUp' || event.key === 'ArrowRight') {
+                    event.preventDefault();
+                    setBar(bar, current + 2);
+                } else if (event.key === 'ArrowDown' || event.key === 'ArrowLeft') {
+                    event.preventDefault();
+                    setBar(bar, current - 2);
+                } else if (event.key === 'Home') {
+                    event.preventDefault();
+                    setBar(bar, min);
+                } else if (event.key === 'End') {
+                    event.preventDefault();
+                    setBar(bar, max);
+                }
+            });
+        });
+
+        const presets = {
+            alexi: { fry: 78, sigh: 62, lowgrit: 68, slides: 88 },
+            corpse: { fry: 38, sigh: 92, lowgrit: 82, slides: 35 },
+            opeth: { fry: 58, sigh: 74, lowgrit: 72, slides: 45 },
+            screamo: { fry: 95, sigh: 35, lowgrit: 25, slides: 45 },
+            black: { fry: 72, sigh: 44, lowgrit: 30, slides: 62 },
+            reset: { fry: 88, sigh: 58, lowgrit: 38, slides: 53 }
+        };
+
+        function setPreset(name) {
+            const preset = presets[name];
+            if (!preset) return;
+            bars.forEach((bar) => {
+                const key = bar.dataset.name;
+                setBar(bar, preset[key]);
+            });
+        }
+
+        document.querySelectorAll('[data-preset]').forEach((button) => {
+            button.addEventListener('click', () => setPreset(button.dataset.preset));
+        });
+    </script>
+</body>
+</html>
