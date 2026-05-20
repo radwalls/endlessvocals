@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Endless Vocals Week 5 Test</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#101224;color:#f5f5ff;padding:20px;min-height:100vh;position:relative;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:-80px;pointer-events:none;z-index:-2;background:radial-gradient(circle at 20% 10%,rgba(142,232,255,.18),transparent 30%),radial-gradient(circle at 80% 20%,rgba(179,136,255,.16),transparent 32%),radial-gradient(circle at 50% 90%,rgba(76,120,255,.12),transparent 35%)}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(115deg,transparent 0 24%,rgba(142,232,255,.18) 24.3%,transparent 25.2%),linear-gradient(63deg,transparent 0 58%,rgba(179,136,255,.16) 58.3%,transparent 59%),linear-gradient(128deg,transparent 0 74%,rgba(142,232,255,.12) 74.2%,transparent 75%);filter:blur(.4px);opacity:.75}
+.app{max-width:850px;margin:auto}.header,.question,.results{background:linear-gradient(135deg,rgba(27,30,58,.96),rgba(23,25,51,.94));border:1px solid #34385f;border-radius:16px;padding:20px;margin-bottom:16px;position:relative;overflow:hidden;box-shadow:0 0 22px rgba(142,232,255,.08)}
+.question:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,transparent 0 34%,rgba(142,232,255,.10) 34.4%,transparent 35.5%,transparent 67%,rgba(179,136,255,.08) 67.3%,transparent 68.2%);opacity:.9}
+.question>*{position:relative}h1{margin:0 0 8px;font-size:28px}h2{color:#8ee8ff;margin-top:0}.question-title{font-weight:bold;margin-bottom:12px}label{display:block;background:#25294d;padding:10px;border-radius:10px;margin:8px 0;cursor:pointer}input[type=text],textarea{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #44496f;background:#101224;color:white;font-size:15px}textarea{min-height:80px}button{background:#8ee8ff;color:#101224;border:0;border-radius:12px;padding:14px 18px;font-weight:bold;font-size:16px;margin-right:8px;cursor:pointer}button.secondary{background:#34385f;color:white}.feedback{margin-top:10px;font-weight:bold}.correct{color:#54df9c}.wrong{color:#ff7484}.hidden{display:none}.score{font-size:28px;font-weight:bold;color:#8ee8ff}.small{color:#c4c6e8}
+
+</style>
+</head>
+<body>
+<div class="app">
+<div class="header">
+<h1>Endless Vocals — Phase Cycle 2</h1>
+<h2>Week 5 Written Test</h2>
+<p class="small">Answer the questions, then press Grade Test. Short answers are recorded but not auto-graded.</p>
+</div>
+
+<form id="quiz">
+
+<div class="question" data-answer="Very quiet but fully supported">
+<div class="question-title">1. When doing Falsetto Slides, the volume should be:</div>
+<label><input type="radio" name="q1" value="Loud and projected"> Loud and projected</label>
+<label><input type="radio" name="q1" value="Breathy and airy"> Breathy and airy</label>
+<label><input type="radio" name="q1" value="Very quiet but fully supported"> Very quiet but fully supported</label>
+<label><input type="radio" name="q1" value="Forced and pushed"> Forced and pushed</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answer="In the roof of the mouth">
+<div class="question-title">2. Proper placement should feel like the sound is:</div>
+<label><input type="radio" name="q2" value="In the throat"> In the throat</label>
+<label><input type="radio" name="q2" value="In the chest"> In the chest</label>
+<label><input type="radio" name="q2" value="In the nose only"> In the nose only</label>
+<label><input type="radio" name="q2" value="In the roof of the mouth"> In the roof of the mouth</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answer="Stay engaged downward">
+<div class="question-title">3. During ISO exercises, support should:</div>
+<label><input type="radio" name="q3" value="Turn off in falsetto"> Turn off in falsetto</label>
+<label><input type="radio" name="q3" value="Push upward"> Push upward</label>
+<label><input type="radio" name="q3" value="Stay engaged downward"> Stay engaged downward</label>
+<label><input type="radio" name="q3" value="Only activate on high notes"> Only activate on high notes</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answer="Transcend from falsetto to full voice">
+<div class="question-title">4. The purpose of Transcending Tones is to:</div>
+<label><input type="radio" name="q4" value="Increase volume only"> Increase volume only</label>
+<label><input type="radio" name="q4" value="Transcend from falsetto to full voice"> Transcend from falsetto to full voice</label>
+<label><input type="radio" name="q4" value="Strengthen low notes only"> Strengthen low notes only</label>
+<label><input type="radio" name="q4" value="Practice vibrato"> Practice vibrato</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answer="Maintain the same volume, support, and placement">
+<div class="question-title">5. In Vendera Sirens, the goal is to:</div>
+<label><input type="radio" name="q5" value="Get louder as you go up"> Get louder as you go up</label>
+<label><input type="radio" name="q5" value="Change vowels constantly"> Change vowels constantly</label>
+<label><input type="radio" name="q5" value="Maintain the same volume, support, and placement"> Maintain the same volume, support, and placement</label>
+<label><input type="radio" name="q5" value="Flip into falsetto at the top"> Flip into falsetto at the top</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answer="Support or coordination needs adjustment">
+<div class="question-title">6. If your voice cracks during an exercise, it usually means:</div>
+<label><input type="radio" name="q6" value="You are doing it perfectly"> You are doing it perfectly</label>
+<label><input type="radio" name="q6" value="You need more throat tension"> You need more throat tension</label>
+<label><input type="radio" name="q6" value="Support or coordination needs adjustment"> Support or coordination needs adjustment</label>
+<label><input type="radio" name="q6" value="You should stop immediately forever"> You should stop immediately forever</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answer="Keep full coordination at very low volume">
+<div class="question-title">7. Tiny Singing should:</div>
+<label><input type="radio" name="q7" value="Be breathy and relaxed"> Be breathy and relaxed</label>
+<label><input type="radio" name="q7" value="Turn off support"> Turn off support</label>
+<label><input type="radio" name="q7" value="Keep full coordination at very low volume"> Keep full coordination at very low volume</label>
+<label><input type="radio" name="q7" value="Only be used for warmups"> Only be used for warmups</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answer="Proper placement and connection">
+<div class="question-title">8. The buzz sensation in Vendera Sirens usually indicates:</div>
+<label><input type="radio" name="q8" value="You are yelling"> You are yelling</label>
+<label><input type="radio" name="q8" value="Proper placement and connection"> Proper placement and connection</label>
+<label><input type="radio" name="q8" value="You are nasal only"> You are nasal only</label>
+<label><input type="radio" name="q8" value="Lack of support"> Lack of support</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answer="2 parts songs for every 1 part exercises">
+<div class="question-title">9. The 2-1 Rule refers to:</div>
+<label><input type="radio" name="q9" value="Only practicing songs and skipping exercises"> Only practicing songs and skipping exercises</label>
+<label><input type="radio" name="q9" value="Practicing exercises for twice as long as songs"> Practicing exercises for twice as long as songs</label>
+<label><input type="radio" name="q9" value="2 parts songs for every 1 part exercises"> 2 parts songs for every 1 part exercises</label>
+<label><input type="radio" name="q9" value="Taking two rest days after every singing day"> Taking two rest days after every singing day</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answer="Maintain placement and support">
+<div class="question-title">10. When going higher in pitch, you should:</div>
+<label><input type="radio" name="q10" value="Reach up physically"> Reach up physically</label>
+<label><input type="radio" name="q10" value="Push harder with the throat"> Push harder with the throat</label>
+<label><input type="radio" name="q10" value="Maintain placement and support"> Maintain placement and support</label>
+<label><input type="radio" name="q10" value="Switch to whispering"> Switch to whispering</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answer="False">
+<div class="question-title">11. Falsetto should always be breathy.</div>
+<label><input type="radio" name="q11" value="True"> True</label>
+<label><input type="radio" name="q11" value="False"> False</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answer="False">
+<div class="question-title">12. You should lose support when singing quietly.</div>
+<label><input type="radio" name="q12" value="True"> True</label>
+<label><input type="radio" name="q12" value="False"> False</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answer="True">
+<div class="question-title">13. The return, or coming back down, in slides is just as important as going up.</div>
+<label><input type="radio" name="q13" value="True"> True</label>
+<label><input type="radio" name="q13" value="False"> False</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answer="False">
+<div class="question-title">14. Full voice should feel completely different from falsetto in placement.</div>
+<label><input type="radio" name="q14" value="True"> True</label>
+<label><input type="radio" name="q14" value="False"> False</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answer="False">
+<div class="question-title">15. You only need to practice exercises if you are a beginner.</div>
+<label><input type="radio" name="q15" value="True"> True</label>
+<label><input type="radio" name="q15" value="False"> False</label>
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answers="downward|down">
+<div class="question-title">16. Support should be directed __________, not upward.</div>
+<input type="text" name="q16" placeholder="Type your answer">
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answers="roof|palate|hard palate">
+<div class="question-title">17. Proper placement is felt in the __________ of the mouth.</div>
+<input type="text" name="q17" placeholder="Type your answer">
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answers="coordination|support|full coordination">
+<div class="question-title">18. Tiny Singing trains you to maintain __________ at low volume.</div>
+<input type="text" name="q18" placeholder="Type your answer">
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answers="full voice|voice">
+<div class="question-title">19. Transcending Tones help you move from falsetto into __________.</div>
+<input type="text" name="q19" placeholder="Type your answer">
+<div class="feedback"></div>
+</div>
+
+<div class="question" data-answers="songs and exercises|songs exercises|2 parts songs 1 part exercises|2 songs 1 exercise">
+<div class="question-title">20. The 2-1 Rule helps balance __________ and __________.</div>
+<input type="text" name="q20" placeholder="Type your answer">
+<div class="feedback"></div>
+</div>
+
+<div class="question short-answer">
+<div class="question-title">21. What is one thing you personally improved during Phase Cycle 2?</div>
+<textarea name="q21" placeholder="Write your answer"></textarea>
+<div class="feedback"></div>
+</div>
+
+<div class="question short-answer">
+<div class="question-title">22. What is one thing you still struggle with?</div>
+<textarea name="q22" placeholder="Write your answer"></textarea>
+<div class="feedback"></div>
+</div>
+
+</form>
+
+<div class="header">
+<button type="button" id="gradeBtn">Grade Test</button>
+<button type="button" id="resetBtn" class="secondary">Reset</button>
+</div>
+
+<div id="results" class="results hidden">
+<h2>Results</h2>
+<div id="score" class="score"></div>
+<p id="level"></p>
+</div>
+
+</div>
+
+<script>
+function clean(text){return String(text||"").toLowerCase().replace(/[.,!?]/g,"").replace(/\s+/g," ").trim();}
+function gradeQuiz(){
+  var questions=document.querySelectorAll(".question");
+  var correct=0,total=0;
+  for(var i=0;i<questions.length;i++){
+    var q=questions[i];
+    var fb=q.querySelector(".feedback");
+    fb.innerHTML="";
+    if(q.classList.contains("short-answer")){
+      fb.innerHTML='<span class="correct">Short answer recorded.</span>';
+      continue;
+    }
+    total++;
+    var user="";
+    var checked=q.querySelector("input[type=radio]:checked");
+    var typed=q.querySelector("input[type=text]");
+    if(checked){user=checked.value;}
+    if(typed){user=typed.value;}
+    var right=false;
+    var answer=q.getAttribute("data-answer");
+    var answers=q.getAttribute("data-answers");
+    if(answer){right=clean(user)===clean(answer);}
+    if(answers){
+      var list=answers.split("|");
+      for(var j=0;j<list.length;j++){
+        if(clean(user)===clean(list[j]) || clean(user).indexOf(clean(list[j]))>-1){right=true;}
+      }
+    }
+    if(right){
+      correct++;
+      fb.innerHTML='<span class="correct">Correct.</span>';
+    } else {
+      var shown=answer || (answers ? answers.split("|")[0] : "");
+      fb.innerHTML='<span class="wrong">Incorrect.</span> <span class="small">Correct answer: '+shown+'</span>';
+    }
+  }
+  var percent=Math.round((correct/total)*100);
+  document.getElementById("results").classList.remove("hidden");
+  document.getElementById("score").textContent=correct+"/"+total+" - "+percent+"%";
+  var level="RESET - the foundations need more review.";
+  if(percent>=85){level="LOCKED IN - strong understanding of the Phase Cycle 2 foundations.";}
+  else if(percent>=65){level="DEVELOPING - good direction, but some details need reinforcement.";}
+  document.getElementById("level").textContent=level;
+  document.getElementById("results").scrollIntoView({behavior:"smooth"});
+}
+function resetQuiz(){
+  document.getElementById("quiz").reset();
+  var fbs=document.querySelectorAll(".feedback");
+  for(var i=0;i<fbs.length;i++){fbs[i].innerHTML="";}
+  document.getElementById("results").classList.add("hidden");
+}
+document.getElementById("gradeBtn").addEventListener("click",gradeQuiz);
+document.getElementById("resetBtn").addEventListener("click",resetQuiz);
+</script>
+</body>
+</html>
