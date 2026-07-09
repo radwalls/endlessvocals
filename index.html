@@ -15,6 +15,11 @@
     <meta name="twitter:title" content="Endless Vocals — Your Vocals Don’t Expire" />
     <meta name="twitter:description" content="Phase Cycle 2 is live from April 6, 2026 through May 31, 2026. Join Endless Vocals for an intensified two-month bootcamp with weekly clinics, replays, and community support." />
     <meta name="twitter:image" content="https://endlessvocals.com/images/endless_thumbnail.png" id="meta-twitter-image" />
+    <script>
+        if (window.location.hash && window.location.hash.includes("access_token=")) {
+            window.location.replace("/song-mapper/" + window.location.hash);
+        }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">

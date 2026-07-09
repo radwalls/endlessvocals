@@ -87,6 +87,27 @@
       gap: 10px;
     }
 
+    .metadata-grid,
+    .library-grid,
+    .auth-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .metadata-grid input,
+    .metadata-grid textarea,
+    .library-grid input,
+    .auth-grid input {
+      min-width: 0;
+    }
+
+    .metadata-grid textarea {
+      min-height: 42px;
+      grid-column: span 2;
+      font: 500 14px/1.35 Inter, "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
     .composer.collapsed textarea,
     .composer.collapsed .generate-row {
       display: none;
@@ -96,7 +117,7 @@
       display: none;
       gap: 8px;
       align-items: center;
-      grid-template-columns: auto auto auto auto auto 1fr;
+      grid-template-columns: repeat(7, auto) 1fr;
     }
 
     .composer.collapsed .topbar {
@@ -105,6 +126,16 @@
 
     .song-label {
       justify-self: end;
+      color: var(--muted);
+      border: 1px solid #3c455d;
+      border-radius: 8px;
+      background: #151b28;
+      padding: 8px 10px;
+      min-width: 220px;
+    }
+
+    .cloud-status {
+      justify-self: stretch;
       color: var(--muted);
       border: 1px solid #3c455d;
       border-radius: 8px;
@@ -123,6 +154,11 @@
       padding: 12px;
       font: 500 15px/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       resize: vertical;
+    }
+
+    .metadata-grid textarea {
+      min-height: 42px;
+      font: 500 14px/1.35 Inter, "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     .generate-row {
@@ -152,6 +188,63 @@
     .danger {
       border-color: #5d3a47;
       color: var(--warn);
+    }
+
+    .library-panel {
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .panel-title h2 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .hint {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .library-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .library-item {
+      display: grid;
+      gap: 4px;
+      padding: 10px;
+      border: 1px solid #343e55;
+      border-radius: 10px;
+      background: #141a27;
+      text-align: left;
+    }
+
+    .library-item strong {
+      color: var(--text);
+      font-size: 0.96rem;
+    }
+
+    .library-item span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+
+    .status-line {
+      color: var(--muted);
+      font-size: 0.9rem;
+      min-height: 1.2em;
     }
 
     .workspace {
@@ -604,10 +697,21 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .song-label {
+      .song-label,
+      .cloud-status {
         justify-self: stretch;
         grid-column: 1 / -1;
         min-width: 0;
+      }
+
+      .metadata-grid,
+      .library-grid,
+      .auth-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .metadata-grid textarea {
+        grid-column: 1 / -1;
       }
     }
 
@@ -690,6 +794,12 @@
       .topbar {
         grid-template-columns: 1fr;
       }
+
+      .metadata-grid,
+      .library-grid,
+      .auth-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 420px) {
@@ -711,12 +821,18 @@
   <main class="app">
     <section class="card header">
       <h1>Song Mapper</h1>
-      <p>Inspired by the Song Mapping process at the end of Jaime Vendera’s Raise Your Voice. Use the different tools to apply markups to your lyrics, helping you break down and learn songs more effectively.</p>
+      <p>Build a visual road map for how a song should be sung: lyrics, pitch, breath, vibrato, sustain, dynamics, tone, and personal performance notes.</p>
       <a class="back-link" href="../">← Back to Endless Vocals</a>
     </section>
 
     <section id="composer" class="card composer">
       <textarea id="lyricsInput" placeholder="Paste lyrics here..."></textarea>
+      <div class="metadata-grid">
+        <input id="songTitle" type="text" placeholder="Song title" />
+        <input id="songArtist" type="text" placeholder="Artist" />
+        <input id="songTags" type="text" placeholder="Tags, comma separated" />
+        <textarea id="songDescription" placeholder="Practice note or description"></textarea>
+      </div>
       <div class="generate-row">
         <button id="generateBtn">Generate Song Map</button>
         <button id="startLoadBtn">Load Song Map</button>
@@ -724,13 +840,35 @@
 
       <div class="topbar">
         <button id="editLyricsBtn">Edit Lyrics</button>
-        <button id="exportBtn">Export Map</button>
-        <button id="saveBtn">Save .smap</button>
+        <button id="cloudSaveBtn">Cloud Save</button>
+        <button id="cloudCopyBtn">Save as Copy</button>
+        <button id="exportBtn">Export Text</button>
+        <button id="saveBtn">Export .smap</button>
         <button id="loadBtn">Load .smap</button>
         <button id="clearMapBtn" class="danger">Clear Map</button>
-        <input id="songTitle" class="song-label" type="text" placeholder="Song title / practice label" />
+        <div id="cloudStatus" class="cloud-status">Cloud library not configured.</div>
         <input id="loadInput" type="file" accept=".smap,application/json,.json" hidden />
       </div>
+    </section>
+
+    <section class="card library-panel">
+      <div class="panel-title">
+        <h2>Song Library</h2>
+        <button id="refreshLibraryBtn">Refresh</button>
+      </div>
+      <p class="hint">Browse public song maps, open one in the editor, then save your own copy when you want to build from someone else's work.</p>
+      <div class="auth-grid">
+        <input id="authEmail" type="email" placeholder="Email for magic link" />
+        <button id="magicLinkBtn">Send Magic Link</button>
+        <button id="signOutBtn">Sign Out</button>
+        <div id="authStatus" class="status-line">Signed out.</div>
+      </div>
+      <div class="library-grid">
+        <input id="librarySearch" type="search" placeholder="Search title, artist, creator, or tags" />
+        <button id="librarySearchBtn">Search</button>
+        <div id="libraryStatus" class="status-line">Connect Supabase to load public maps.</div>
+      </div>
+      <div id="libraryList" class="library-list"></div>
     </section>
 
     <section class="workspace">
@@ -788,6 +926,46 @@
           <div class="row">
             <input id="customAbove" type="text" placeholder="Custom above note..." />
             <button id="applyCustomAboveBtn">Apply</button>
+          </div>
+        </div>
+
+        <div class="group">
+          <label for="vibratoSelect">Vibrato</label>
+          <div class="row">
+            <select id="vibratoSelect">
+              <option value="">None</option>
+              <option value="quick">quick vibrato</option>
+              <option value="slow">slow vibrato</option>
+              <option value="delayed">delayed vibrato</option>
+            </select>
+            <button id="applyVibratoBtn">Apply</button>
+          </div>
+        </div>
+
+        <div class="group">
+          <label for="sustainSelect">Sustain</label>
+          <div class="row">
+            <select id="sustainSelect">
+              <option value="">None</option>
+              <option value="short">short sustain</option>
+              <option value="medium">medium sustain</option>
+              <option value="long">long sustain</option>
+            </select>
+            <button id="applySustainBtn">Apply</button>
+          </div>
+        </div>
+
+        <div class="group">
+          <label for="dynamicSelect">Dynamics</label>
+          <div class="row">
+            <select id="dynamicSelect">
+              <option value="">None</option>
+              <option value="softer">softer</option>
+              <option value="louder">louder</option>
+              <option value="swell">swell</option>
+              <option value="taper">taper</option>
+            </select>
+            <button id="applyDynamicBtn">Apply</button>
           </div>
         </div>
 
@@ -860,6 +1038,11 @@
         </div>
 
         <div class="group">
+          <button id="applyConsonantSwapBtn">Add Consonant Swap</button>
+          <button id="clearConsonantSwapBtn">Clear Consonant Swap</button>
+        </div>
+
+        <div class="group">
           <button id="clearSelectedBtn" class="danger">Clear Selected Markings</button>
         </div>
       </aside>
@@ -868,6 +1051,7 @@
     <pre id="exportBox" class="card">Nothing exported yet.</pre>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     (function () {
       const composer = document.getElementById("composer");
@@ -877,10 +1061,25 @@
       const editLyricsBtn = document.getElementById("editLyricsBtn");
       const exportBtn = document.getElementById("exportBtn");
       const saveBtn = document.getElementById("saveBtn");
+      const cloudSaveBtn = document.getElementById("cloudSaveBtn");
+      const cloudCopyBtn = document.getElementById("cloudCopyBtn");
       const loadBtn = document.getElementById("loadBtn");
       const loadInput = document.getElementById("loadInput");
       const clearMapBtn = document.getElementById("clearMapBtn");
       const songTitleInput = document.getElementById("songTitle");
+      const songArtistInput = document.getElementById("songArtist");
+      const songTagsInput = document.getElementById("songTags");
+      const songDescriptionInput = document.getElementById("songDescription");
+      const cloudStatus = document.getElementById("cloudStatus");
+      const authEmailInput = document.getElementById("authEmail");
+      const magicLinkBtn = document.getElementById("magicLinkBtn");
+      const signOutBtn = document.getElementById("signOutBtn");
+      const authStatus = document.getElementById("authStatus");
+      const librarySearch = document.getElementById("librarySearch");
+      const librarySearchBtn = document.getElementById("librarySearchBtn");
+      const refreshLibraryBtn = document.getElementById("refreshLibraryBtn");
+      const libraryStatus = document.getElementById("libraryStatus");
+      const libraryList = document.getElementById("libraryList");
       const map = document.getElementById("map");
       const exportBox = document.getElementById("exportBox");
       const selectedSummary = document.getElementById("selectedSummary");
@@ -894,6 +1093,9 @@
       const volumeInput = document.getElementById("volumeInput");
       const breathTypeSelect = document.getElementById("breathTypeSelect");
       const trueMusicModeToggle = document.getElementById("trueMusicModeToggle");
+      const vibratoSelect = document.getElementById("vibratoSelect");
+      const sustainSelect = document.getElementById("sustainSelect");
+      const dynamicSelect = document.getElementById("dynamicSelect");
 
       const enuncModeBtn = document.getElementById("enuncModeBtn");
       const volumeModeBtn = document.getElementById("volumeModeBtn");
@@ -912,6 +1114,14 @@
       let pitchPointSeed = 0;
       let breathSeed = 0;
       let lastBreathPlacement = null;
+      let supabaseClient = null;
+      let currentSession = null;
+      let currentCloudMap = null;
+      let libraryRows = [];
+      // Fill these with your Supabase project settings after running supabase/song-mapper-schema.sql.
+      const SUPABASE_URL = "https://qdpwjfbijndyzasxaphz.supabase.co";
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkcHdqZmJpam5keXphc3hhcGh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0MzkxNzMsImV4cCI6MjA5OTAxNTE3M30.eKC8XzJFM3pWMBoH0nB2ulbrOcHBSjkhZVYwVXRnNxU";
+      const AUTH_REDIRECT_URL = "https://endlessvocals.com/song-mapper/";
       const NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const MUSIC_NOTE_RANGE = buildMusicNoteRange(24, 96); // C1 to C7
 
@@ -957,6 +1167,12 @@
           text,
           above: "",
           below: "",
+          tone: "",
+          performanceNote: "",
+          vibrato: "",
+          sustain: "",
+          dynamic: "",
+          consonantSwap: "",
           volume: null,
           enunciation: 50,
           letterLevels: [],
@@ -1280,8 +1496,12 @@
       }
 
       function applyWordVisual(word) {
-        word.aboveNode.textContent = word.above || "\u00a0";
-        word.belowNode.textContent = word.below || "\u00a0";
+        const aboveParts = [word.above || word.tone, word.vibrato, word.sustain, word.dynamic]
+          .filter(Boolean);
+        const belowParts = [word.below || word.performanceNote, word.consonantSwap ? "swap: " + word.consonantSwap : ""]
+          .filter(Boolean);
+        word.aboveNode.textContent = aboveParts.join(" · ") || "\u00a0";
+        word.belowNode.textContent = belowParts.join(" · ") || "\u00a0";
 
         normalizeLetterLevels(word);
         renderWordLetters(word);
@@ -1935,12 +2155,59 @@ function renderMusicRollLabels(line, height, rowBands) {
 
       function applyAboveValue(value) {
         const normalized = (value || "").trim();
-        applyToSelected(function (w) { w.above = normalized; });
+        applyToSelected(function (w) {
+          w.above = normalized;
+          w.tone = normalized;
+        });
       }
 
       function applyBelowValue(value) {
         const normalized = (value || "").trim();
-        applyToSelected(function (w) { w.below = normalized; });
+        applyToSelected(function (w) {
+          w.below = normalized;
+          w.performanceNote = normalized;
+        });
+      }
+
+      function applyVibratoValue(value) {
+        const normalized = (value || "").trim();
+        applyToSelected(function (w) { w.vibrato = normalized; });
+      }
+
+      function applySustainValue(value) {
+        const normalized = (value || "").trim();
+        applyToSelected(function (w) { w.sustain = normalized; });
+      }
+
+      function applyDynamicValue(value) {
+        const normalized = (value || "").trim();
+        applyToSelected(function (w) { w.dynamic = normalized; });
+      }
+
+      function buildConsonantSwap(text) {
+        return String(text || "")
+          .replace(/tch/gi, function (match) { return preserveCase(match, "ch"); })
+          .replace(/sh/gi, function (match) { return preserveCase(match, "zh"); })
+          .replace(/x/gi, function (match) { return preserveCase(match, "eggs"); })
+          .replace(/qu/gi, function (match) { return preserveCase(match, "gu"); })
+          .replace(/[ck]/gi, function (match) { return preserveCase(match, "g"); })
+          .replace(/f/gi, function (match) { return preserveCase(match, "v"); })
+          .replace(/h/gi, "")
+          .replace(/p/gi, function (match) { return preserveCase(match, "b"); })
+          .replace(/s/gi, function (match) { return preserveCase(match, "z"); })
+          .replace(/t/gi, function (match) { return preserveCase(match, "d"); });
+      }
+
+      function preserveCase(source, replacement) {
+        return source === source.toUpperCase() ? replacement.toUpperCase() : replacement;
+      }
+
+      function applyConsonantSwap() {
+        applyToSelected(function (w) { w.consonantSwap = buildConsonantSwap(w.text); });
+      }
+
+      function clearConsonantSwap() {
+        applyToSelected(function (w) { w.consonantSwap = ""; });
       }
 
       function applyVolumeValue(value) {
@@ -1966,6 +2233,12 @@ function renderMusicRollLabels(line, height, rowBands) {
         applyToSelected(function (w) {
           w.above = "";
           w.below = "";
+          w.tone = "";
+          w.performanceNote = "";
+          w.vibrato = "";
+          w.sustain = "";
+          w.dynamic = "";
+          w.consonantSwap = "";
           w.volume = null;
           w.enunciation = 50;
           w.letterLevels = Array.from({ length: w.text.length }, function () { return 50; });
@@ -1991,6 +2264,7 @@ function renderMusicRollLabels(line, height, rowBands) {
       }
 
       function clearMap() {
+        currentCloudMap = null;
         clearModel();
         drawMode = null;
         activePitchDrag = null;
@@ -2004,6 +2278,7 @@ function renderMusicRollLabels(line, height, rowBands) {
         composer.classList.remove("collapsed");
         exportBox.textContent = "Nothing exported yet.";
         renderEmpty("Paste lyrics and click “Generate Song Map”.");
+        updateAuthUI();
         updateSelectionUI();
       }
 
@@ -2026,6 +2301,10 @@ function renderMusicRollLabels(line, height, rowBands) {
           const above = lineWords.map(function (w) { return w.above || "-"; }).join(" | ");
           const lyric = lineWords.map(function (w) { return w.text; }).join(" ");
           const below = lineWords.map(function (w) { return w.below || "-"; }).join(" | ");
+          const vibrato = lineWords.map(function (w) { return w.vibrato || "-"; }).join(" | ");
+          const sustain = lineWords.map(function (w) { return w.sustain || "-"; }).join(" | ");
+          const dynamics = lineWords.map(function (w) { return w.dynamic || "-"; }).join(" | ");
+          const swaps = lineWords.map(function (w) { return w.consonantSwap || "-"; }).join(" | ");
           const volume = lineWords.map(function (w) {
             return w.volume == null ? "-" : String(Math.round(w.volume));
           }).join(" | ");
@@ -2041,10 +2320,14 @@ function renderMusicRollLabels(line, height, rowBands) {
             "ABOVE:\n" + above + "\n\n" +
             "LYRIC:\n" + lyric + "\n\n" +
             "BELOW:\n" + below + "\n\n" +
+            "VIBRATO:\n" + vibrato + "\n\n" +
+            "SUSTAIN:\n" + sustain + "\n\n" +
+            "DYNAMICS:\n" + dynamics + "\n\n" +
             "VOLUME:\n" + volume + "\n\n" +
             "ENUNCIATION:\n" + enunciation + "\n\n" +
             "PITCH RANGE:\n" + pitch + "\n\n" +
-            "BREATHS:\n" + breaths + "\n"
+            "BREATHS:\n" + breaths + "\n\n" +
+            "CONSONANT SWAPS:\n" + swaps + "\n"
           );
         });
 
@@ -2060,10 +2343,16 @@ function renderMusicRollLabels(line, height, rowBands) {
             text: w.text,
             above: w.above,
             below: w.below,
+            tone: w.tone || w.above || "",
+            performanceNote: w.performanceNote || w.below || "",
+            vibrato: w.vibrato || "",
+            sustain: w.sustain || "",
+            dynamic: w.dynamic || "",
             volume: w.volume,
             enunciation: w.enunciation,
             letterLevels: Array.isArray(w.letterLevels) ? w.letterLevels.slice() : [],
-            pitch: w.pitch
+            pitch: w.pitch,
+            consonantSwap: w.consonantSwap || ""
           };
         });
 
@@ -2077,16 +2366,29 @@ function renderMusicRollLabels(line, height, rowBands) {
             }) : [],
             breaths: Array.isArray(line.breaths) ? line.breaths.map(function (breath) {
               return { id: breath.id, type: breath.type, x: breath.x, y: breath.y };
-            }) : []
+            }) : [],
+            sectionLabel: line.sectionLabel || ""
           };
         });
 
         return {
+          schemaVersion: 2,
+          createdWith: "endless-vocals-song-mapper",
           songTitle: (songTitleInput.value || "").trim(),
+          artist: (songArtistInput.value || "").trim(),
+          description: (songDescriptionInput.value || "").trim(),
+          tags: parseTags(songTagsInput.value),
           lyrics,
           words: wordsPayload,
           lines: linesPayload
         };
+      }
+
+      function parseTags(value) {
+        return String(value || "")
+          .split(",")
+          .map(function (tag) { return tag.trim(); })
+          .filter(Boolean);
       }
 
       function sanitizeFilename(base) {
@@ -2100,6 +2402,7 @@ function renderMusicRollLabels(line, height, rowBands) {
       }
 
       function validateSongMapPayload(payload) {
+        payload = unwrapSongMapPayload(payload);
         if (!payload || typeof payload !== "object") return "Invalid file format.";
         if (!Array.isArray(payload.lyrics)) return "Missing or invalid lyrics field.";
         if (!Array.isArray(payload.words)) return "Missing or invalid words field.";
@@ -2108,12 +2411,16 @@ function renderMusicRollLabels(line, height, rowBands) {
       }
 
       function applyLoadedSongMap(payload) {
+        payload = unwrapSongMapPayload(payload);
         lyricsInput.value = payload.lyrics.join("\n");
         if (typeof payload.songTitle === "string") {
           songTitleInput.value = payload.songTitle;
         } else {
           songTitleInput.value = "";
         }
+        songArtistInput.value = typeof payload.artist === "string" ? payload.artist : "";
+        songDescriptionInput.value = typeof payload.description === "string" ? payload.description : "";
+        songTagsInput.value = Array.isArray(payload.tags) ? payload.tags.join(", ") : "";
 
         generateMap();
 
@@ -2127,6 +2434,12 @@ function renderMusicRollLabels(line, height, rowBands) {
           if (typeof loaded.text === "string") word.text = loaded.text;
           word.above = typeof loaded.above === "string" ? loaded.above : "";
           word.below = typeof loaded.below === "string" ? loaded.below : "";
+          word.tone = typeof loaded.tone === "string" ? loaded.tone : word.above;
+          word.performanceNote = typeof loaded.performanceNote === "string" ? loaded.performanceNote : word.below;
+          word.vibrato = typeof loaded.vibrato === "string" ? loaded.vibrato : "";
+          word.sustain = typeof loaded.sustain === "string" ? loaded.sustain : "";
+          word.dynamic = typeof loaded.dynamic === "string" ? loaded.dynamic : "";
+          word.consonantSwap = typeof loaded.consonantSwap === "string" ? loaded.consonantSwap : "";
           word.volume = loaded.volume == null ? null : clamp(Number(loaded.volume) || 1, 1, 10);
           word.pitch = loaded.pitch == null ? 50 : clamp(Number(loaded.pitch) || 50, 0, 100);
           word.enunciation = loaded.enunciation == null ? 50 : clamp(Number(loaded.enunciation) || 50, 0, 100);
@@ -2166,11 +2479,17 @@ function renderMusicRollLabels(line, height, rowBands) {
               };
             })
             : [];
+          line.sectionLabel = typeof loaded.sectionLabel === "string" ? loaded.sectionLabel : "";
           renderBreathMarkers(line);
         });
 
         redrawAllPitchLines();
         syncPitchLayerVisibility();
+      }
+
+      function unwrapSongMapPayload(payload) {
+        if (payload && payload.map_data && typeof payload.map_data === "object") return payload.map_data;
+        return payload;
       }
 
       function loadSongMapFile(file) {
@@ -2186,6 +2505,8 @@ function renderMusicRollLabels(line, height, rowBands) {
             }
             clearMap();
             applyLoadedSongMap(payload);
+            currentCloudMap = null;
+            updateAuthUI();
             exportBox.textContent = "Loaded song map from " + file.name;
           } catch (error) {
             exportBox.textContent = "Load failed: Invalid .smap JSON file.";
@@ -2213,6 +2534,233 @@ function renderMusicRollLabels(line, height, rowBands) {
         a.click();
         a.remove();
         URL.revokeObjectURL(url);
+      }
+
+      function isSupabaseConfigured() {
+        return Boolean(SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase);
+      }
+
+      async function initSupabase() {
+        if (!isSupabaseConfigured()) {
+          cloudStatus.textContent = "Cloud library not configured. Add your Supabase anon key in this file.";
+          libraryStatus.textContent = "Cloud library is waiting for Supabase config.";
+          cloudSaveBtn.disabled = true;
+          cloudCopyBtn.disabled = true;
+          magicLinkBtn.disabled = true;
+          signOutBtn.disabled = true;
+          return;
+        }
+
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const sessionResult = await supabaseClient.auth.getSession();
+        currentSession = sessionResult.data.session;
+        updateAuthUI();
+        supabaseClient.auth.onAuthStateChange(function (_event, session) {
+          currentSession = session;
+          updateAuthUI();
+          loadLibrary();
+        });
+        loadLibrary();
+      }
+
+      function updateAuthUI() {
+        if (!supabaseClient) {
+          cloudStatus.textContent = "Cloud library not configured. Add your Supabase anon key in this file.";
+          authStatus.textContent = "Signed out.";
+          cloudSaveBtn.disabled = true;
+          cloudCopyBtn.disabled = true;
+          magicLinkBtn.disabled = true;
+          signOutBtn.disabled = true;
+          return;
+        }
+        const user = currentSession && currentSession.user;
+        if (user) {
+          authStatus.textContent = "Signed in as " + (user.email || "Supabase user") + ".";
+          cloudStatus.textContent = currentCloudMap
+            ? "Loaded cloud map: " + (currentCloudMap.title || "Untitled")
+            : "Signed in. Ready to cloud save.";
+          cloudSaveBtn.disabled = false;
+          cloudCopyBtn.disabled = false;
+          magicLinkBtn.disabled = false;
+          signOutBtn.disabled = false;
+        } else {
+          authStatus.textContent = "Signed out.";
+          cloudStatus.textContent = "Browse public maps. Sign in to cloud save.";
+          cloudSaveBtn.disabled = true;
+          cloudCopyBtn.disabled = true;
+          magicLinkBtn.disabled = false;
+          signOutBtn.disabled = true;
+        }
+      }
+
+      async function sendMagicLink() {
+        if (!supabaseClient) return;
+        const email = authEmailInput.value.trim();
+        if (!email) {
+          authStatus.textContent = "Enter an email first.";
+          return;
+        }
+        authStatus.textContent = "Sending magic link...";
+        const options = {};
+        if (window.location.protocol === "http:" || window.location.protocol === "https:") {
+          options.emailRedirectTo = window.location.href.split("#")[0];
+        } else {
+          options.emailRedirectTo = AUTH_REDIRECT_URL;
+        }
+        const result = await supabaseClient.auth.signInWithOtp({ email, options });
+        authStatus.textContent = result.error
+          ? "Magic link failed: " + result.error.message
+          : "Magic link sent. Check your email.";
+      }
+
+      async function signOut() {
+        if (!supabaseClient) return;
+        await supabaseClient.auth.signOut();
+        currentCloudMap = null;
+        updateAuthUI();
+      }
+
+      async function loadLibrary() {
+        if (!supabaseClient) return;
+        libraryStatus.textContent = "Loading public maps...";
+        const term = librarySearch.value.trim();
+        let query = supabaseClient
+          .from("song_maps")
+          .select("id, owner_id, title, artist, description, tags, visibility, schema_version, map_data, source_map_id, updated_at")
+          .eq("visibility", "public")
+          .order("updated_at", { ascending: false })
+          .limit(50);
+
+        if (term) {
+          const likeTerm = "%" + term.replace(/[%_]/g, "") + "%";
+          query = query.or("title.ilike." + likeTerm + ",artist.ilike." + likeTerm + ",description.ilike." + likeTerm);
+        }
+
+        const result = await query;
+        if (result.error) {
+          libraryRows = [];
+          libraryStatus.textContent = "Library load failed: " + result.error.message;
+          renderLibrary();
+          return;
+        }
+
+        libraryRows = result.data || [];
+        if (term) {
+          const lower = term.toLowerCase();
+          libraryRows = libraryRows.filter(function (row) {
+            const tags = Array.isArray(row.tags) ? row.tags.join(" ") : "";
+            const creator = row.profiles && row.profiles.display_name ? row.profiles.display_name : "";
+            return [row.title, row.artist, row.description, tags, creator].join(" ").toLowerCase().includes(lower);
+          });
+        }
+        libraryStatus.textContent = libraryRows.length
+          ? String(libraryRows.length) + " public map" + (libraryRows.length === 1 ? "" : "s") + " found."
+          : "No public maps found yet.";
+        renderLibrary();
+      }
+
+      function renderLibrary() {
+        libraryList.innerHTML = "";
+        libraryRows.forEach(function (row) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "library-item";
+          const creator = row.profiles && row.profiles.display_name ? row.profiles.display_name : "community";
+          const tags = Array.isArray(row.tags) && row.tags.length ? " · " + row.tags.join(", ") : "";
+          button.innerHTML =
+            "<strong></strong><span></span><span></span>";
+          button.querySelector("strong").textContent = row.title || "Untitled song";
+          button.querySelectorAll("span")[0].textContent = (row.artist || "Unknown artist") + " · by " + creator;
+          button.querySelectorAll("span")[1].textContent = formatDate(row.updated_at) + tags;
+          button.addEventListener("click", function () {
+            openCloudMap(row);
+          });
+          libraryList.appendChild(button);
+        });
+      }
+
+      function formatDate(value) {
+        if (!value) return "No date";
+        return new Date(value).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+      }
+
+      function openCloudMap(row) {
+        const validationError = validateSongMapPayload(row.map_data);
+        if (validationError) {
+          libraryStatus.textContent = "Cannot open map: " + validationError;
+          return;
+        }
+        clearMap();
+        applyLoadedSongMap(row.map_data);
+        currentCloudMap = row;
+        songTitleInput.value = row.title || songTitleInput.value;
+        songArtistInput.value = row.artist || songArtistInput.value;
+        songDescriptionInput.value = row.description || songDescriptionInput.value;
+        songTagsInput.value = Array.isArray(row.tags) ? row.tags.join(", ") : songTagsInput.value;
+        cloudStatus.textContent = "Loaded cloud map: " + (row.title || "Untitled") + ".";
+        updateAuthUI();
+      }
+
+      async function cloudSave(options) {
+        if (!supabaseClient || !currentSession || !currentSession.user) {
+          cloudStatus.textContent = "Sign in before cloud saving.";
+          return;
+        }
+        if (!words.length) {
+          cloudStatus.textContent = "Create or load a song map before cloud saving.";
+          return;
+        }
+
+        const mapData = buildSongMapPayload();
+        const title = (songTitleInput.value || "Untitled song").trim();
+        const payload = {
+          owner_id: currentSession.user.id,
+          title,
+          artist: (songArtistInput.value || "").trim(),
+          description: (songDescriptionInput.value || "").trim(),
+          tags: parseTags(songTagsInput.value),
+          visibility: "public",
+          schema_version: 2,
+          map_data: mapData
+        };
+
+        const canUpdate = currentCloudMap
+          && currentCloudMap.id
+          && currentCloudMap.owner_id === currentSession.user.id
+          && !(options && options.asCopy);
+
+        cloudStatus.textContent = canUpdate ? "Updating cloud map..." : "Saving cloud copy...";
+        let result;
+        if (canUpdate) {
+          result = await supabaseClient
+            .from("song_maps")
+            .update(Object.assign({}, payload, { updated_at: new Date().toISOString() }))
+            .eq("id", currentCloudMap.id)
+            .select("id, owner_id, title, artist, description, tags, visibility, schema_version, map_data, source_map_id, updated_at")
+            .single();
+        } else {
+          result = await supabaseClient
+            .from("song_maps")
+            .insert(Object.assign({}, payload, {
+              source_map_id: currentCloudMap && currentCloudMap.id ? currentCloudMap.id : null
+            }))
+            .select("id, owner_id, title, artist, description, tags, visibility, schema_version, map_data, source_map_id, updated_at")
+            .single();
+        }
+
+        if (result.error) {
+          cloudStatus.textContent = "Cloud save failed: " + result.error.message;
+          return;
+        }
+
+        currentCloudMap = result.data;
+        await supabaseClient.from("song_map_versions").insert({
+          song_map_id: currentCloudMap.id,
+          created_by: currentSession.user.id,
+          map_data: mapData
+        });
+        cloudStatus.textContent = "Saved to cloud: " + title + ".";
+        loadLibrary();
       }
 
       function openLoadPicker() {
@@ -2244,7 +2792,16 @@ function renderMusicRollLabels(line, height, rowBands) {
       editLyricsBtn.addEventListener("click", editLyrics);
       exportBtn.addEventListener("click", exportMap);
       saveBtn.addEventListener("click", saveSongMap);
+      cloudSaveBtn.addEventListener("click", function () { cloudSave({ asCopy: false }); });
+      cloudCopyBtn.addEventListener("click", function () { cloudSave({ asCopy: true }); });
       loadBtn.addEventListener("click", openLoadPicker);
+      magicLinkBtn.addEventListener("click", sendMagicLink);
+      signOutBtn.addEventListener("click", signOut);
+      refreshLibraryBtn.addEventListener("click", loadLibrary);
+      librarySearchBtn.addEventListener("click", loadLibrary);
+      librarySearch.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") loadLibrary();
+      });
       loadInput.addEventListener("change", function (event) {
         const file = event.target.files && event.target.files[0];
         loadSongMapFile(file);
@@ -2271,6 +2828,18 @@ function renderMusicRollLabels(line, height, rowBands) {
         applyBelowValue(customBelow.value);
       });
 
+      document.getElementById("applyVibratoBtn").addEventListener("click", function () {
+        applyVibratoValue(vibratoSelect.value);
+      });
+
+      document.getElementById("applySustainBtn").addEventListener("click", function () {
+        applySustainValue(sustainSelect.value);
+      });
+
+      document.getElementById("applyDynamicBtn").addEventListener("click", function () {
+        applyDynamicValue(dynamicSelect.value);
+      });
+
       document.getElementById("applyVolumeBtn").addEventListener("click", function () {
         applyVolumeValue(volumeInput.value);
       });
@@ -2278,6 +2847,8 @@ function renderMusicRollLabels(line, height, rowBands) {
 
       document.getElementById("clearSelectedBtn").addEventListener("click", clearSelectedMarkings);
       document.getElementById("applyWordEditBtn").addEventListener("click", applyWordEdit);
+      document.getElementById("applyConsonantSwapBtn").addEventListener("click", applyConsonantSwap);
+      document.getElementById("clearConsonantSwapBtn").addEventListener("click", clearConsonantSwap);
 
       enuncModeBtn.addEventListener("click", function () { setDrawMode("enunciation"); });
       volumeModeBtn.addEventListener("click", function () { setDrawMode("volume"); });
@@ -2290,6 +2861,7 @@ function renderMusicRollLabels(line, height, rowBands) {
       trueMusicMode = false;
       trueMusicModeToggle.checked = false;
       renderEmpty("Paste lyrics and click “Generate Song Map”.");
+      initSupabase();
     })();
   </script>
 </body>
