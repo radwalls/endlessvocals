@@ -110,6 +110,12 @@
             background: var(--surface-soft);
             font-weight: 600;
         }
+        .plugin-product{position:relative;overflow:hidden;color:#edfaff;background:radial-gradient(circle at 8% 0%,rgba(0,117,255,.22),transparent 35%),linear-gradient(135deg,#080d14,#11151c 64%,#111);border-color:rgba(0,117,255,.32)}
+        .plugin-product .kicker{color:#55aaff;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+        .plugin-product h2{font-size:clamp(28px,5vw,42px);margin-top:8px}.plugin-product p{color:#aab7c1}
+        .plugin-shots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}.plugin-shots img{width:100%;aspect-ratio:462/560;object-fit:cover;object-position:bottom;border-radius:7px;border:1px solid rgba(255,255,255,.12)}
+        .plugin-product .links a{background:#e9eef5;color:#111;border:0}.checkout-note{font-size:12px;color:#8fa5b3!important}
+        @media(max-width:600px){.plugin-shots{grid-template-columns:repeat(2,1fr)}}
     </style>
 </head>
 <body>
@@ -126,10 +132,19 @@
 
         <section class="hero">
             <h1>SHOP</h1>
-            <p>Three ways to train with Endless Vocals right now: two focused products and full monthly membership. The next bootcamp is starting soon, so jump in now and get ahead.</p>
+            <p>Vocal training, practical tools, and a supportive community—built to keep you practicing and make every session sound inspiring.</p>
         </section>
 
         <section class="shop-grid" aria-label="Shop products">
+            <article class="product plugin-product" id="ez-plugins">
+                <div class="kicker">Rad Walls × Endless Vocals</div>
+                <h2>EZ One-Knob Plug-ins</h2>
+                <div class="price">$9 each</div>
+                <p>Nine focused Audio Unit plug-ins for Logic Pro. Pick the sound you need, turn one knob, and keep practicing or creating. They sound musical on vocals, guitar, bass, synths, drums, and more.</p>
+                <div class="plugin-shots" aria-label="EZ plug-in interface gallery"><img src="plugin-images/ez-verb.png" alt="EZ Verb interface"><img src="plugin-images/ez-delay.png" alt="EZ Delay interface"><img src="plugin-images/ez-doubler.png" alt="EZ Doubler interface"><img src="plugin-images/ez-chorus.png" alt="EZ Chorus interface"><img src="plugin-images/ez-pressor.png" alt="EZ Pressor interface"><img src="plugin-images/ez-d-esser.png" alt="EZ D-Esser interface"><img src="plugin-images/ez-q.png" alt="EZ Q interface"><img src="plugin-images/ez-sat.png" alt="EZ Sat interface"><img src="plugin-images/ez-tone.png" alt="EZ Tone interface"></div>
+                <div class="links"><a href="https://buy.stripe.com/9B63cu4T24iLeV2am95gc02">EZ Verb · $9</a><a href="https://buy.stripe.com/7sY28q71a9D5cMUam95gc03">EZ Delay · $9</a><a href="https://buy.stripe.com/8x25kCdpy5mPfZ6fGt5gc04">EZ Doubler · $9</a><a href="https://buy.stripe.com/3cI6oG5X602vbIQam95gc05">EZ Chorus · $9</a><a href="https://buy.stripe.com/aFa3cuadm16z3ck1PD5gc06">EZ Pressor · $9</a><a href="https://buy.stripe.com/14A5kC99i3eH008bqd5gc07">EZ D-Esser · $9</a><a href="https://buy.stripe.com/dRm4gy85e3eHfZ6cuh5gc08">EZ Q · $9</a><a href="https://buy.stripe.com/dRmcN45X602vdQY1PD5gc09">EZ Sat · $9</a><a href="https://buy.stripe.com/dRm8wO99i9D5008eCp5gc0a">EZ Tone · $9</a></div>
+                <p class="checkout-note">Secure checkout through Stripe. Your purchased plug-in and installation guide will be delivered to your checkout email.</p>
+            </article>
             <article class="product">
                 <h2>EV Warm-up + EV Warm-down Combo Pack</h2>
                 <div class="price">$20</div>
@@ -154,10 +169,7 @@
                 <h2>Endless Vocals Membership</h2>
                 <div class="price">$24 / month</div>
                 <p>Get access to the Endless Vocals school: live bootcamp classes, replays, vocal training structure, community feedback, and ongoing support from coaches Ryan and Tiago. The next bootcamp is starting soon, so now is the best time to join and lock in your progress.</p>
-                <div class="links">
-                    <a href="https://ko-fi.com/endlessvocals" target="_blank" rel="noopener noreferrer">Join on Ko-fi</a>
-                    <a href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener noreferrer">Join Discord</a>
-                </div>
+                <div class="links"><a href="join.html">JOIN!</a></div>
             </article>
         </section>
     </div>
