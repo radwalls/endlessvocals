@@ -1,19 +1,38 @@
-RAD WALLS x ENDLESS VOCALS — EZ ONE-KNOB SUITE
+RAD WALLS x ENDLESS VOCALS — EZ ONE-KNOB SUITE 0.2.0
 
 Thank you for supporting independent music tools and vocal education.
 
-INCLUDED AUDIO UNITS
-EZ Verb, EZ Delay, EZ Doubler, EZ Chorus, EZ Pressor, EZ D-Esser,
+INCLUDED
+EZ Verb, EZ Delay, EZ Doubler, EZ Chorus, EZ Pressor, EZ D-esser,
 EZ Q, EZ Sat, and EZ Tone.
 
-LOGIC PRO / AUDIO UNIT INSTALLATION
-1. Open the Components folder in this download.
-2. Copy all nine .component files to:
-   Macintosh HD/Library/Audio/Plug-Ins/Components
-3. Restart Logic Pro.
-4. Find the plug-ins under Audio FX > Rad Walls.
+FORMATS
+- Components: Audio Unit format for Logic Pro and other AU hosts on macOS.
+- VST3: VST3 format for Ableton Live, Cubase, Reaper, Studio One, and other
+  VST3 hosts on macOS.
 
-If Logic was open during installation, quit and reopen it. If a plug-in still
-does not appear, open Logic Pro > Settings > Plug-in Manager and rescan it.
+LOGIC PRO / AUDIO UNIT INSTALLATION
+1. Quit Logic Pro.
+2. Copy all nine .component files from Components to:
+   ~/Library/Audio/Plug-Ins/Components/
+3. Reopen Logic Pro.
+4. If needed, use Logic Pro > Settings > Plug-in Manager and rescan them.
+
+VST3 INSTALLATION
+1. Quit your DAW.
+2. Copy all nine .vst3 files from VST3 to:
+   ~/Library/Audio/Plug-Ins/VST3/
+3. Reopen your DAW and rescan plug-ins if needed.
+
+CHANNEL CHOICES
+Every plug-in supports mono, mono-to-stereo, and stereo in the same download.
+Your DAW chooses the matching layout when you insert it.
+
+REQUIREMENTS
+Apple Silicon Mac with macOS 13 or newer.
+
+This purchase is for one person. Please do not redistribute the plug-ins or
+the download link.
 
 Need help? Email radwalls@gmail.com
+
