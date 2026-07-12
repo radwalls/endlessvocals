@@ -1,0 +1,19 @@
+RAD WALLS x ENDLESS VOCALS — EZ ONE-KNOB SUITE
+
+Thank you for supporting independent music tools and vocal education.
+
+INCLUDED AUDIO UNITS
+EZ Verb, EZ Delay, EZ Doubler, EZ Chorus, EZ Pressor, EZ D-Esser,
+EZ Q, EZ Sat, and EZ Tone.
+
+LOGIC PRO / AUDIO UNIT INSTALLATION
+1. Open the Components folder in this download.
+2. Copy all nine .component files to:
+   Macintosh HD/Library/Audio/Plug-Ins/Components
+3. Restart Logic Pro.
+4. Find the plug-ins under Audio FX > Rad Walls.
+
+If Logic was open during installation, quit and reopen it. If a plug-in still
+does not appear, open Logic Pro > Settings > Plug-in Manager and rescan it.
+
+Need help? Email radwalls@gmail.com
