@@ -1,10 +1,10 @@
-RAD WALLS x ENDLESS VOCALS — EZ ONE-KNOB SUITE 0.2.0
+RAD WALLS x ENDLESS VOCALS — EZ ONE-KNOB SUITE 0.3.0
 
 Thank you for supporting independent music tools and vocal education.
 
 INCLUDED
 EZ Verb, EZ Delay, EZ Doubler, EZ Chorus, EZ Pressor, EZ D-esser,
-EZ Q, EZ Sat, and EZ Tone.
+EZ Q, EZ Sat, EZ Tone, and EZ Tuner.
 
 FORMATS
 - Components: Audio Unit format for Logic Pro and other AU hosts on macOS.
@@ -13,14 +13,14 @@ FORMATS
 
 LOGIC PRO / AUDIO UNIT INSTALLATION
 1. Quit Logic Pro.
-2. Copy all nine .component files from Components to:
+2. Copy all ten .component files from Components to:
    ~/Library/Audio/Plug-Ins/Components/
 3. Reopen Logic Pro.
 4. If needed, use Logic Pro > Settings > Plug-in Manager and rescan them.
 
 VST3 INSTALLATION
 1. Quit your DAW.
-2. Copy all nine .vst3 files from VST3 to:
+2. Copy all ten .vst3 files from VST3 to:
    ~/Library/Audio/Plug-Ins/VST3/
 3. Reopen your DAW and rescan plug-ins if needed.
 
@@ -35,4 +35,3 @@ This purchase is for one person. Please do not redistribute the plug-ins or
 the download link.
 
 Need help? Email radwalls@gmail.com
-
