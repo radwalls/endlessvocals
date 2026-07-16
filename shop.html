@@ -141,6 +141,12 @@
         .plugin-product .links a{background:#e9eef5;color:#111;border:0}.checkout-note{font-size:12px;color:#8fa5b3!important}
         .coming-soon{display:inline-flex;align-items:center;gap:9px;margin-top:12px;padding:10px 14px;border:1px solid rgba(142,190,255,.35);border-radius:999px;background:rgba(31,92,255,.12);color:#d9eaff;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
         .coming-soon::before{content:"";width:7px;height:7px;border-radius:50%;background:#66a7ff;box-shadow:0 0 14px #66a7ff}
+        .coming-soon-section{margin-top:54px;padding-top:34px;border-top:1px solid var(--surface-border)}
+        .coming-soon-heading{margin-bottom:20px;text-align:center}
+        .coming-soon-heading .kicker{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+        .coming-soon-heading h2{margin:8px 0 7px;font-size:clamp(30px,5vw,42px)}
+        .coming-soon-heading p{max-width:62ch;margin:0 auto;color:var(--muted);line-height:1.6}
+        .coming-soon-grid{display:grid;gap:18px}
         @media(max-width:600px){.plugin-shots{grid-template-columns:repeat(2,1fr)}.featured-product.has-image{grid-template-columns:1fr}.featured-product img{max-height:none}}
     </style>
 </head>
@@ -181,26 +187,6 @@
                 <img class="plugin-product-shot" src="plugin-images/rdws-raw-synth-v2.jpg" alt="RDWS RAW SYNTH V2 photographed-hardware synthesizer interface">
                 <div class="links"><a href="https://buy.stripe.com/dRm00i71a9D514c1PD5gc0g">Get RDWS RAW SYNTH V2 · $15</a></div>
                 <p class="checkout-note">Apple Silicon Mac and macOS 13+ required. Your Audio Unit, VST3, standalone app, presets, and installation guide are sent to your checkout email automatically.</p>
-            </article>
-
-            <article class="product plugin-product" id="ez-plugins" data-featured="true">
-                <div class="kicker">Rad Walls × Endless Vocals</div>
-                <h2>EZ One-Knob Plug-ins</h2>
-                <div class="price">Coming Soon · AU + VST3</div>
-                <p>The EZ line is back in development while the sound, controls, and reliability are refined. The candy-control look stays, but checkout is paused until every plug-in feels ready to recommend to vocal students and recording artists.</p>
-                <div class="plugin-shots" aria-label="EZ plug-in interface gallery"><img src="plugin-images/ez-verb.png?v=0.3.0" alt="EZ Verb interface"><img src="plugin-images/ez-delay.png?v=0.3.0" alt="EZ Delay interface"><img src="plugin-images/ez-doubler.png?v=0.3.0" alt="EZ Doubler interface"><img src="plugin-images/ez-chorus.png?v=0.3.0" alt="EZ Chorus interface"><img src="plugin-images/ez-pressor.png?v=0.3.0" alt="EZ Pressor interface"><img src="plugin-images/ez-desser.png?v=0.3.0" alt="EZ D-Esser interface"><img src="plugin-images/ez-q.png?v=0.3.0" alt="EZ Q interface"><img src="plugin-images/ez-sat.png?v=0.3.0" alt="EZ Sat interface"><img src="plugin-images/ez-tone.png?v=0.3.0" alt="EZ Tone interface"><img src="plugin-images/ez-tuner.png?v=0.3.0" alt="EZ Tuner interface"></div>
-                <div class="coming-soon" role="status">Coming soon · not for sale yet</div>
-                <p class="checkout-note">There is no active checkout for the EZ plug-ins while development continues.</p>
-            </article>
-
-            <article class="product plugin-product" id="fifty-eight-better" data-featured="true">
-                <div class="kicker">Fifty Eight Audio × Endless Vocals</div>
-                <h2>Fifty-Eight Better</h2>
-                <div class="price">Coming Soon · AU + VST3</div>
-                <p>Fifty-Eight Better is being refined before release. Its SM58-focused vocal shaping, leveling, noise reduction, peak control, and preamp colors will return when the plug-in is ready for confident daily use.</p>
-                <img class="plugin-product-shot" src="plugin-images/fifty-eight-better.jpg" alt="Fifty-Eight Better plug-in interface">
-                <div class="coming-soon" role="status">Coming soon · not for sale yet</div>
-                <p class="checkout-note">There is no active checkout for Fifty-Eight Better while development continues.</p>
             </article>
 
             <article class="product plugin-product" id="valveheart-compressor" data-featured="true">
@@ -254,6 +240,35 @@
                 <p>Get access to the Endless Vocals school: live bootcamp classes, replays, vocal training structure, community feedback, and ongoing support from coaches Ryan and Tiago. The next bootcamp is starting soon, so now is the best time to join and lock in your progress.</p>
                 <div class="links"><a href="join.html">JOIN!</a></div>
             </article>
+        </section>
+
+        <section class="coming-soon-section" aria-labelledby="coming-soon-title">
+            <div class="coming-soon-heading">
+                <div class="kicker">In development</div>
+                <h2 id="coming-soon-title">Coming Soon</h2>
+                <p>These plug-ins are still being refined. They are shown here as a preview, with checkout paused until they are ready.</p>
+            </div>
+            <div class="coming-soon-grid">
+                <article class="product plugin-product" id="ez-plugins">
+                    <div class="kicker">Rad Walls × Endless Vocals</div>
+                    <h2>EZ One-Knob Plug-ins</h2>
+                    <div class="price">Coming Soon · AU + VST3</div>
+                    <p>The EZ line is back in development while the sound, controls, and reliability are refined. The candy-control look stays, but checkout is paused until every plug-in feels ready to recommend to vocal students and recording artists.</p>
+                    <div class="plugin-shots" aria-label="EZ plug-in interface gallery"><img src="plugin-images/ez-verb.png?v=0.3.0" alt="EZ Verb interface"><img src="plugin-images/ez-delay.png?v=0.3.0" alt="EZ Delay interface"><img src="plugin-images/ez-doubler.png?v=0.3.0" alt="EZ Doubler interface"><img src="plugin-images/ez-chorus.png?v=0.3.0" alt="EZ Chorus interface"><img src="plugin-images/ez-pressor.png?v=0.3.0" alt="EZ Pressor interface"><img src="plugin-images/ez-desser.png?v=0.3.0" alt="EZ D-Esser interface"><img src="plugin-images/ez-q.png?v=0.3.0" alt="EZ Q interface"><img src="plugin-images/ez-sat.png?v=0.3.0" alt="EZ Sat interface"><img src="plugin-images/ez-tone.png?v=0.3.0" alt="EZ Tone interface"><img src="plugin-images/ez-tuner.png?v=0.3.0" alt="EZ Tuner interface"></div>
+                    <div class="coming-soon" role="status">Coming soon · not for sale yet</div>
+                    <p class="checkout-note">There is no active checkout for the EZ plug-ins while development continues.</p>
+                </article>
+
+                <article class="product plugin-product" id="fifty-eight-better">
+                    <div class="kicker">Fifty Eight Audio × Endless Vocals</div>
+                    <h2>Fifty-Eight Better</h2>
+                    <div class="price">Coming Soon · AU + VST3</div>
+                    <p>Fifty-Eight Better is being refined before release. Its SM58-focused vocal shaping, leveling, noise reduction, peak control, and preamp colors will return when the plug-in is ready for confident daily use.</p>
+                    <img class="plugin-product-shot" src="plugin-images/fifty-eight-better.jpg" alt="Fifty-Eight Better plug-in interface">
+                    <div class="coming-soon" role="status">Coming soon · not for sale yet</div>
+                    <p class="checkout-note">There is no active checkout for Fifty-Eight Better while development continues.</p>
+                </article>
+            </div>
         </section>
     </div>
     <script>
