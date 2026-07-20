@@ -697,6 +697,29 @@
                 font-size: 13px;
             }
 
+            .clinic-list .pt-reference {
+                display: none;
+                margin-top: 2px;
+                color: var(--muted);
+                font-size: 11px;
+                opacity: .72;
+            }
+
+        .times-localized .clinic-list .pt-reference {
+            display: block;
+        }
+
+        .schedule-zone {
+            margin: 18px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+        }
+
+            .schedule-zone strong {
+                color: var(--fg);
+            }
+
         .note {
             font-size: 13px;
             color: var(--note)
@@ -959,6 +982,8 @@
                 </figure>
             </div>
 
+            <p class="schedule-zone" id="schedule-zone" aria-live="polite"><strong>Pacific Time schedule.</strong> On supported devices, these class times automatically change to your local time.</p>
+
             <section class="program-grid" aria-label="Clean to Scream live schedule">
                 <article class="card month-card" aria-labelledby="august-title">
                     <img class="month-image" src="images/clean-to-scream-clean.jpg" alt="Ryan demonstrating clean singing at a studio microphone" loading="lazy">
@@ -966,9 +991,9 @@
                     <h3 id="august-title">Clean Singing — ISO Method</h3>
                     <ul class="clinic-list">
                         <li><strong>Vocal Stress Release + Practice Baseline</strong><time class="js-local-time" datetime="2026-08-01T16:00:00Z">Saturday, August 1 at 9:00 AM PT</time></li>
-                        <li><strong>SOVT Warm-ups</strong><time class="js-local-time" datetime="2026-08-11T01:00:00Z">Monday, August 10 at 6:00 PM PT</time></li>
-                        <li><strong>ISO Exercises I — Breathing, Support + Placement</strong><time class="js-local-time" datetime="2026-08-15T16:00:00Z">Saturday, August 15 at 9:00 AM PT</time></li>
-                        <li><strong>ISO Exercises II — Resonance, Slides, Sustain + Dynamics</strong><time class="js-local-time" datetime="2026-08-25T01:00:00Z">Monday, August 24 at 6:00 PM PT</time></li>
+                        <li><strong>Technique — Breathing, Support + Placement</strong><time class="js-local-time" datetime="2026-08-11T01:00:00Z">Monday, August 10 at 6:00 PM PT</time></li>
+                        <li><strong>ISO Exercises — Falsetto Slides, Transcending Tones + Vendera Sirens</strong><time class="js-local-time" datetime="2026-08-15T16:00:00Z">Saturday, August 15 at 9:00 AM PT</time></li>
+                        <li><strong>Singing Songs + Vocal Strength Trainer App</strong><time class="js-local-time" datetime="2026-08-25T01:00:00Z">Monday, August 24 at 6:00 PM PT</time></li>
                         <li><strong>Song Application + Warm-down</strong><time class="js-local-time" datetime="2026-08-29T16:00:00Z">Saturday, August 29 at 9:00 AM PT</time></li>
                     </ul>
                 </article>
@@ -1115,6 +1140,9 @@
         const timeElements = document.querySelectorAll('.js-local-time[datetime]');
         if (!timeElements.length || typeof Intl === 'undefined' || !Intl.DateTimeFormat) return;
 
+        const detectedTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const scheduleZone = document.getElementById('schedule-zone');
+
         const formatter = new Intl.DateTimeFormat(undefined, {
             weekday: 'long',
             year: 'numeric',
@@ -1132,9 +1160,20 @@
             const eventDate = new Date(utcValue);
             if (Number.isNaN(eventDate.getTime())) return;
 
-            timeEl.title = `Official Pacific schedule: ${timeEl.textContent.trim()}`;
+            const pacificSchedule = timeEl.textContent.trim();
+            timeEl.title = `Official Pacific schedule: ${pacificSchedule}`;
             timeEl.textContent = formatter.format(eventDate);
+
+            const reference = document.createElement('span');
+            reference.className = 'pt-reference';
+            reference.textContent = `Pacific reference: ${pacificSchedule}`;
+            timeEl.insertAdjacentElement('afterend', reference);
         });
+
+        document.body.classList.add('times-localized');
+        if (scheduleZone) {
+            scheduleZone.innerHTML = `<strong>Times shown in ${detectedTimeZone || 'your local time'}.</strong> Pacific Time remains listed beneath each class.`;
+        }
     }
 
     const themeToggle = document.getElementById('theme-toggle');
