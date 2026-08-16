@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Endless Vocals — Shop</title>
-    <meta name="description" content="Shop Endless Vocals training products, RDWS audio plug-ins, and membership access." />
+    <meta name="description" content="Shop iPhone apps, Endless Vocals training products, RDWS audio plug-ins, and membership access." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -102,6 +102,29 @@
         .featured-product img { display: block; width: 100%; max-height: 230px; object-fit: cover; object-position: center; border-radius: 12px; border: 1px solid var(--surface-border); }
         .featured-product img[hidden] { display: none; }
 
+        .app-section { margin: 0 0 34px; }
+        .app-section-heading { display:flex; align-items:end; justify-content:space-between; gap:18px; margin:0 0 16px; }
+        .app-section-heading p { margin:0; color:var(--muted); line-height:1.5; }
+        .app-section-heading a { color:var(--accent); font-weight:800; white-space:nowrap; }
+        .app-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+        .app-card { min-height:520px; display:grid; grid-template-columns:minmax(0,1fr) minmax(150px,42%); gap:20px; overflow:hidden; padding:24px; border-radius:22px; box-shadow:0 18px 36px var(--shadow); }
+        .app-card-copy { align-self:center; }
+        .app-card .kicker { margin:0 0 8px; font-size:10px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+        .app-card h2 { margin:0 0 8px; font-size:clamp(30px,4vw,44px); line-height:.98; }
+        .app-card .price { margin:0 0 14px; }
+        .app-card p { margin:0 0 18px; line-height:1.55; }
+        .app-card .links a { border:0; }
+        .app-preview { width:100%; height:100%; max-height:470px; align-self:end; object-fit:cover; object-position:top; border-radius:24px 24px 0 0; box-shadow:0 22px 42px rgba(0,0,0,.34); }
+        .ownstems-card { color:#fff; border:1px solid rgba(145,97,255,.38); background:radial-gradient(circle at 85% 6%,rgba(145,97,255,.36),transparent 42%),linear-gradient(150deg,#090b13,#17132d); }
+        .ownstems-card .kicker,.ownstems-card .price { color:#4af0b8; }
+        .ownstems-card p { color:#b8b7c5; }
+        .ownstems-card .links a { background:#4af0b8; color:#06120e; }
+        .gr-card { color:#fff; border:1px solid rgba(209,75,63,.38); background:radial-gradient(circle at 80% 10%,rgba(209,75,63,.25),transparent 44%),linear-gradient(150deg,#120a0a,#291110); }
+        .gr-card .kicker,.gr-card .price { color:#f05a4f; }
+        .gr-card p { color:#c2aaa4; }
+        .gr-card .links a { background:#f05a4f; color:#170706; }
+        .gr-card .links a:last-child { background:rgba(255,255,255,.1); color:#fff; }
+
         .shop-grid {
             display: grid;
             gap: 18px;
@@ -138,7 +161,8 @@
         .plugin-product h2{font-size:clamp(28px,5vw,42px);margin-top:8px}.plugin-product p{color:#aab7c1}
         .plugin-product-shot{display:block;width:100%;max-width:760px;margin:18px auto;border-radius:10px;border:1px solid rgba(255,255,255,.14);box-shadow:0 18px 44px rgba(0,0,0,.28)}
         .plugin-product .links a{background:#e9eef5;color:#111;border:0}.checkout-note{font-size:12px;color:#8fa5b3!important}
-        @media(max-width:600px){.featured-product.has-image{grid-template-columns:1fr}.featured-product img{max-height:none}}
+        @media(max-width:760px){.app-grid{grid-template-columns:1fr}.app-card{min-height:460px}}
+        @media(max-width:600px){.featured-product.has-image{grid-template-columns:1fr}.featured-product img{max-height:none}.app-section-heading{align-items:flex-start;flex-direction:column}.app-card{grid-template-columns:minmax(0,1fr) minmax(120px,38%);padding:20px;gap:14px}.app-preview{max-height:430px}}
     </style>
 </head>
 <body>
@@ -167,6 +191,35 @@
                 <a id="featured-link" href="#">See featured product</a>
             </div>
             <img id="featured-image" src="" alt="" hidden>
+        </section>
+
+        <section class="app-section" id="iphone-apps" aria-labelledby="iphone-apps-title">
+            <div class="app-section-heading">
+                <div><h2 id="iphone-apps-title">iPhone Apps by Radwalls</h2><p>Music tools made to stay close to the song.</p></div>
+                <a href="https://www.radwall.com/apps/">See all iPhone apps ↗</a>
+            </div>
+            <div class="app-grid">
+                <article class="app-card ownstems-card">
+                    <div class="app-card-copy">
+                        <div class="kicker">Original music only</div>
+                        <h2>OwnStems</h2>
+                        <div class="price">Free download · 3 songs included</div>
+                        <p>Make an instrumental from a song you created. Neural separation runs locally on iPhone, and OwnStems never uploads your audio. Unlimited use is a $9.99 lifetime unlock.</p>
+                        <div class="links"><a href="/ownstems/">Explore OwnStems</a></div>
+                    </div>
+                    <img class="app-preview" src="app-images/ownstems-home.png" alt="OwnStems iPhone interface">
+                </article>
+                <article class="app-card gr-card">
+                    <div class="app-card-copy">
+                        <div class="kicker">Radwalls Industrial Audio</div>
+                        <h2>GR Synth</h2>
+                        <div class="price">App Store release in progress</div>
+                        <p>A focused FM machine for industrial impacts, unstable tones, mechanical phrases, local presets, and WAV exports you can move into a session.</p>
+                        <div class="links"><a href="https://www.radwall.com/apps/#gr-synth">See GR Synth</a><a href="https://www.radwall.com/grey-red-synth.html">Play the browser synth</a></div>
+                    </div>
+                    <img class="app-preview" src="app-images/gr-synth-home.png" alt="GR Synth running on iPhone">
+                </article>
+            </div>
         </section>
 
         <section class="shop-grid" aria-label="Shop products">
