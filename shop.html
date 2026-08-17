@@ -111,19 +111,31 @@
         .app-card-copy { align-self:center; }
         .app-card .kicker { margin:0 0 8px; font-size:10px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
         .app-card h2 { margin:0 0 8px; font-size:clamp(30px,4vw,44px); line-height:.98; }
+        .app-card .app-name { margin:0 0 16px; font-size:11px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; }
         .app-card .price { margin:0 0 14px; }
         .app-card p { margin:0 0 18px; line-height:1.55; }
         .app-card .links a { border:0; }
         .app-preview { width:100%; height:100%; max-height:470px; align-self:end; object-fit:cover; object-position:top; border-radius:24px 24px 0 0; box-shadow:0 22px 42px rgba(0,0,0,.34); }
-        .ownstems-card { color:#fff; border:1px solid rgba(145,97,255,.38); background:radial-gradient(circle at 85% 6%,rgba(145,97,255,.36),transparent 42%),linear-gradient(150deg,#090b13,#17132d); }
-        .ownstems-card .kicker,.ownstems-card .price { color:#4af0b8; }
-        .ownstems-card p { color:#b8b7c5; }
-        .ownstems-card .links a { background:#4af0b8; color:#06120e; }
-        .gr-card { color:#fff; border:1px solid rgba(209,75,63,.38); background:radial-gradient(circle at 80% 10%,rgba(209,75,63,.25),transparent 44%),linear-gradient(150deg,#120a0a,#291110); }
-        .gr-card .kicker,.gr-card .price { color:#f05a4f; }
-        .gr-card p { color:#c2aaa4; }
-        .gr-card .links a { background:#f05a4f; color:#170706; }
-        .gr-card .links a:last-child { background:rgba(255,255,255,.1); color:#fff; }
+        .vst-card { grid-column:1 / -1; min-height:610px; grid-template-columns:minmax(0,1.05fr) minmax(220px,36%); color:#fff; border:1px solid rgba(188,91,255,.45); background:radial-gradient(circle at 5% 10%,rgba(76,210,255,.2),transparent 34%),radial-gradient(circle at 65% 0%,rgba(180,60,255,.34),transparent 44%),#09070f; }
+        .vst-card h2 { max-width:9ch; font-size:clamp(42px,7vw,76px); letter-spacing:-.045em; }
+        .vst-card .app-name,.vst-card .kicker,.vst-card .price { color:#c85cff; }
+        .vst-card p { max-width:52ch; color:#c7c2cf; }
+        .vst-card .links a { background:#b43cff; color:#fff; }
+        .vst-card .app-preview { max-height:560px; border:1px solid rgba(255,255,255,.15); }
+        .ownstems-card { color:#11131a; border:1px solid #c9c4ba; background:linear-gradient(145deg,#f7f3eb,#e8e2d7); }
+        .ownstems-card h2 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(34px,4.6vw,54px); font-weight:500; letter-spacing:-.045em; }
+        .ownstems-card .app-name { color:#6b5f8d; }
+        .ownstems-card .kicker,.ownstems-card .price { color:#4f3f76; }
+        .ownstems-card p { color:#504b45; }
+        .ownstems-card .links a { background:#17131f; color:#fff; }
+        .ownstems-card .app-preview { border-radius:3px 3px 0 0; box-shadow:12px 18px 0 rgba(61,51,77,.16); }
+        .gr-card { color:#f5e9e6; border:1px solid #9e3029; border-radius:3px; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0,rgba(255,255,255,.018) 1px,transparent 1px,transparent 4px),radial-gradient(circle at 80% 8%,rgba(231,61,48,.23),transparent 42%),#100909; }
+        .gr-card h2 { font-size:clamp(30px,4vw,46px); letter-spacing:.06em; text-transform:uppercase; }
+        .gr-card .app-name,.gr-card .kicker,.gr-card .price { color:#ff5f53; }
+        .gr-card p { color:#c7aaa5; font-size:13px; }
+        .gr-card .links a { border-radius:2px; background:#e54135; color:#170706; }
+        .gr-card .links a:last-child { background:rgba(255,255,255,.08); color:#fff; }
+        .gr-card .app-preview { border-radius:2px 2px 0 0; filter:saturate(.88) contrast(1.06); }
 
         .shop-grid {
             display: grid;
@@ -161,8 +173,8 @@
         .plugin-product h2{font-size:clamp(28px,5vw,42px);margin-top:8px}.plugin-product p{color:#aab7c1}
         .plugin-product-shot{display:block;width:100%;max-width:760px;margin:18px auto;border-radius:10px;border:1px solid rgba(255,255,255,.14);box-shadow:0 18px 44px rgba(0,0,0,.28)}
         .plugin-product .links a{background:#e9eef5;color:#111;border:0}.checkout-note{font-size:12px;color:#8fa5b3!important}
-        @media(max-width:760px){.app-grid{grid-template-columns:1fr}.app-card{min-height:460px}}
-        @media(max-width:600px){.featured-product.has-image{grid-template-columns:1fr}.featured-product img{max-height:none}.app-section-heading{align-items:flex-start;flex-direction:column}.app-card{grid-template-columns:minmax(0,1fr) minmax(120px,38%);padding:20px;gap:14px}.app-preview{max-height:430px}}
+        @media(max-width:760px){.app-grid{grid-template-columns:1fr}.app-card,.vst-card{min-height:460px;grid-column:auto}}
+        @media(max-width:600px){.featured-product.has-image{grid-template-columns:1fr}.featured-product img{max-height:none}.app-section-heading{align-items:flex-start;flex-direction:column}.app-card,.vst-card{grid-template-columns:minmax(0,1fr) minmax(120px,38%);padding:20px;gap:14px}.app-preview{max-height:430px}.vst-card h2{font-size:clamp(34px,10vw,52px)}}
     </style>
 </head>
 <body>
@@ -195,26 +207,39 @@
 
         <section class="app-section" id="iphone-apps" aria-labelledby="iphone-apps-title">
             <div class="app-section-heading">
-                <div><h2 id="iphone-apps-title">iPhone Apps by Endless Vocals</h2><p>Music tools made to stay close to the song.</p></div>
+                <div><h2 id="iphone-apps-title">iPhone Apps by Endless Vocals</h2><p>Three very different ways to train, shape, and finish music.</p></div>
                 <a href="https://www.radwall.com/apps/">See all iPhone apps ↗</a>
             </div>
             <div class="app-grid">
+                <article class="app-card vst-card">
+                    <div class="app-card-copy">
+                        <div class="app-name">Vocal Strength Trainer</div>
+                        <div class="kicker">Endless Vocals × Jaime Vendera</div>
+                        <h2>Your practice. Guided.</h2>
+                        <div class="price">Currently in private testing</div>
+                        <p>Build a complete vocal session, then move through it one stage at a time. Tune, train, run scales, practice songs, record takes, shape vocal effects, and keep the work connected in one iPhone system.</p>
+                        <div class="links"><a href="https://vocalstrengthtrainer.com/">See Vocal Strength Trainer ↗</a></div>
+                    </div>
+                    <img class="app-preview" src="app-images/vocal-strength-trainer.png" alt="Vocal Strength Trainer guided practice screen on iPhone">
+                </article>
                 <article class="app-card ownstems-card">
                     <div class="app-card-copy">
-                        <div class="kicker">Original music only</div>
-                        <h2>OwnStems</h2>
-                        <div class="price">Free download · 3 songs included</div>
-                        <p>Make an instrumental from a song you created. Neural separation runs locally on iPhone, and OwnStems never uploads your audio. Unlimited use is a $9.99 lifetime unlock.</p>
+                        <div class="app-name">OwnStems</div>
+                        <div class="kicker">A private cutting room for your mixes</div>
+                        <h2>Your track, without the vocal.</h2>
+                        <div class="price">Three finished songs included</div>
+                        <p>Bring in a mix you wrote and recorded. OwnStems creates its instrumental on your iPhone—no account, no upload, no borrowed catalog. Unlimited use is one $9.99 purchase.</p>
                         <div class="links"><a href="/ownstems/">Explore OwnStems</a></div>
                     </div>
                     <img class="app-preview" src="app-images/ownstems-home.png" alt="OwnStems iPhone interface">
                 </article>
                 <article class="app-card gr-card">
                     <div class="app-card-copy">
-                        <div class="kicker">An Endless Vocals app</div>
-                        <h2>GR Synth</h2>
-                        <div class="price">App Store release in progress</div>
-                        <p>A focused FM machine for industrial impacts, unstable tones, mechanical phrases, local presets, and WAV exports you can move into a session.</p>
+                        <div class="app-name">Endless Vocals // GR-404</div>
+                        <div class="kicker">SYS://FM SIGNAL ENGINE</div>
+                        <h2>GR_SYNTH</h2>
+                        <div class="price">[ APP STORE BUILD IN PROGRESS ]</div>
+                        <p>&gt; GENERATE INDUSTRIAL IMPACTS, UNSTABLE TONES, AND MECHANICAL PHRASES.<br>&gt; SAVE LOCALLY. EXPORT WAV. RETURN TO SESSION.</p>
                         <div class="links"><a href="https://www.radwall.com/apps/#gr-synth">See GR Synth</a><a href="https://www.radwall.com/grey-red-synth.html">Play the browser synth</a></div>
                     </div>
                     <img class="app-preview" src="app-images/gr-synth-home.png" alt="GR Synth running on iPhone">
