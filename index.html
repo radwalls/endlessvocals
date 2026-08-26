@@ -4,16 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Clean to Scream — Endless Vocals Bootcamp III</title>
-    <meta name="description" content="Clean to Scream runs August 1 through September 26, 2026. Build clean singing with the ISO Method in August, then train screams gradually through Scream Center in September." />
+    <meta name="description" content="Clean to Scream is now applying the ISO Method to full songs. The final clean-singing clinic is August 29 before Scream Center begins September 8, 2026." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://endlessvocals.com/" />
     <meta property="og:title" content="Clean to Scream — Endless Vocals Bootcamp III" />
-    <meta property="og:description" content="Clean singing first. Screams second. Join the new Endless Vocals live training arc from August 1 through September 26, 2026." />
+    <meta property="og:description" content="Four clean-singing clinics are complete. Song application is next, followed by Scream Center beginning September 8, 2026." />
     <meta property="og:image" content="https://endlessvocals.com/images/clean-to-scream-bootcamp.jpg" />
     <meta property="og:image:alt" content="Clean to Scream by Endless Vocals, August and September 2026" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Clean to Scream — Endless Vocals Bootcamp III" />
-    <meta name="twitter:description" content="Clean singing first. Screams second. Join the new Endless Vocals live training arc from August 1 through September 26, 2026." />
+    <meta name="twitter:description" content="Four clean-singing clinics are complete. Song application is next, followed by Scream Center beginning September 8, 2026." />
     <meta name="twitter:image" content="https://endlessvocals.com/images/clean-to-scream-bootcamp.jpg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -309,6 +309,79 @@
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 18px;
             margin-top: 18px;
+        }
+
+        .clinic-progress {
+            margin-top: 32px;
+            padding: 24px;
+            border: 1px solid var(--surface-border);
+            border-left: 5px solid var(--accent);
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--surface), var(--surface-soft));
+            box-shadow: 0 16px 38px var(--shadow);
+        }
+
+        .clinic-progress h2 {
+            margin: 4px 0 8px;
+            font-size: clamp(24px, 3vw, 36px);
+        }
+
+        .clinic-progress > p {
+            max-width: 72ch;
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .clinic-progress-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+            gap: 18px;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .clinic-progress-step {
+            min-height: 116px;
+            padding: 16px;
+            border: 1px solid var(--surface-border);
+            border-radius: 14px;
+            background: var(--list-item-bg);
+        }
+
+        .clinic-progress-step.next {
+            border-color: var(--accent-2);
+        }
+
+        .clinic-progress-label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .clinic-progress-step.next .clinic-progress-label {
+            color: var(--accent-2);
+        }
+
+        .clinic-progress-step strong,
+        .clinic-progress-step time {
+            display: block;
+        }
+
+        .clinic-progress-step time {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .clinic-progress-arrow {
+            color: var(--accent-2);
+            font-size: 26px;
+            font-weight: 800;
         }
 
         .month-card {
@@ -677,11 +750,60 @@
         }
 
             .clinic-list li {
+                position: relative;
                 border: 1px solid var(--surface-border);
                 background: var(--list-item-bg);
                 border-radius: 14px;
                 padding: 12px 14px;
                 line-height: 1.45;
+            }
+
+            .clinic-list li.is-complete,
+            .clinic-list li.is-latest,
+            .clinic-list li.is-next {
+                padding-right: 78px;
+            }
+
+            .clinic-list li.is-complete {
+                opacity: .68;
+            }
+
+            .clinic-list li.is-latest {
+                border-color: var(--accent);
+                opacity: 1;
+                box-shadow: inset 4px 0 0 var(--accent);
+            }
+
+            .clinic-list li.is-next {
+                border-color: var(--accent-2);
+                box-shadow: inset 4px 0 0 var(--accent-2);
+            }
+
+            .clinic-list li.is-complete::after,
+            .clinic-list li.is-latest::after,
+            .clinic-list li.is-next::after {
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                font-size: 9px;
+                font-weight: 800;
+                letter-spacing: .1em;
+                text-transform: uppercase;
+            }
+
+            .clinic-list li.is-complete::after {
+                content: "Done";
+                color: var(--muted);
+            }
+
+            .clinic-list li.is-latest::after {
+                content: "Latest";
+                color: var(--accent);
+            }
+
+            .clinic-list li.is-next::after {
+                content: "Next";
+                color: var(--accent-2);
             }
 
             .clinic-list strong {
@@ -750,6 +872,14 @@
 
             .program-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .clinic-progress-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .clinic-progress-arrow {
+                display: none;
             }
 
             .video-card {
@@ -932,9 +1062,9 @@
         <section class="hero" aria-labelledby="h1">
             <div class="hero-intro">
                 <div>
-                    <span class="hero-kicker">Bootcamp III • Starts August 1</span>
+                    <span class="hero-kicker">Bootcamp III • Clinic 4 complete</span>
                     <h1 id="h1" class="title">Clean to Scream</h1>
-                    <p class="subtitle">Build the clean voice first. August is dedicated to the ISO Method and a reliable practice routine. In September, we bring that coordination into fry, grit, and controlled screams—slowly, with time to recover and practice between sessions.</p>
+                    <p class="subtitle">Four clean-singing clinics are complete. We have moved from stress release, support, and ISO exercises into singing songs with the Vocal Strength Trainer. Next, we apply that work directly to songs before Scream Center begins in September.</p>
                     <div class="cta-row" role="group" aria-label="Primary actions">
                         <a class="btn btn-primary" href="join.html" aria-label="Join Endless Vocals">
                             <span>JOIN!</span>
@@ -969,11 +1099,11 @@
             <div class="grid" style="margin-top:32px">
                 <section class="card" aria-labelledby="whatis">
                     <h3 id="whatis">Clean to Scream • August 1 → September 26, 2026</h3>
-                    <p>One focused live session at a time, followed by space to practice. Saturdays begin at 9:00 AM Pacific and Mondays begin at 6:00 PM Pacific. Every class is recorded for members.</p>
+                    <p>One focused live session at a time, followed by space to practice. The latest clinic brought the ISO foundation into songs and the Vocal Strength Trainer. Every class is recorded for members.</p>
                     <div class="list" aria-label="Program highlights">
-                        <div class="item">9 live sessions with recovery time between classes</div>
-                        <div class="item">August: clean singing through the ISO Method</div>
-                        <div class="item">September: fry, grit, screams, combinations, and resets</div>
+                        <div class="item">Now: Singing Songs + Vocal Strength Trainer App</div>
+                        <div class="item">Next: Song Application + Warm-down on August 29</div>
+                        <div class="item">Then: Scream Center begins September 8</div>
                     </div>
                 </section>
                 <figure class="card motion-card">
@@ -981,6 +1111,25 @@
                     <figcaption>Increase your range, build power, and sing for longer.</figcaption>
                 </figure>
             </div>
+
+            <section class="clinic-progress" aria-labelledby="clinic-progress-title">
+                <span class="month-label">Where we are now</span>
+                <h2 id="clinic-progress-title">The clean foundation is moving into songs.</h2>
+                <p>Clinic 4 is complete. One clean-singing session remains before the course shifts into the Scream Center progression.</p>
+                <div class="clinic-progress-grid">
+                    <div class="clinic-progress-step">
+                        <span class="clinic-progress-label">Latest clinic • Complete</span>
+                        <strong>Singing Songs + Vocal Strength Trainer App</strong>
+                        <time datetime="2026-08-24">August 24, 2026</time>
+                    </div>
+                    <span class="clinic-progress-arrow" aria-hidden="true">→</span>
+                    <div class="clinic-progress-step next">
+                        <span class="clinic-progress-label">Next live clinic</span>
+                        <strong>Song Application + Warm-down</strong>
+                        <time class="js-local-time" datetime="2026-08-29T16:00:00Z">Saturday, August 29 at 9:00 AM PT</time>
+                    </div>
+                </div>
+            </section>
 
             <p class="schedule-zone" id="schedule-zone" aria-live="polite"><strong>Pacific Time schedule.</strong> On supported devices, these class times automatically change to your local time.</p>
 
@@ -990,11 +1139,11 @@
                     <span class="month-label">August • Clean Singing</span>
                     <h3 id="august-title">Clean Singing — ISO Method</h3>
                     <ul class="clinic-list">
-                        <li><strong>Vocal Stress Release + Practice Baseline</strong><time class="js-local-time" datetime="2026-08-01T16:00:00Z">Saturday, August 1 at 9:00 AM PT</time></li>
-                        <li><strong>Technique — Breathing, Support + Placement</strong><time class="js-local-time" datetime="2026-08-11T01:00:00Z">Monday, August 10 at 6:00 PM PT</time></li>
-                        <li><strong>ISO Exercises — Falsetto Slides, Transcending Tones + Vendera Sirens</strong><time class="js-local-time" datetime="2026-08-15T16:00:00Z">Saturday, August 15 at 9:00 AM PT</time></li>
-                        <li><strong>Singing Songs + Vocal Strength Trainer App</strong><time class="js-local-time" datetime="2026-08-25T01:00:00Z">Monday, August 24 at 6:00 PM PT</time></li>
-                        <li><strong>Song Application + Warm-down</strong><time class="js-local-time" datetime="2026-08-29T16:00:00Z">Saturday, August 29 at 9:00 AM PT</time></li>
+                        <li class="is-complete"><strong>Vocal Stress Release + Practice Baseline</strong><time class="js-local-time" datetime="2026-08-01T16:00:00Z">Saturday, August 1 at 9:00 AM PT</time></li>
+                        <li class="is-complete"><strong>Technique — Breathing, Support + Placement</strong><time class="js-local-time" datetime="2026-08-11T01:00:00Z">Monday, August 10 at 6:00 PM PT</time></li>
+                        <li class="is-complete"><strong>ISO Exercises — Falsetto Slides, Transcending Tones + Vendera Sirens</strong><time class="js-local-time" datetime="2026-08-15T16:00:00Z">Saturday, August 15 at 9:00 AM PT</time></li>
+                        <li class="is-latest"><strong>Singing Songs + Vocal Strength Trainer App</strong><time class="js-local-time" datetime="2026-08-25T01:00:00Z">Monday, August 24 at 6:00 PM PT</time></li>
+                        <li class="is-next"><strong>Song Application + Warm-down</strong><time class="js-local-time" datetime="2026-08-29T16:00:00Z">Saturday, August 29 at 9:00 AM PT</time></li>
                     </ul>
                 </article>
 
