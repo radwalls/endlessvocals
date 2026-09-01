@@ -106,7 +106,7 @@
         .app-section-heading { display:flex; align-items:end; justify-content:space-between; gap:18px; margin:0 0 16px; }
         .app-section-heading p { margin:0; color:var(--muted); line-height:1.5; }
         .app-section-heading a { color:var(--accent); font-weight:800; white-space:nowrap; }
-        .app-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+        .app-grid { display:grid; grid-template-columns:1fr; gap:18px; }
         .app-card { min-height:520px; display:grid; grid-template-columns:minmax(0,1fr) minmax(150px,42%); gap:20px; overflow:hidden; padding:24px; border-radius:22px; box-shadow:0 18px 36px var(--shadow); }
         .app-card-copy { align-self:center; }
         .app-card .kicker { margin:0 0 8px; font-size:10px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
@@ -122,13 +122,6 @@
         .vst-card p { max-width:52ch; color:#c7c2cf; }
         .vst-card .links a { background:#b43cff; color:#fff; }
         .vst-card .app-preview { max-height:560px; border:1px solid rgba(255,255,255,.15); }
-        .ownstems-card { color:#11131a; border:1px solid #c9c4ba; background:linear-gradient(145deg,#f7f3eb,#e8e2d7); }
-        .ownstems-card h2 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(34px,4.6vw,54px); font-weight:500; letter-spacing:-.045em; }
-        .ownstems-card .app-name { color:#6b5f8d; }
-        .ownstems-card .kicker,.ownstems-card .price { color:#4f3f76; }
-        .ownstems-card p { color:#504b45; }
-        .ownstems-card .links a { background:#17131f; color:#fff; }
-        .ownstems-card .app-preview { border-radius:3px 3px 0 0; box-shadow:12px 18px 0 rgba(61,51,77,.16); }
         .gr-card { color:#f5e9e6; border:1px solid #9e3029; border-radius:3px; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0,rgba(255,255,255,.018) 1px,transparent 1px,transparent 4px),radial-gradient(circle at 80% 8%,rgba(231,61,48,.23),transparent 42%),#100909; }
         .gr-card h2 { font-size:clamp(30px,4vw,46px); letter-spacing:.06em; text-transform:uppercase; }
         .gr-card .app-name,.gr-card .kicker,.gr-card .price { color:#ff5f53; }
@@ -207,7 +200,7 @@
 
         <section class="app-section" id="iphone-apps" aria-labelledby="iphone-apps-title">
             <div class="app-section-heading">
-                <div><h2 id="iphone-apps-title">iPhone Apps by Endless Vocals</h2><p>Three very different ways to train, shape, and finish music.</p></div>
+                <div><h2 id="iphone-apps-title">iPhone Apps by Endless Vocals</h2><p>Current apps and previews from Endless Vocals.</p></div>
                 <a href="https://www.radwall.com/apps/">See all iPhone apps ↗</a>
             </div>
             <div class="app-grid">
@@ -221,17 +214,6 @@
                         <div class="links"><a href="https://vocalstrengthtrainer.com/">See Vocal Strength Trainer ↗</a></div>
                     </div>
                     <img class="app-preview" src="app-images/vocal-strength-trainer.png" alt="Vocal Strength Trainer guided practice screen on iPhone">
-                </article>
-                <article class="app-card ownstems-card">
-                    <div class="app-card-copy">
-                        <div class="app-name">OwnStems</div>
-                        <div class="kicker">A private cutting room for your mixes</div>
-                        <h2>Your track, without the vocal.</h2>
-                        <div class="price">Three finished songs included</div>
-                        <p>Bring in a mix you wrote and recorded. OwnStems creates its instrumental on your iPhone—no account, no upload, no borrowed catalog. Unlimited use is one $9.99 purchase.</p>
-                        <div class="links"><a href="/ownstems/">Explore OwnStems</a></div>
-                    </div>
-                    <img class="app-preview" src="app-images/ownstems-home.png" alt="OwnStems iPhone interface">
                 </article>
                 <article class="app-card gr-card">
                     <div class="app-card-copy">
