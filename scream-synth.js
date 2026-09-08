@@ -19,7 +19,7 @@
         modulation: 0.42,
     });
 
-    const LAYER_OUTPUT_GAINS = Object.freeze({ L: 0.8, M: 0.72, H: 2.2 });
+    const LAYER_OUTPUT_GAINS = Object.freeze({ L: 0.8, M: 0.72, H: 0.9 });
 
     function finite(value, fallback) {
         return Number.isFinite(Number(value)) ? Number(value) : fallback;
@@ -215,6 +215,7 @@
         buildSighLayer() {
             const audio = this.context;
             this.sighSourceBus = audio.createGain();
+            this.sighDcBlocker = audio.createBiquadFilter();
             this.sighMovement = audio.createGain();
             this.sighDirectFilter = audio.createBiquadFilter();
             this.sighDirectGain = audio.createGain();
@@ -224,19 +225,18 @@
             this.sighFormantTwoGain = audio.createGain();
             this.sighLayerBus = audio.createGain();
 
-            this.sighOscillatorOne = audio.createOscillator();
-            this.sighOscillatorTwo = audio.createOscillator();
-            const sighOscillatorOneGain = audio.createGain();
-            const sighOscillatorTwoGain = audio.createGain();
-            this.sighOscillatorOne.type = 'sawtooth';
-            this.sighOscillatorTwo.type = 'triangle';
-            this.sighOscillatorTwo.detune.value = -9;
-            sighOscillatorOneGain.gain.value = 0.32;
-            sighOscillatorTwoGain.gain.value = 0.38;
-            this.sighOscillatorOne.connect(sighOscillatorOneGain).connect(this.sighSourceBus);
-            this.sighOscillatorTwo.connect(sighOscillatorTwoGain).connect(this.sighSourceBus);
-            this.addSource(this.sighOscillatorOne);
-            this.addSource(this.sighOscillatorTwo);
+            this.sighBrownSource = audio.createBufferSource();
+            this.sighPinkSource = audio.createBufferSource();
+            this.sighBrownGain = audio.createGain();
+            this.sighPinkGain = audio.createGain();
+            this.sighBrownSource.buffer = this.makeColoredNoiseBuffer(4.1, 'brown');
+            this.sighPinkSource.buffer = this.makeColoredNoiseBuffer(4.3, 'pink');
+            this.sighBrownSource.loop = true;
+            this.sighPinkSource.loop = true;
+            this.sighBrownSource.connect(this.sighBrownGain).connect(this.sighSourceBus);
+            this.sighPinkSource.connect(this.sighPinkGain).connect(this.sighSourceBus);
+            this.addSource(this.sighBrownSource);
+            this.addSource(this.sighPinkSource);
 
             this.sighLfo = audio.createOscillator();
             this.sighLfoDepth = audio.createGain();
@@ -245,14 +245,17 @@
             this.sighLfo.connect(this.sighLfoDepth).connect(this.sighMovement.gain);
             this.addSource(this.sighLfo);
 
-            this.sighSourceBus.connect(this.sighMovement);
-            this.sighMovement.gain.value = 0.72;
+            this.sighSourceBus.connect(this.sighDcBlocker).connect(this.sighMovement);
+            this.sighDcBlocker.type = 'highpass';
+            this.sighDcBlocker.frequency.value = 68;
+            this.sighDcBlocker.Q.value = 0.55;
+            this.sighMovement.gain.value = 0.68;
             this.sighMovement.connect(this.sighDirectFilter).connect(this.sighDirectGain).connect(this.sighLayerBus);
             this.sighMovement.connect(this.sighFormantOne).connect(this.sighFormantOneGain).connect(this.sighLayerBus);
             this.sighMovement.connect(this.sighFormantTwo).connect(this.sighFormantTwoGain).connect(this.sighLayerBus);
             this.sighDirectFilter.type = 'lowpass';
             this.sighDirectFilter.Q.value = 0.65;
-            this.sighDirectGain.gain.value = 0.58;
+            this.sighDirectGain.gain.value = 0.82;
             this.sighFormantOne.type = 'bandpass';
             this.sighFormantOne.frequency.value = 430;
             this.sighFormantOne.Q.value = 1.1;
@@ -260,18 +263,7 @@
             this.sighFormantTwo.type = 'bandpass';
             this.sighFormantTwo.frequency.value = 880;
             this.sighFormantTwo.Q.value = 1.5;
-            this.sighFormantTwoGain.gain.value = 0.22;
-
-            this.sighNoiseSource = audio.createBufferSource();
-            this.sighNoiseSource.buffer = this.makeNoiseBuffer(2.2);
-            this.sighNoiseSource.loop = true;
-            this.sighNoiseFilter = audio.createBiquadFilter();
-            this.sighNoiseGain = audio.createGain();
-            this.sighNoiseFilter.type = 'bandpass';
-            this.sighNoiseFilter.frequency.value = 520;
-            this.sighNoiseFilter.Q.value = 0.72;
-            this.sighNoiseSource.connect(this.sighNoiseFilter).connect(this.sighNoiseGain).connect(this.sighLayerBus);
-            this.addSource(this.sighNoiseSource);
+            this.sighFormantTwoGain.gain.value = 0.18;
 
             this.connectLayer('L', this.sighLayerBus, -0.12);
         }
@@ -331,13 +323,13 @@
 
         buildFryLayer() {
             const audio = this.context;
-            this.fryRegularSource = audio.createBufferSource();
+            this.frySteadySource = audio.createBufferSource();
             this.fryIrregularSource = audio.createBufferSource();
-            this.fryRegularSource.buffer = this.makePulseBuffer(false);
-            this.fryIrregularSource.buffer = this.makePulseBuffer(true);
-            this.fryRegularSource.loop = true;
+            this.frySteadySource.buffer = this.makeWhiteNoiseBuffer(4.2, false);
+            this.fryIrregularSource.buffer = this.makeWhiteNoiseBuffer(4.4, true);
+            this.frySteadySource.loop = true;
             this.fryIrregularSource.loop = true;
-            this.fryRegularGain = audio.createGain();
+            this.frySteadyGain = audio.createGain();
             this.fryIrregularGain = audio.createGain();
             this.frySourceBus = audio.createGain();
             this.fryHighpass = audio.createBiquadFilter();
@@ -345,34 +337,53 @@
             this.fryLowpass = audio.createBiquadFilter();
             this.fryLayerBus = audio.createGain();
 
-            this.fryRegularSource.connect(this.fryRegularGain).connect(this.frySourceBus);
+            this.frySteadySource.connect(this.frySteadyGain).connect(this.frySourceBus);
             this.fryIrregularSource.connect(this.fryIrregularGain).connect(this.frySourceBus);
             this.frySourceBus.connect(this.fryHighpass).connect(this.fryFocus).connect(this.fryLowpass).connect(this.fryLayerBus);
             this.fryHighpass.type = 'highpass';
-            this.fryHighpass.frequency.value = 145;
+            this.fryHighpass.frequency.value = 1460;
             this.fryHighpass.Q.value = 0.55;
             this.fryFocus.type = 'bandpass';
-            this.fryFocus.frequency.value = 1700;
-            this.fryFocus.Q.value = 0.9;
+            this.fryFocus.frequency.value = 2750;
+            this.fryFocus.Q.value = 0.65;
             this.fryLowpass.type = 'lowpass';
-            this.fryLowpass.frequency.value = 3900;
-            this.fryLowpass.Q.value = 0.7;
-            this.addSource(this.fryRegularSource);
+            this.fryLowpass.frequency.value = 5700;
+            this.fryLowpass.Q.value = 0.55;
+            this.addSource(this.frySteadySource);
             this.addSource(this.fryIrregularSource);
 
             this.connectLayer('H', this.fryLayerBus, 0.12);
         }
 
-        makeNoiseBuffer(seconds) {
+        makeColoredNoiseBuffer(seconds, color) {
             const sampleRate = this.context.sampleRate;
             const length = Math.max(1, Math.floor(sampleRate * seconds));
             const buffer = this.context.createBuffer(1, length, sampleRate);
             const data = buffer.getChannelData(0);
-            let previous = 0;
+            let brown = 0;
+            let pink0 = 0;
+            let pink1 = 0;
+            let pink2 = 0;
+            let pink3 = 0;
+            let pink4 = 0;
+            let pink5 = 0;
+            let pink6 = 0;
             for (let index = 0; index < length; index += 1) {
                 const white = Math.random() * 2 - 1;
-                previous = previous * 0.985 + white * 0.015;
-                data[index] = State.clamp((white * 0.34) + (previous * 2.3), -1, 1);
+                if (color === 'brown') {
+                    brown = (brown + white * 0.022) / 1.022;
+                    data[index] = State.clamp(brown * 3.25, -1, 1);
+                } else {
+                    pink0 = 0.99886 * pink0 + white * 0.0555179;
+                    pink1 = 0.99332 * pink1 + white * 0.0750759;
+                    pink2 = 0.969 * pink2 + white * 0.153852;
+                    pink3 = 0.8665 * pink3 + white * 0.3104856;
+                    pink4 = 0.55 * pink4 + white * 0.5329522;
+                    pink5 = -0.7616 * pink5 - white * 0.016898;
+                    const pink = pink0 + pink1 + pink2 + pink3 + pink4 + pink5 + pink6 + white * 0.5362;
+                    pink6 = white * 0.115926;
+                    data[index] = State.clamp(pink * 0.105, -1, 1);
+                }
             }
             this.fadeBufferEdges(data, 640);
             return buffer;
@@ -387,30 +398,26 @@
             }
         }
 
-        makePulseBuffer(irregular) {
+        makeWhiteNoiseBuffer(seconds, irregular) {
             const sampleRate = this.context.sampleRate;
-            const length = Math.floor(sampleRate * 2.4);
+            const length = Math.floor(sampleRate * seconds);
             const buffer = this.context.createBuffer(1, length, sampleRate);
             const data = buffer.getChannelData(0);
-            let position = 0;
+            let envelope = 0.55;
+            let target = 0.55;
+            let samplesUntilChange = 0;
 
-            while (position < length - 640) {
-                const seconds = irregular
-                    ? 0.022 + (Math.random() * Math.random() * 0.105)
-                    : 0.047 + ((Math.random() - 0.5) * 0.006);
-                position += Math.max(24, Math.floor(seconds * sampleRate));
-                const amplitude = irregular ? 0.42 + Math.random() * 0.52 : 0.62 + Math.random() * 0.12;
-                const pulseLength = irregular ? 100 + Math.floor(Math.random() * 260) : 190;
-                const ringFrequency = irregular ? 520 + Math.random() * 1500 : 820;
-                for (let offset = 0; offset < pulseLength && position + offset < length; offset += 1) {
-                    const envelope = Math.exp(-offset / (irregular ? 58 : 74));
-                    const ring = Math.sin((Math.PI * 2 * ringFrequency * offset) / sampleRate);
-                    const crackle = (Math.random() * 2 - 1) * (irregular ? 0.65 : 0.34);
-                    data[position + offset] += State.clamp((ring * 0.72 + crackle) * envelope * amplitude, -1, 1);
+            for (let index = 0; index < length; index += 1) {
+                if (irregular) {
+                    if (samplesUntilChange <= 0) {
+                        target = 0.12 + Math.pow(Math.random(), 1.7) * 0.88;
+                        samplesUntilChange = Math.floor(sampleRate * (0.008 + Math.random() * 0.065));
+                    }
+                    samplesUntilChange -= 1;
+                    envelope += (target - envelope) * 0.018;
                 }
-                if (irregular && Math.random() > 0.68) {
-                    position += Math.floor(sampleRate * (0.004 + Math.random() * 0.012));
-                }
+                const white = Math.random() * 2 - 1;
+                data[index] = white * (irregular ? envelope : 0.62);
             }
 
             this.fadeBufferEdges(data, 640);
@@ -533,16 +540,11 @@
 
         applyPitch(immediate) {
             const frequency = State.midiToFrequency(this.settings.midi);
-            this.setParam(this.sighOscillatorOne.frequency, frequency * 0.31, 0.032, immediate);
-            this.setParam(this.sighOscillatorTwo.frequency, frequency * 0.52, 0.032, immediate);
             if (this.voiceOscillators) {
                 this.voiceOscillators.forEach((oscillator) => {
                     this.setParam(oscillator.node.frequency, frequency * oscillator.ratio, 0.032, immediate);
                 });
             }
-            const fryRate = State.clamp(Math.sqrt(frequency / 164.81), 0.62, 1.58);
-            this.setParam(this.fryRegularSource && this.fryRegularSource.playbackRate, fryRate, 0.04, immediate);
-            this.setParam(this.fryIrregularSource && this.fryIrregularSource.playbackRate, fryRate, 0.04, immediate);
             this.applyVowel(immediate);
         }
 
@@ -602,8 +604,8 @@
 
         applyIrregularity(immediate) {
             const amount = this.settings.irregularity;
-            this.setParam(this.fryRegularGain && this.fryRegularGain.gain, Math.cos(amount * Math.PI * 0.5) * 0.76, 0.035, immediate);
-            this.setParam(this.fryIrregularGain && this.fryIrregularGain.gain, Math.sin(amount * Math.PI * 0.5) * 0.88, 0.035, immediate);
+            this.setParam(this.frySteadyGain && this.frySteadyGain.gain, Math.cos(amount * Math.PI * 0.5) * 0.52, 0.035, immediate);
+            this.setParam(this.fryIrregularGain && this.fryIrregularGain.gain, Math.sin(amount * Math.PI * 0.5) * 0.64, 0.035, immediate);
         }
 
         setNoise(amount) {
@@ -612,7 +614,9 @@
         }
 
         applyNoise(immediate) {
-            this.setParam(this.sighNoiseGain && this.sighNoiseGain.gain, this.settings.noise * 0.34, 0.035, immediate);
+            const color = this.settings.noise;
+            this.setParam(this.sighBrownGain && this.sighBrownGain.gain, Math.cos(color * Math.PI * 0.5) * 0.84, 0.035, immediate);
+            this.setParam(this.sighPinkGain && this.sighPinkGain.gain, Math.sin(color * Math.PI * 0.5) * 0.72, 0.035, immediate);
         }
 
         setTone(amount) {
@@ -622,10 +626,11 @@
 
         applyTone(immediate) {
             const amount = this.settings.tone;
-            this.setParam(this.sighDirectFilter && this.sighDirectFilter.frequency, 650 + amount * 1900, 0.045, immediate);
+            this.setParam(this.sighDirectFilter && this.sighDirectFilter.frequency, 350 + amount * 1050, 0.045, immediate);
             this.setParam(this.voiceBodyFilter && this.voiceBodyFilter.frequency, 1250 + amount * 4700, 0.045, immediate);
-            this.setParam(this.fryFocus && this.fryFocus.frequency, 850 + amount * 2250, 0.045, immediate);
-            this.setParam(this.fryLowpass && this.fryLowpass.frequency, 2200 + amount * 3400, 0.045, immediate);
+            this.setParam(this.fryHighpass && this.fryHighpass.frequency, 1100 + amount * 650, 0.045, immediate);
+            this.setParam(this.fryFocus && this.fryFocus.frequency, 1800 + amount * 1700, 0.045, immediate);
+            this.setParam(this.fryLowpass && this.fryLowpass.frequency, 4000 + amount * 3000, 0.045, immediate);
         }
 
         setModulation(amount) {
@@ -634,7 +639,7 @@
         }
 
         applyModulation(immediate) {
-            this.setParam(this.sighLfoDepth && this.sighLfoDepth.gain, 0.025 + this.settings.modulation * 0.17, 0.035, immediate);
+            this.setParam(this.sighLfoDepth && this.sighLfoDepth.gain, 0.025 + this.settings.modulation * 0.065, 0.035, immediate);
             this.setParam(this.sighLfo && this.sighLfo.frequency, 1.35 + this.settings.modulation * 3.1, 0.035, immediate);
         }
 
