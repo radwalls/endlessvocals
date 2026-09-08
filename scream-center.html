@@ -580,6 +580,7 @@
             .moon.one { width: 86px; height: 86px; }
         }
     </style>
+    <link rel="stylesheet" href="scream-synth.css" />
 </head>
 <body id="top">
     <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
@@ -589,6 +590,7 @@
             <nav class="nav" aria-label="Scream Center navigation">
                 <a href="index.html">Home</a>
                 <a href="#course">Course</a>
+                <a href="#scream-synth">Scream Synth</a>
                 <a href="#scale">Heaviness Scale</a>
                 <a href="#coming-soon">Coming Soon</a>
             </nav>
@@ -640,6 +642,161 @@
                     <h3>Grit Slides and Combinations</h3>
                     <p>Slide up and down without losing coordination, then move between fry and low grit, frustrated sigh and low grit, sustained screams, and stylistic variations.</p>
                 </article>
+            </div>
+        </section>
+
+        <section id="scream-synth" class="section scream-synth-shell" aria-labelledby="scream-synth-title">
+            <span class="kicker">Interactive lesson instrument</span>
+            <h2 id="scream-synth-title">Scream Synth</h2>
+            <p class="ss-intro">Use the switches like a simplified accordion register bank: isolate one synthetic texture, compare it with another, then hear the layers together.</p>
+            <p class="ss-reference">Accordion reference: <strong>L = 16′ Bassoon</strong>, <strong>M = 8′ Clarinet</strong>, and <strong>H = 4′ Piccolo</strong>. Here, those switch positions choose synthetic lesson textures rather than literal octave ranks. <a href="https://en.wikipedia.org/wiki/Accordion_reed_ranks_and_switches" target="_blank" rel="noopener noreferrer">See the reed-rank reference.</a></p>
+            <p class="ss-disclaimer"><strong>A sound-design illustration, not a model of vocal anatomy.</strong> These synthesized layers are not instructions for producing a scream.</p>
+
+            <div class="ss-instrument" data-scream-synth data-audio-state="disabled" data-playing="false">
+                <div class="ss-topbar">
+                    <div class="ss-audio-status" role="status" aria-live="polite">
+                        <span class="ss-status-light" aria-hidden="true"></span>
+                        <span data-audio-status>Audio is off. Select Enable Audio to begin.</span>
+                    </div>
+                    <div class="ss-meter-wrap" data-output-meter-wrap role="meter" aria-label="Output peak meter" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0" aria-valuetext="Silent">
+                        <div class="ss-meter"><div class="ss-meter-fill" data-output-meter></div></div>
+                        <output class="ss-meter-readout" data-meter-readout>−∞ dB</output>
+                    </div>
+                </div>
+
+                <div class="ss-register-layout">
+                    <section class="ss-panel" aria-labelledby="ss-register-title">
+                        <div class="ss-panel-title" id="ss-register-title">
+                            <span>Register switches</span>
+                            <small>One complete preset at a time</small>
+                        </div>
+                        <div class="ss-preset-grid" data-register-presets></div>
+                        <noscript><p>JavaScript is required for the interactive Scream Synth.</p></noscript>
+
+                        <div class="ss-panel-title" style="margin-top:22px">
+                            <span>Individual ranks</span>
+                            <small>Build any combination manually</small>
+                        </div>
+                        <div class="ss-manual-bank" role="group" aria-label="Individual rank switches">
+                            <button class="ss-rank-toggle" type="button" data-rank-toggle data-rank="L" aria-pressed="false" aria-label="Toggle L, Frustrated Sigh">
+                                <strong>L</strong><span>Frustrated Sigh</span>
+                            </button>
+                            <button class="ss-rank-toggle" type="button" data-rank-toggle data-rank="M" aria-pressed="true" aria-label="Toggle M, Voice or Grit">
+                                <strong>M</strong><span>Voice / Grit</span>
+                            </button>
+                            <button class="ss-rank-toggle" type="button" data-rank-toggle data-rank="H" aria-pressed="false" aria-label="Toggle H, Fry">
+                                <strong>H</strong><span>Fry</span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <aside class="ss-panel ss-visual-panel" aria-label="Current register and live output">
+                        <div>
+                            <div class="ss-register-symbol large" data-main-register-symbol aria-hidden="true">
+                                <span class="ss-register-dot" data-rank="H"></span>
+                                <span class="ss-register-dot is-on" data-rank="M"></span>
+                                <span class="ss-register-dot" data-rank="L"></span>
+                            </div>
+                            <div class="ss-active-name" data-active-register>Voice / Grit</div>
+                        </div>
+                        <div class="ss-bellows" data-bellows aria-hidden="true">
+                            <span class="ss-bellows-end"></span>
+                            <span class="ss-bellows-folds"></span>
+                            <span class="ss-bellows-end"></span>
+                        </div>
+                        <canvas class="ss-scope" data-output-scope width="420" height="104" role="img" aria-label="Live waveform from the actual Scream Synth output">Live output waveform</canvas>
+                    </aside>
+                </div>
+
+                <div class="ss-controls-grid" role="group" aria-label="Layer levels">
+                    <section class="ss-control" data-layer="L">
+                        <label class="ss-control-label" for="ss-level-l"><span>L · Frustrated Sigh</span><output for="ss-level-l" data-output-for="ss-level-l">72%</output></label>
+                        <input id="ss-level-l" data-layer-level="L" type="range" min="0" max="100" value="72" />
+                        <p>Hear the low rumbling layer.</p>
+                    </section>
+                    <section class="ss-control" data-layer="M">
+                        <label class="ss-control-label" for="ss-level-m"><span>M · Voice / Grit</span><output for="ss-level-m" data-output-for="ss-level-m">74%</output></label>
+                        <input id="ss-level-m" data-layer-level="M" type="range" min="0" max="100" value="74" />
+                        <p>Move from a clean vowel tone to a rougher sound.</p>
+                    </section>
+                    <section class="ss-control" data-layer="H">
+                        <label class="ss-control-label" for="ss-level-h"><span>H · Fry</span><output for="ss-level-h" data-output-for="ss-level-h">62%</output></label>
+                        <input id="ss-level-h" data-layer-level="H" type="range" min="0" max="100" value="62" />
+                        <p>Isolate the creaky texture.</p>
+                    </section>
+                </div>
+
+                <div class="ss-performance-grid">
+                    <section class="ss-panel" aria-labelledby="ss-main-controls-title">
+                        <div class="ss-panel-title" id="ss-main-controls-title"><span>Sound controls</span><small>Changes stay live while held</small></div>
+                        <div class="ss-main-controls">
+                            <div class="ss-control">
+                                <label class="ss-control-label" for="ss-pitch"><span>Pitch</span><output for="ss-pitch" data-pitch-readout>E3 · 164.8 Hz</output></label>
+                                <input id="ss-pitch" data-pitch type="range" min="36" max="83" step="1" value="52" />
+                            </div>
+                            <div class="ss-control">
+                                <label class="ss-control-label" for="ss-vowel"><span>Vowel</span><output for="ss-vowel" data-vowel-readout>Ah</output></label>
+                                <select class="ss-select" id="ss-vowel" data-vowel>
+                                    <option>Ah</option>
+                                    <option>Ee</option>
+                                    <option>Oh</option>
+                                    <option>Oo</option>
+                                </select>
+                            </div>
+                            <div class="ss-control" data-layer="M">
+                                <label class="ss-control-label" for="ss-grit"><span>Grit</span><output for="ss-grit" data-output-for="ss-grit">38%</output></label>
+                                <input id="ss-grit" data-grit type="range" min="0" max="100" value="38" />
+                            </div>
+                            <div class="ss-control">
+                                <label class="ss-control-label" for="ss-expression"><span>Bellows / Expression</span><output for="ss-expression" data-output-for="ss-expression">70%</output></label>
+                                <input id="ss-expression" data-expression type="range" min="0" max="100" value="70" />
+                            </div>
+                            <div class="ss-control">
+                                <label class="ss-control-label" for="ss-master"><span>Master volume</span><output for="ss-master" data-output-for="ss-master">32%</output></label>
+                                <input id="ss-master" data-master type="range" min="0" max="100" value="32" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="ss-panel ss-play-area" aria-labelledby="ss-play-title">
+                        <div class="ss-panel-title" id="ss-play-title"><span>Play</span><small>Starts quietly</small></div>
+                        <button class="ss-button ss-enable" type="button" data-enable-audio>Enable Audio</button>
+                        <button class="ss-button ss-hold" type="button" data-hold-play>Hold to Play</button>
+                        <label class="ss-latch"><input type="checkbox" data-latch /> Latch for hands-free play</label>
+                        <button class="ss-button ss-stop" type="button" data-stop-all>STOP ALL SOUND</button>
+                        <p class="ss-audio-error" data-audio-error role="alert"></p>
+                    </section>
+                </div>
+
+                <section class="ss-panel ss-keyboard-panel" aria-labelledby="ss-keyboard-title">
+                    <div class="ss-keyboard-head">
+                        <div class="ss-panel-title" id="ss-keyboard-title" style="margin:0"><span>Monophonic keyboard</span><small>Press one note · swipe for more</small></div>
+                        <div class="ss-octave-control" aria-label="Keyboard octave">
+                            <button type="button" data-octave-down aria-label="Lower keyboard octave">−</button>
+                            <span>Octave <output data-octave-readout>3</output></span>
+                            <button type="button" data-octave-up aria-label="Raise keyboard octave">+</button>
+                        </div>
+                    </div>
+                    <div class="ss-keyboard" data-keyboard role="group" aria-label="Scream Synth note keyboard"></div>
+                </section>
+
+                <details class="ss-advanced">
+                    <summary>Advanced texture controls</summary>
+                    <div class="ss-advanced-grid">
+                        <label for="ss-irregularity">Fry pulse irregularity <output for="ss-irregularity" data-output-for="ss-irregularity">72%</output>
+                            <input id="ss-irregularity" data-irregularity type="range" min="0" max="100" value="72" />
+                        </label>
+                        <label for="ss-noise">Sigh noise balance <output for="ss-noise" data-output-for="ss-noise">34%</output>
+                            <input id="ss-noise" data-noise type="range" min="0" max="100" value="34" />
+                        </label>
+                        <label for="ss-tone">Texture filter <output for="ss-tone" data-output-for="ss-tone">56%</output>
+                            <input id="ss-tone" data-tone type="range" min="0" max="100" value="56" />
+                        </label>
+                        <label for="ss-modulation">Low-layer motion <output for="ss-modulation" data-output-for="ss-modulation">42%</output>
+                            <input id="ss-modulation" data-modulation type="range" min="0" max="100" value="42" />
+                        </label>
+                    </div>
+                </details>
             </div>
         </section>
 
@@ -905,5 +1062,7 @@
             seedParticles();
         });
     </script>
+    <script src="scream-synth-state.js"></script>
+    <script src="scream-synth.js"></script>
 </body>
 </html>
