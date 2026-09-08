@@ -13,7 +13,7 @@
         grit: 0.38,
         expression: 0.70,
         master: 0.32,
-        irregularity: 0.72,
+        irregularity: 0.24,
         noise: 0.34,
         tone: 0.56,
         modulation: 0.42,
@@ -345,7 +345,7 @@
             this.fryHighpass.Q.value = 0.55;
             this.fryFocus.type = 'bandpass';
             this.fryFocus.frequency.value = 2750;
-            this.fryFocus.Q.value = 0.65;
+            this.fryFocus.Q.value = 0.5;
             this.fryLowpass.type = 'lowpass';
             this.fryLowpass.frequency.value = 5700;
             this.fryLowpass.Q.value = 0.55;
@@ -403,21 +403,22 @@
             const length = Math.floor(sampleRate * seconds);
             const buffer = this.context.createBuffer(1, length, sampleRate);
             const data = buffer.getChannelData(0);
-            let envelope = 0.55;
-            let target = 0.55;
+            let envelope = 0.62;
+            let target = 0.62;
             let samplesUntilChange = 0;
+            const slew = 1 - Math.exp(-1 / (sampleRate * 0.045));
 
             for (let index = 0; index < length; index += 1) {
                 if (irregular) {
                     if (samplesUntilChange <= 0) {
-                        target = 0.12 + Math.pow(Math.random(), 1.7) * 0.88;
-                        samplesUntilChange = Math.floor(sampleRate * (0.008 + Math.random() * 0.065));
+                        target = 0.5 + Math.pow(Math.random(), 1.5) * 0.25;
+                        samplesUntilChange = Math.floor(sampleRate * (0.12 + Math.random() * 0.28));
                     }
                     samplesUntilChange -= 1;
-                    envelope += (target - envelope) * 0.018;
+                    envelope += (target - envelope) * slew;
                 }
                 const white = Math.random() * 2 - 1;
-                data[index] = white * (irregular ? envelope : 0.62);
+                data[index] = white * (irregular ? envelope : 0.68);
             }
 
             this.fadeBufferEdges(data, 640);
@@ -604,8 +605,8 @@
 
         applyIrregularity(immediate) {
             const amount = this.settings.irregularity;
-            this.setParam(this.frySteadyGain && this.frySteadyGain.gain, Math.cos(amount * Math.PI * 0.5) * 0.52, 0.035, immediate);
-            this.setParam(this.fryIrregularGain && this.fryIrregularGain.gain, Math.sin(amount * Math.PI * 0.5) * 0.64, 0.035, immediate);
+            this.setParam(this.frySteadyGain && this.frySteadyGain.gain, 0.48 - amount * 0.08, 0.06, immediate);
+            this.setParam(this.fryIrregularGain && this.fryIrregularGain.gain, amount * 0.22, 0.06, immediate);
         }
 
         setNoise(amount) {

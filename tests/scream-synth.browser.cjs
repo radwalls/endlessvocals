@@ -328,6 +328,17 @@ async function run() {
         const soloCentroids = soloMeasurements.map((item) => item.outputCentroidHz);
         assert.ok(Math.max(...soloCentroids) - Math.min(...soloCentroids) > 120, 'solo layers have measurably different spectra');
 
+        await page.locator('[data-scream-preset="fry"]').click();
+        const fryRmsReadings = [];
+        for (let sample = 0; sample < 14; sample += 1) {
+            await page.waitForTimeout(70);
+            fryRmsReadings.push((await diagnostics(page)).outputRms);
+        }
+        const fryRmsFloor = Math.min(...fryRmsReadings);
+        const fryRmsCeiling = Math.max(...fryRmsReadings);
+        assert.ok(fryRmsFloor > 0.0005, 'default Fry stays continuously audible');
+        assert.ok(fryRmsCeiling / fryRmsFloor < 1.35, 'default Fry remains a steady noise bed without heavy pulsing');
+
         await page.locator('[data-scream-preset="voice-grit"]').click();
         await page.locator('[data-grit]').fill('0');
         const vowelCentroids = [];
