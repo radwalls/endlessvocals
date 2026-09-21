@@ -2,142 +2,373 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#071420">
-  <meta name="description" content="An Endless Vocals Tabata timer for focused training rounds.">
-  <title>Tabata Trainer — Endless Vocals</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="%23071420"/><path d="M14 48 30 13 24 48 42 13 35 49" stroke="%2362eeaf" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="49" cy="16" r="5" fill="%23ffb24a"/></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Tabata Timer</title>
   <style>
-    :root { --ink:#eef7ff; --muted:#92a9b9; --panel:rgba(15,35,50,.84); --line:rgba(174,221,238,.16); --mint:#62eeaf; --orange:#ffb24a; --coral:#ff6e5c; --navy:#071420; --deep:#03090f; }
+    :root {
+      --green:#58bd5e;
+      --green-dark:#43a84a;
+      --red:#d95f58;
+      --paper:#f7f7f7;
+      --line:#cfcfcf;
+      --ink:#202020;
+      --muted:#777;
+    }
     * { box-sizing:border-box; }
-    html { min-height:100%; background:var(--deep); }
-    body { min-height:100%; margin:0; color:var(--ink); background:radial-gradient(75rem 45rem at -8% -10%, #173a52 0, transparent 62%), radial-gradient(55rem 38rem at 100% 100%, #1d4a3e 0, transparent 58%), var(--navy); font-family:"Space Grotesk",system-ui,sans-serif; }
-    button,input { font:inherit; }
+    html,body { min-height:100%; }
+    body { margin:0; display:flex; justify-content:center; background:#e9e9e9; color:var(--ink); font-family:Arial,Helvetica,sans-serif; }
+    button,input,select { font:inherit; }
     button { cursor:pointer; }
-    .shell { width:min(1120px,calc(100% - 32px)); margin:0 auto; padding:22px 0 44px; }
-    .masthead { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:clamp(28px,5vw,56px); }
-    .brand { color:var(--ink); font-size:.79rem; letter-spacing:.16em; font-weight:700; text-decoration:none; }
-    .brand span { color:var(--mint); }
-    .home-link { color:var(--muted); text-decoration:none; font-size:.9rem; padding:10px 0; }
-    .home-link:hover,.home-link:focus-visible { color:var(--ink); }
-    main { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr); gap:clamp(26px,5vw,72px); align-items:start; }
-    .eyebrow { color:var(--mint); font:500 .77rem/1 "DM Mono",monospace; letter-spacing:.14em; text-transform:uppercase; margin:0 0 13px; }
-    h1 { max-width:10ch; margin:0; font-size:clamp(2.6rem,6vw,5.6rem); line-height:.89; letter-spacing:-.065em; }
-    .intro { max-width:43ch; margin:20px 0 30px; color:var(--muted); font-size:1.02rem; line-height:1.55; }
-    .timer-card { position:relative; overflow:hidden; border:1px solid var(--line); border-radius:28px; padding:clamp(22px,4vw,40px); background:linear-gradient(140deg,rgba(36,77,91,.57),rgba(7,23,35,.92)); box-shadow:0 28px 80px rgba(0,0,0,.28); }
-    .timer-card::after { content:""; position:absolute; width:320px; height:320px; right:-150px; top:-170px; border-radius:50%; background:radial-gradient(circle,rgba(98,238,175,.25),transparent 66%); pointer-events:none; }
-    .phase-row { position:relative; display:flex; align-items:center; justify-content:space-between; gap:16px; z-index:1; }
-    .phase { color:var(--mint); font:500 .78rem/1 "DM Mono",monospace; letter-spacing:.12em; text-transform:uppercase; }
-    .round-count { color:var(--muted); font:500 .8rem/1 "DM Mono",monospace; }
-    .clock { position:relative; z-index:1; margin:26px 0 22px; font:500 clamp(4.7rem,12vw,8.4rem)/.87 "DM Mono",monospace; letter-spacing:-.1em; font-variant-numeric:tabular-nums; white-space:nowrap; }
-    .round-track { position:relative; z-index:1; display:flex; gap:8px; margin-bottom:27px; }
-    .round-dot { width:100%; height:9px; border:0; border-radius:99px; background:rgba(255,255,255,.14); padding:0; transition:background .18s ease, transform .18s ease; }
-    .round-dot.done { background:var(--mint); } .round-dot.active { background:var(--orange); transform:scaleY(1.45); } .round-dot.rest { background:var(--coral); }
-    .actions { position:relative; z-index:1; display:flex; gap:12px; }
-    .primary,.secondary { border:0; border-radius:14px; min-height:54px; padding:0 22px; font-weight:700; transition:transform .16s ease, box-shadow .16s ease, background .16s ease; }
-    .primary { min-width:150px; background:var(--mint); color:#062016; box-shadow:0 12px 24px rgba(98,238,175,.15); } .primary:hover { transform:translateY(-2px); box-shadow:0 18px 30px rgba(98,238,175,.25); }
-    .primary.running { background:var(--orange); color:#261500; } .secondary { background:rgba(255,255,255,.08); border:1px solid var(--line); color:var(--ink); } .secondary:hover { background:rgba(255,255,255,.13); }
-    .status-note { position:relative; z-index:1; min-height:20px; margin:17px 0 0; color:var(--muted); font-size:.86rem; }
-    .settings { border:1px solid var(--line); border-radius:24px; padding:24px; background:rgba(3,13,22,.4); }
-    .settings h2 { margin:0; font-size:1.15rem; letter-spacing:-.03em; } .settings > p { margin:7px 0 21px; color:var(--muted); font-size:.9rem; line-height:1.45; }
-    .presets { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:22px; }
-    .preset { border:1px solid var(--line); border-radius:12px; padding:12px 10px; background:transparent; color:var(--muted); font-size:.83rem; } .preset strong { display:block; color:var(--ink); font-size:.88rem; margin-bottom:3px; } .preset.active,.preset:hover { color:#062016; background:var(--mint); border-color:var(--mint); } .preset.active strong,.preset:hover strong { color:#062016; }
-    .preset.long { grid-column:1 / -1; }
-    .setting-grid { display:grid; gap:0; border-top:1px solid var(--line); }
-    .setting { display:grid; grid-template-columns:1fr auto; gap:14px; align-items:center; padding:14px 0; border-bottom:1px solid var(--line); }
-    .setting label { font-weight:600; font-size:.92rem; } .setting small { display:block; color:var(--muted); font-size:.76rem; margin-top:2px; }
-    .value-control { display:flex; align-items:center; gap:8px; } .number { width:63px; min-height:36px; padding:3px 7px; border:1px solid var(--line); border-radius:9px; background:rgba(255,255,255,.05); color:var(--ink); text-align:center; font:500 .88rem "DM Mono",monospace; }
-    input[type=range] { width:92px; accent-color:var(--mint); } .unit { width:26px; color:var(--muted); font:.75rem "DM Mono",monospace; }
-    .switch { appearance:none; width:42px; height:24px; margin:0; border:1px solid var(--line); border-radius:999px; background:rgba(255,255,255,.13); position:relative; transition:background .18s ease; } .switch::after { content:""; position:absolute; width:18px; height:18px; left:2px; top:2px; border-radius:50%; background:#fff; transition:transform .18s ease; } .switch:checked { background:var(--mint); } .switch:checked::after { transform:translateX(18px); }
-    .total { display:flex; justify-content:space-between; padding-top:17px; color:var(--muted); font-size:.86rem; } .total strong { color:var(--ink); font:500 .93rem "DM Mono",monospace; }
-    .finish { position:fixed; z-index:20; inset:0; display:grid; place-items:center; padding:24px; visibility:hidden; opacity:0; background:rgba(1,7,10,.92); transition:opacity .18s ease, visibility .18s ease; overflow:hidden; transform-origin:center; will-change:transform; } .finish.show { visibility:visible; opacity:1; } .finish.impact { animation:screenRock .9s cubic-bezier(.22,.78,.26,1) both; }
-    .finish::before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 50% 50%,rgba(255,178,74,.22),transparent 42%); }
-    .finish::after { content:""; position:absolute; inset:0; background:#ffd27b; opacity:0; pointer-events:none; mix-blend-mode:screen; } .finish.impact::after { animation:impactFlash .42s ease-out both; }
-    .finish-content { position:relative; z-index:2; width:min(620px,100%); text-align:center; transform:scale(.92); transition:transform .35s cubic-bezier(.2,.85,.3,1.3); } .finish.show .finish-content { transform:scale(1); }
-    .finish-kicker { color:var(--orange); font:500 .84rem "DM Mono",monospace; letter-spacing:.13em; text-transform:uppercase; } .finish h2 { max-width:8ch; margin:10px auto 15px; font-size:clamp(4rem,13vw,9rem); line-height:.78; letter-spacing:-.09em; } .finish p { margin:0 auto 27px; max-width:32ch; color:#c1d0d7; line-height:1.5; }
-    .claws { position:absolute; inset:-12vh -14vw; width:128vw; height:124vh; object-fit:cover; opacity:0; transform:translate3d(-128%,-16%,0) rotate(-8deg) scale(1.24); pointer-events:none; mix-blend-mode:screen; will-change:transform,opacity; } .finish.show .claws { animation:clawSwipe 1.05s cubic-bezier(.12,.72,.16,1) .12s both; }
+    .page { width:100%; max-width:492px; min-height:100vh; background:#f5f5f5; overflow:hidden; }
+    .top-strip { height:22px; background:#292929; border-bottom:1px solid #444; }
+    .titlebar { height:44px; display:grid; place-items:center; background:linear-gradient(#fff,#f5f5f5); box-shadow:0 2px 7px rgba(0,0,0,.15); font-size:18px; }
+    main { position:relative; left:-7px; width:293px; margin:0 auto; padding-top:5px; }
+    .clock { height:104px; display:flex; align-items:center; justify-content:center; margin:0; color:#171717; font-size:116px; font-weight:300; line-height:1; letter-spacing:-7px; font-variant-numeric:tabular-nums; white-space:nowrap; transform:scaleX(1.1); }
+    .clock.counting { color:#111; animation:countPulse .42s ease-out; }
+    .round-strip { height:43px; display:grid; grid-template-columns:repeat(var(--rounds),1fr); margin-top:5px; overflow:hidden; border-radius:4px; }
+    .round-segment { min-width:0; display:grid; place-items:center; color:#fff; background:linear-gradient(to right,var(--green) 0 calc(100% - 10px),var(--red) calc(100% - 10px) 100%); font-size:20px; text-shadow:0 1px 0 rgba(0,0,0,.08); transition:filter .15s ease,box-shadow .15s ease; }
+    .round-segment:last-child { background:var(--green); }
+    .round-segment.done { background:#3ea64a; }
+    .round-segment.current { position:relative; z-index:1; box-shadow:inset 0 0 0 3px rgba(255,255,255,.88); filter:saturate(1.15); }
+    .round-count { height:114px; display:flex; align-items:center; justify-content:center; margin:10px 0 0; color:#171717; font-size:115px; font-weight:300; line-height:1; letter-spacing:-7px; font-variant-numeric:tabular-nums; transform:scaleX(1.22); }
+    .controls-wrap { position:relative; }
+    .controls { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+    .control { height:45px; border-radius:5px; border:1px solid #cfcfcf; background:linear-gradient(#fff,#fafafa); color:#777; font-size:18px; box-shadow:inset 0 1px 0 rgba(255,255,255,.65); }
+    .control.primary { border-color:#4caf50; background:linear-gradient(#63c76a,#55b95d); color:#fff; text-shadow:0 -1px rgba(0,0,0,.12); }
+    .control:active { transform:translateY(1px); }
+    .progress-rail { position:absolute; left:0; right:0; bottom:-8px; height:4px; overflow:hidden; border-radius:999px; background:#ddd; opacity:0; transition:opacity .16s ease; }
+    .progress-rail.visible { opacity:1; }
+    .progress-fill { width:100%; height:100%; border-radius:inherit; background:var(--green); transform:scaleX(0); transform-origin:left center; will-change:transform; }
+    .progress-fill.rest { background:var(--red); }
+    .progress-fill.prep { background:#efb63f; }
+    .settings { margin-top:13px; overflow:hidden; border:1px solid #c9c9c9; border-radius:5px; background:#fff; }
+    .tabs { display:grid; grid-template-columns:1fr 1fr; gap:0; padding:10px 10px 9px; }
+    .tab { height:33px; border:1px solid #c9c9c9; background:#fff; color:#333; font-size:14px; }
+    .tab:first-child { border-radius:3px 0 0 3px; }
+    .tab:last-child { margin-left:-1px; border-radius:0 3px 3px 0; color:#64160f; }
+    .tab.active { position:relative; z-index:1; background:linear-gradient(#f8f8f8,#e3e3e3); box-shadow:inset 0 1px 5px rgba(0,0,0,.12); color:#555; }
+    .setting-row { width:100%; min-height:43px; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:0 10px; border:0; border-top:1px solid var(--line); background:#fff; color:#3d3d3d; text-align:left; }
+    button.setting-row:hover { background:#fafafa; }
+    .setting-label { font-size:18px; font-weight:700; white-space:nowrap; }
+    .setting-value { color:#444; font-size:18px; font-weight:400; white-space:nowrap; }
+    .setting-value.muted { color:#999; }
+    .caret { display:inline-block; width:0; height:0; margin-left:4px; vertical-align:middle; border:4px solid transparent; border-top-color:#555; transform:translateY(3px); }
+    .toggle { position:relative; width:75px; height:28px; flex:none; }
+    .toggle input { position:absolute; width:1px; height:1px; opacity:0; }
+    .toggle-track { position:absolute; inset:1px 0; border:1px solid #b8b8b8; border-radius:999px; background:linear-gradient(#e5e5e5,#fff); box-shadow:inset 0 1px 2px rgba(0,0,0,.14); }
+    .toggle-knob { position:absolute; top:1px; left:0; width:27px; height:27px; border:1px solid #999; border-radius:50%; background:linear-gradient(#fff,#e9e9e9); box-shadow:0 1px 3px rgba(0,0,0,.28); transition:transform .16s ease; }
+    .toggle-text { position:absolute; right:8px; top:6px; color:#777; font-size:14px; font-weight:700; }
+    .toggle input:checked ~ .toggle-track { background:#67c86e; border-color:#4caf50; }
+    .toggle input:checked ~ .toggle-knob { transform:translateX(48px); }
+    .toggle input:checked ~ .toggle-text { left:9px; right:auto; color:#fff; }
+    .phase-live { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+    dialog { width:min(340px,calc(100% - 32px)); padding:0; border:1px solid #aaa; border-radius:7px; background:#fff; box-shadow:0 16px 50px rgba(0,0,0,.33); }
+    dialog::backdrop { background:rgba(0,0,0,.42); }
+    .dialog-head { padding:16px 18px 10px; border-bottom:1px solid #ddd; font-size:20px; font-weight:700; }
+    .dialog-body { padding:18px; }
+    .dialog-body p { margin:0 0 12px; color:#666; font-size:14px; line-height:1.4; }
+    .number-picker { display:grid; grid-template-columns:44px 1fr 44px; gap:8px; }
+    .number-picker button,.number-picker input { height:46px; border:1px solid #bbb; border-radius:5px; background:#fafafa; text-align:center; font-size:20px; }
+    .number-picker input { width:100%; background:#fff; font-variant-numeric:tabular-nums; }
+    .dialog-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:0 18px 18px; }
+    .dialog-actions button { height:42px; border:1px solid #bbb; border-radius:5px; background:#fff; }
+    .dialog-actions .save { border-color:#4caf50; background:var(--green); color:#fff; }
+    .finish { position:fixed; z-index:20; inset:0; display:grid; place-items:center; padding:24px; visibility:hidden; opacity:0; overflow:hidden; background:rgba(1,7,10,.94); transition:opacity .18s ease,visibility .18s ease; transform-origin:center; will-change:transform; }
+    .finish.show { visibility:visible; opacity:1; }
+    .finish.impact { animation:screenRock .9s cubic-bezier(.22,.78,.26,1) both; }
+    .finish::after { content:""; position:absolute; inset:0; background:#ffd27b; opacity:0; pointer-events:none; mix-blend-mode:screen; }
+    .finish.impact::after { animation:impactFlash .42s ease-out both; }
+    .claws { position:absolute; inset:-12vh -14vw; width:128vw; height:124vh; object-fit:cover; opacity:0; transform:translate3d(-128%,-16%,0) rotate(-8deg) scale(1.24); pointer-events:none; mix-blend-mode:screen; will-change:transform,opacity; }
+    .finish.show .claws { animation:clawSwipe 1.05s cubic-bezier(.12,.72,.16,1) .12s both; }
+    .finish-content { position:relative; z-index:2; width:min(620px,100%); color:#fff; text-align:center; }
+    .finish-kicker { color:#ffb24a; font-size:14px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    .finish h2 { margin:9px 0 14px; font-size:clamp(58px,13vw,122px); line-height:.84; letter-spacing:-.08em; }
+    .finish p { max-width:430px; margin:0 auto 26px; color:#d2dde1; font-size:17px; line-height:1.45; }
+    .again { min-width:150px; height:48px; border:0; border-radius:8px; background:#61e5ae; color:#09251b; font-weight:700; }
+    @keyframes countPulse { 0% { transform:scaleX(1.1) scale(1); } 45% { transform:scaleX(1.1) scale(1.045); } 100% { transform:scaleX(1.1) scale(1); } }
     @keyframes clawSwipe { 0% { opacity:0; transform:translate3d(-128%,-16%,0) rotate(-8deg) scale(1.24); } 12% { opacity:1; } 68% { opacity:1; transform:translate3d(-2%,0,0) rotate(0) scale(1.1); } 82% { opacity:1; transform:translate3d(4%,0,0) rotate(.6deg) scale(1.12); } 100% { opacity:.86; transform:translate3d(0,0,0) rotate(0) scale(1.1); } }
     @keyframes screenRock { 0% { transform:translate3d(0,0,0) rotate(0); } 10% { transform:translate3d(-34px,10px,0) rotate(-1.35deg); } 22% { transform:translate3d(30px,-8px,0) rotate(1.15deg); } 35% { transform:translate3d(-22px,6px,0) rotate(-.82deg); } 49% { transform:translate3d(16px,-4px,0) rotate(.58deg); } 64% { transform:translate3d(-10px,3px,0) rotate(-.36deg); } 80% { transform:translate3d(5px,-1px,0) rotate(.18deg); } 100% { transform:translate3d(0,0,0) rotate(0); } }
     @keyframes impactFlash { 0% { opacity:.55; } 100% { opacity:0; } }
-    :focus-visible { outline:3px solid var(--orange); outline-offset:3px; }
-    @media (max-width:780px) { .shell { width:min(100% - 24px,620px); padding-top:17px; } main { grid-template-columns:1fr; gap:22px; } h1 { max-width:none; } .intro { margin-bottom:23px; } .timer-card { border-radius:22px; } .settings { border-radius:20px; } .masthead { margin-bottom:30px; } }
-    @media (max-width:380px) { .value-control { gap:5px; } input[type=range] { width:72px; } .settings { padding:18px; } }
-    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms !important; scroll-behavior:auto !important; transition-duration:.01ms !important; } }
+    :focus-visible { outline:3px solid #1877d2; outline-offset:2px; }
+    @media (max-width:350px) { main { width:calc(100% - 24px); } .clock { font-size:100px; } .round-count { font-size:102px; } .setting-label,.setting-value { font-size:16px; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <header class="masthead"><a class="brand" href="index.html">ENDLESS <span>VOCALS</span></a><a class="home-link" href="index.html">← Home</a></header>
-    <main>
-      <section aria-labelledby="timer-title">
-        <p class="eyebrow">Training tool / no distractions</p>
-        <h1 id="timer-title">Train hard. Finish fierce.</h1>
-        <p class="intro">A stripped-back Tabata timer for warm-ups, drills, and focused practice. Set your rhythm, press start, and let the rounds take over.</p>
-        <div class="timer-card" aria-live="polite">
-          <div class="phase-row"><span id="phase" class="phase">Ready</span><span id="roundCount" class="round-count">Round 0 / 8</span></div>
-          <div id="clock" class="clock">00:20</div>
-          <div id="roundTrack" class="round-track" role="img" aria-label="Eight workout rounds"></div>
-          <div class="actions"><button id="start" class="primary" type="button">Start</button><button id="reset" class="secondary" type="button">Reset</button></div>
-          <p id="statusNote" class="status-note">20 seconds on · 10 seconds off · 8 rounds</p>
+  <div class="page">
+    <div class="top-strip" aria-hidden="true"></div>
+    <header class="titlebar">Tabata Timer</header>
+    <main aria-label="Tabata timer">
+      <p id="clock" class="clock" aria-live="off">00:00</p>
+      <div id="roundStrip" class="round-strip" role="img" aria-label="Eight workout rounds"></div>
+      <p id="roundCount" class="round-count">0/8</p>
+      <div class="controls-wrap">
+        <div class="controls">
+          <button id="start" class="control primary" type="button">Start</button>
+          <button id="reset" class="control" type="button">Reset</button>
         </div>
+        <div id="progressRail" class="progress-rail" aria-hidden="true"><div id="progressFill" class="progress-fill"></div></div>
+      </div>
+      <section class="settings" aria-label="Timer settings">
+        <div class="tabs" aria-label="Presets">
+          <button id="tabataPreset" class="tab active" type="button">Tabata</button>
+          <button id="customPreset" class="tab" type="button">Tabata This</button>
+        </div>
+        <button class="setting-row" type="button" data-setting="rounds"><span class="setting-label">Rounds</span></button>
+        <button class="setting-row" type="button" data-setting="work"><span class="setting-label">Time On</span></button>
+        <button class="setting-row" type="button" data-setting="rest"><span class="setting-label">Time Off</span></button>
+        <label class="setting-row"><span class="setting-label">Include Last Rest</span><span class="toggle"><input id="finalRest" type="checkbox"><span class="toggle-track"></span><span class="toggle-knob"></span><span id="toggleText" class="toggle-text">OFF</span></span></label>
+        <div class="setting-row"><span class="setting-label">Total Workout Time</span><span id="totalTime" class="setting-value muted">3:50</span></div>
+        <button class="setting-row" type="button" data-setting="prep"><span class="setting-label">Prep Time</span></button>
+        <button class="setting-row" type="button" data-info="sound"><span class="setting-label">Sounds</span><span class="setting-value">Fight Bell<span class="caret"></span></span></button>
+        <button class="setting-row" type="button" data-info="countdown"><span class="setting-label">Count Down</span><span class="setting-value">Every Transition<span class="caret"></span></span></button>
       </section>
-      <aside class="settings" aria-labelledby="settings-title">
-        <h2 id="settings-title">Build your round</h2>
-        <p>Use a preset or build anything from a quick interval to a long practice block.</p>
-        <div class="presets" aria-label="Timer presets"><button class="preset active" type="button" data-preset="tabata"><strong>Tabata</strong>20 on · 10 off × 8</button><button class="preset" type="button" data-preset="vocal"><strong>Vocal drill</strong>30 on · 15 off × 6</button><button class="preset long" type="button" data-preset="long"><strong>Long practice</strong>5:00 on · 1:00 off × 4</button></div>
-        <div class="setting-grid">
-          <div class="setting"><label for="rounds">Rounds<small>How many times through</small></label><div class="value-control"><input id="rounds" class="number" type="number" min="1" max="99" value="8"><span class="unit">×</span></div></div>
-          <div class="setting"><label for="work">Time on<small>Active practice · up to 15 min</small></label><div class="value-control"><input id="work" type="range" min="5" max="900" step="5" value="20"><input id="workNumber" class="number" type="number" min="5" max="900" step="5" value="20"><span class="unit">sec</span></div></div>
-          <div class="setting"><label for="rest">Time off<small>Recover between rounds · up to 10 min</small></label><div class="value-control"><input id="rest" type="range" min="0" max="600" step="5" value="10"><input id="restNumber" class="number" type="number" min="0" max="600" step="5" value="10"><span class="unit">sec</span></div></div>
-          <div class="setting"><label for="prep">Prep time<small>Settle in · up to 10 min</small></label><div class="value-control"><input id="prep" type="range" min="0" max="600" step="5" value="5"><input id="prepNumber" class="number" type="number" min="0" max="600" step="5" value="5"><span class="unit">sec</span></div></div>
-          <div class="setting"><label for="finalRest">Include last rest<small>Finish with one final recovery</small></label><input id="finalRest" class="switch" type="checkbox" aria-label="Include last rest"></div>
-        </div>
-        <div class="total"><span>Total workout time</span><strong id="totalTime">04:55</strong></div>
-      </aside>
+      <span id="phaseLive" class="phase-live" aria-live="assertive"></span>
     </main>
   </div>
-  <section id="finish" class="finish" aria-labelledby="finish-title" aria-modal="true" role="dialog">
+
+  <dialog id="settingDialog">
+    <form method="dialog" id="settingForm">
+      <div id="dialogTitle" class="dialog-head">Rounds</div>
+      <div class="dialog-body">
+        <p id="dialogHelp">Choose the number of rounds.</p>
+        <div class="number-picker">
+          <button id="decrease" type="button" aria-label="Decrease">−</button>
+          <input id="dialogInput" type="number" inputmode="numeric">
+          <button id="increase" type="button" aria-label="Increase">+</button>
+        </div>
+      </div>
+      <div class="dialog-actions"><button value="cancel">Cancel</button><button id="saveSetting" class="save" value="default">Save</button></div>
+    </form>
+  </dialog>
+
+  <section id="finish" class="finish" role="dialog" aria-modal="true" aria-labelledby="finishTitle">
     <img class="claws" src="images/lion-claw-overlay.png" alt="" aria-hidden="true">
-    <div class="finish-content"><div class="finish-kicker">Workout complete</div><h2 id="finish-title">CRUSHED IT.</h2><p>You showed up and finished every round. Take the win.</p><button id="again" class="primary" type="button">Run it back</button></div>
+    <div class="finish-content"><div class="finish-kicker">Workout complete</div><h2 id="finishTitle">CRUSHED IT.</h2><p>You showed up and finished every round. Take the win.</p><button id="again" class="again" type="button">Run it back</button></div>
   </section>
+
+  <audio id="countdownVoice" src="sounds/male-countdown.wav" preload="auto" aria-hidden="true"></audio>
+  <audio id="bellOne" src="sounds/fight-bell.wav" preload="auto" aria-hidden="true"></audio>
+  <audio id="bellTwo" src="sounds/fight-bell.wav" preload="auto" aria-hidden="true"></audio>
+  <audio id="bellThree" src="sounds/fight-bell.wav" preload="auto" aria-hidden="true"></audio>
   <audio id="lionRoar" src="sounds/lion-roar.wav" preload="auto" aria-hidden="true"></audio>
   <audio id="crowdCheer" src="sounds/crowd-cheer.wav" preload="auto" aria-hidden="true"></audio>
+
   <script>
     (() => {
       const $ = (id) => document.getElementById(id);
-      const controls = { rounds:$('rounds'), work:$('work'), workNumber:$('workNumber'), rest:$('rest'), restNumber:$('restNumber'), prep:$('prep'), prepNumber:$('prepNumber'), finalRest:$('finalRest') };
-      const ui = { start:$('start'), reset:$('reset'), clock:$('clock'), phase:$('phase'), count:$('roundCount'), track:$('roundTrack'), note:$('statusNote'), total:$('totalTime'), finish:$('finish'), again:$('again'), lionRoar:$('lionRoar'), crowdCheer:$('crowdCheer') };
-      let state = { running:false, phase:'ready', round:0, remaining:20, tick:null, target:0, audio:null, finished:false };
+      const ui = {
+        clock:$('clock'),roundStrip:$('roundStrip'),roundCount:$('roundCount'),start:$('start'),reset:$('reset'),
+        progressRail:$('progressRail'),progressFill:$('progressFill'),totalTime:$('totalTime'),finalRest:$('finalRest'),toggleText:$('toggleText'),
+        tabataPreset:$('tabataPreset'),customPreset:$('customPreset'),phaseLive:$('phaseLive'),dialog:$('settingDialog'),dialogTitle:$('dialogTitle'),
+        dialogHelp:$('dialogHelp'),dialogInput:$('dialogInput'),decrease:$('decrease'),increase:$('increase'),saveSetting:$('saveSetting'),
+        finish:$('finish'),again:$('again'),countdownVoice:$('countdownVoice'),bellOne:$('bellOne'),bellTwo:$('bellTwo'),bellThree:$('bellThree'),
+        lionRoar:$('lionRoar'),crowdCheer:$('crowdCheer')
+      };
+      const settings = { rounds:8, work:20, rest:10, prep:5, finalRest:false };
+      const settingMeta = {
+        rounds:{title:'Rounds',help:'Choose how many times to repeat work and recovery.',min:1,max:99,step:1,suffix:' rounds'},
+        work:{title:'Time On',help:'Set each work interval. You can go up to 15 minutes.',min:5,max:900,step:5,suffix:' seconds'},
+        rest:{title:'Time Off',help:'Set each recovery interval. You can go up to 10 minutes.',min:0,max:600,step:5,suffix:' seconds'},
+        prep:{title:'Prep Time',help:'Choose the countdown before round one.',min:0,max:600,step:5,suffix:' seconds'}
+      };
+      let activeSetting = null;
       let finishTimers = [];
-      let finishAudioUnlocked = false;
-      const clamp = (value,min,max) => Math.max(min,Math.min(max,Number(value) || min));
-      const config = () => ({ rounds:clamp(controls.rounds.value,1,99), work:clamp(controls.workNumber.value,5,900), rest:clamp(controls.restNumber.value,0,600), prep:clamp(controls.prepNumber.value,0,600), finalRest:controls.finalRest.checked });
-      const format = (seconds) => `${String(Math.floor(seconds / 60)).padStart(2,'0')}:${String(seconds % 60).padStart(2,'0')}`;
-      const describeDuration = (seconds) => seconds < 60 ? `${seconds} seconds` : `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2,'0')}`;
-      function totalSeconds(c=config()) { return c.prep + c.rounds * c.work + Math.max(0,c.rounds - (c.finalRest ? 0 : 1)) * c.rest; }
-      function renderTrack() { const c=config(); ui.track.innerHTML=''; for(let i=1;i<=c.rounds;i++){ const dot=document.createElement('span'); dot.className='round-dot' + (i<state.round?' done':'') + (i===state.round && state.phase!=='ready'?' active':'') + (state.phase==='rest' && i===state.round?' rest':''); ui.track.append(dot); } }
-      function render() { const c=config(); ui.clock.textContent=format(Math.max(0,Math.ceil(state.remaining))); const label={ready:'READY',prep:'GET READY',work:'WORK',rest:'RECOVER',complete:'COMPLETE'}[state.phase]; ui.phase.textContent=label; ui.count.textContent=`Round ${state.round} / ${c.rounds}`; ui.start.textContent=state.running?'Pause':(state.finished?'Start again':'Start'); ui.start.classList.toggle('running',state.running); ui.note.textContent=state.phase==='ready'?`${describeDuration(c.work)} on · ${describeDuration(c.rest)} off · ${c.rounds} rounds`:state.phase==='prep'?'Breathe in. Your first work round is coming.':state.phase==='work'?'Stay with it — you are in the work.':state.phase==='rest'?'Recover with intention. The next round is yours.':'Every round done.'; ui.total.textContent=format(totalSeconds(c)); renderTrack(); }
-      function setInputs(pair,value){ pair[0].value=value; pair[1].value=value; }
-      function configureInputs(){ [[controls.work,controls.workNumber],[controls.rest,controls.restNumber],[controls.prep,controls.prepNumber]].forEach(pair=>pair.forEach(input=>input.addEventListener('input',()=>{ if(state.running)return; const min=Number(pair[0].min),max=Number(pair[0].max); setInputs(pair,clamp(input.value,min,max)); selectCustom(); reset(false); }))); controls.rounds.addEventListener('input',()=>{if(!state.running){controls.rounds.value=clamp(controls.rounds.value,1,99); selectCustom(); reset(false);}}); controls.finalRest.addEventListener('change',()=>{if(!state.running){selectCustom();reset(false);}}); }
-      function selectCustom(){ document.querySelectorAll('.preset').forEach(button=>button.classList.remove('active')); }
-      function ensureAudio(){ if(!state.audio) state.audio=new (window.AudioContext||window.webkitAudioContext)(); if(state.audio.state==='suspended')state.audio.resume(); return state.audio; }
-      function beep(freq=650,length=.09,gain=.06,type='sine',delay=0){ const a=ensureAudio(), t=a.currentTime+delay, osc=a.createOscillator(), amp=a.createGain(); osc.type=type; osc.frequency.setValueAtTime(freq,t); amp.gain.setValueAtTime(.0001,t); amp.gain.exponentialRampToValueAtTime(gain,t+.012); amp.gain.exponentialRampToValueAtTime(.0001,t+length); osc.connect(amp).connect(a.destination); osc.start(t); osc.stop(t+length+.03); }
-      function unlockFinishAudio(){ if(finishAudioUnlocked)return; finishAudioUnlocked=true; [[ui.lionRoar,.92],[ui.crowdCheer,.76]].forEach(([audio,volume])=>{ audio.volume=0; const attempt=audio.play(); if(attempt)attempt.then(()=>{audio.pause();audio.currentTime=0;audio.volume=volume;}).catch(()=>{audio.volume=volume;}); }); }
-      function playRecorded(audio,volume){ audio.pause(); audio.currentTime=0; audio.volume=volume; const attempt=audio.play(); if(attempt)attempt.catch(()=>{}); }
-      function clearFinishEffects(){ finishTimers.forEach(window.clearTimeout); finishTimers=[]; [ui.lionRoar,ui.crowdCheer].forEach(audio=>{audio.pause();audio.currentTime=0;}); ui.finish.classList.remove('show','impact'); }
-      function phaseDuration(){ const c=config(); return state.phase==='prep'?c.prep:state.phase==='work'?c.work:c.rest; }
-      function switchPhase(){ const c=config(); if(state.phase==='prep'){state.phase='work';state.round=1;beep(880,.14,.09,'sine');} else if(state.phase==='work'){ if(state.round===c.rounds&&!c.finalRest){ finish();return;} state.phase='rest';beep(430,.1,.06,'triangle'); } else if(state.phase==='rest'){ if(state.round===c.rounds){finish();return;} state.phase='work';state.round++;beep(880,.14,.09,'sine'); } state.remaining=phaseDuration(); state.target=performance.now()+state.remaining*1000; render(); }
-      function tick(){ state.remaining=Math.max(0,(state.target-performance.now())/1000); if(state.remaining>0 && state.remaining<=3.05 && Math.ceil(state.remaining)!==Math.ceil(state.remaining+.12)) beep(660,.05,.04,'sine'); render(); if(state.remaining<=0)switchPhase(); }
-      function start(){ if(state.finished){ reset(false); } ensureAudio(); unlockFinishAudio(); if(state.phase==='ready'){ const c=config(); state.phase=c.prep>0?'prep':'work'; state.round=c.prep>0?0:1; state.remaining=phaseDuration(); } state.running=true; state.target=performance.now()+state.remaining*1000; state.tick=setInterval(tick,100); render(); }
-      function pause(){ clearInterval(state.tick); state.tick=null; state.running=false; render(); }
-      function reset(close=true){ clearInterval(state.tick); const c=config(); state={...state,running:false,phase:'ready',round:0,remaining:c.work,tick:null,target:0,finished:false}; if(close)clearFinishEffects(); render(); }
-      function finish(){ clearInterval(state.tick); clearFinishEffects(); state.running=false; state.phase='complete'; state.remaining=0; state.finished=true; render(); void ui.finish.offsetWidth; ui.finish.classList.add('show'); playRecorded(ui.lionRoar,.92); finishTimers.push(window.setTimeout(()=>ui.finish.classList.add('impact'),830)); finishTimers.push(window.setTimeout(()=>playRecorded(ui.crowdCheer,.76),1820)); finishTimers.push(window.setTimeout(()=>ui.again.focus(),2050)); }
-      ui.start.addEventListener('click',()=>state.running?pause():start()); ui.reset.addEventListener('click',()=>reset()); ui.again.addEventListener('click',()=>reset());
-      document.querySelectorAll('.preset').forEach(button=>button.addEventListener('click',()=>{ if(state.running)return; const presets={tabata:{rounds:8,work:20,rest:10,prep:5},vocal:{rounds:6,work:30,rest:15,prep:8},long:{rounds:4,work:300,rest:60,prep:10}}; const values=presets[button.dataset.preset]; controls.rounds.value=values.rounds; setInputs([controls.work,controls.workNumber],values.work); setInputs([controls.rest,controls.restNumber],values.rest); setInputs([controls.prep,controls.prepNumber],values.prep); controls.finalRest.checked=false; document.querySelectorAll('.preset').forEach(x=>x.classList.toggle('active',x===button)); reset(false); }));
-      configureInputs(); render();
+      let mediaUnlocked = false;
+      let state = freshState();
+
+      function freshState() { return {running:false,phase:'ready',round:0,remaining:0,duration:0,target:0,raf:0,finished:false,countdownPlayed:false,lastShown:null}; }
+      function clamp(value,min,max) { return Math.max(min,Math.min(max,Number(value) || min)); }
+      function format(seconds) { const whole=Math.max(0,Math.ceil(seconds)); return `${String(Math.floor(whole/60)).padStart(2,'0')}:${String(whole%60).padStart(2,'0')}`; }
+      function workoutSeconds() { return settings.rounds*settings.work + (settings.rounds-(settings.finalRest?0:1))*settings.rest; }
+      function shortTime(seconds) { return seconds<60 ? `${seconds}` : `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`; }
+
+      function renderRounds() {
+        ui.roundStrip.style.setProperty('--rounds',settings.rounds);
+        ui.roundStrip.setAttribute('aria-label',`${settings.rounds} workout rounds`);
+        ui.roundStrip.innerHTML='';
+        for(let i=1;i<=settings.rounds;i++){
+          const segment=document.createElement('span');
+          segment.className='round-segment'+(i<state.round?' done':'')+(i===state.round&&state.phase!=='ready'&&state.phase!=='prep'?' current':'');
+          segment.textContent=i;
+          ui.roundStrip.append(segment);
+        }
+      }
+      function render() {
+        ui.clock.textContent=state.phase==='ready'?'00:00':format(state.remaining);
+        ui.roundCount.textContent=`${state.round}/${settings.rounds}`;
+        ui.start.textContent=state.running?'Pause':(state.finished?'Start':'Start');
+        ui.totalTime.textContent=shortTime(workoutSeconds());
+        ui.toggleText.textContent=settings.finalRest?'ON':'OFF';
+        ui.progressRail.classList.toggle('visible',state.phase!=='ready'&&!state.finished);
+        ui.progressFill.className=`progress-fill ${state.phase==='rest'?'rest':state.phase==='prep'?'prep':''}`;
+        renderRounds();
+      }
+      function updateProgress() {
+        const progress=state.duration>0?Math.max(0,Math.min(1,1-state.remaining/state.duration)):0;
+        ui.progressFill.style.transform=`scaleX(${progress})`;
+      }
+      function pulseCountdown(number) {
+        if(number===state.lastShown)return;
+        state.lastShown=number;
+        ui.clock.classList.remove('counting');
+        void ui.clock.offsetWidth;
+        ui.clock.classList.add('counting');
+        ui.phaseLive.textContent=String(number);
+      }
+      function announcePhase() {
+        const words={prep:'Get ready',work:'Work',rest:'Recover'};
+        ui.phaseLive.textContent=words[state.phase]||'';
+      }
+
+      function unlockMedia() {
+        if(mediaUnlocked)return;
+        mediaUnlocked=true;
+        const items=[[ui.countdownVoice,.9],[ui.bellOne,.92],[ui.bellTwo,.92],[ui.bellThree,.92],[ui.lionRoar,.92],[ui.crowdCheer,.76]];
+        items.forEach(([audio,volume])=>{
+          audio.volume=0;
+          const attempt=audio.play();
+          if(attempt)attempt.then(()=>{audio.pause();audio.currentTime=0;audio.volume=volume;}).catch(()=>{audio.volume=volume;});
+        });
+      }
+      function playAudio(audio,volume) { audio.pause(); audio.currentTime=0; audio.volume=volume; const attempt=audio.play(); if(attempt)attempt.catch(()=>{}); }
+      function playFightBell() {
+        [[ui.bellOne,0],[ui.bellTwo,340],[ui.bellThree,680]].forEach(([audio,delay])=>window.setTimeout(()=>playAudio(audio,.92),delay));
+      }
+      function stopIntervalAudio() { [ui.countdownVoice,ui.bellOne,ui.bellTwo,ui.bellThree].forEach(audio=>{audio.pause();audio.currentTime=0;}); }
+
+      function setPhase(phase,duration,round) {
+        state.phase=phase;
+        state.duration=duration;
+        state.remaining=duration;
+        state.round=round;
+        state.target=performance.now()+duration*1000;
+        state.countdownPlayed=false;
+        state.lastShown=null;
+        announcePhase();
+        render();
+        updateProgress();
+        if(duration<=3&&duration>0){ playAudio(ui.countdownVoice,.9); state.countdownPlayed=true; }
+      }
+      function begin() {
+        unlockMedia();
+        if(state.finished)reset();
+        if(state.phase==='ready'){
+          if(settings.prep>0)setPhase('prep',settings.prep,0);
+          else { playFightBell(); setPhase('work',settings.work,1); }
+        } else {
+          state.target=performance.now()+state.remaining*1000;
+        }
+        state.running=true;
+        render();
+        state.raf=requestAnimationFrame(tick);
+      }
+      function pause() {
+        state.running=false;
+        cancelAnimationFrame(state.raf);
+        state.raf=0;
+        stopIntervalAudio();
+        render();
+      }
+      function tick(now) {
+        if(!state.running)return;
+        state.remaining=Math.max(0,(state.target-now)/1000);
+        const shown=Math.ceil(state.remaining);
+        if(shown<=3&&shown>=1){
+          pulseCountdown(shown);
+          if(!state.countdownPlayed){ playAudio(ui.countdownVoice,.9); state.countdownPlayed=true; }
+        }
+        ui.clock.textContent=format(state.remaining);
+        updateProgress();
+        if(state.remaining<=0){ advance(); return; }
+        state.raf=requestAnimationFrame(tick);
+      }
+      function advance() {
+        if(state.phase==='prep'){
+          playFightBell();
+          setPhase('work',settings.work,1);
+        } else if(state.phase==='work'){
+          if(state.round===settings.rounds&&!settings.finalRest){ finish(); return; }
+          if(settings.rest>0){ playFightBell(); setPhase('rest',settings.rest,state.round); }
+          else if(state.round<settings.rounds){ playFightBell(); setPhase('work',settings.work,state.round+1); }
+          else { finish(); return; }
+        } else if(state.phase==='rest'){
+          if(state.round===settings.rounds){ finish(); return; }
+          playFightBell();
+          setPhase('work',settings.work,state.round+1);
+        }
+        state.raf=requestAnimationFrame(tick);
+      }
+      function reset() {
+        cancelAnimationFrame(state.raf);
+        stopIntervalAudio();
+        clearFinishEffects();
+        state=freshState();
+        ui.progressFill.style.transform='scaleX(0)';
+        render();
+      }
+
+      function clearFinishEffects() {
+        finishTimers.forEach(window.clearTimeout); finishTimers=[];
+        [ui.lionRoar,ui.crowdCheer].forEach(audio=>{audio.pause();audio.currentTime=0;});
+        ui.finish.classList.remove('show','impact');
+      }
+      function finish() {
+        state.running=false; state.finished=true; state.phase='complete'; state.remaining=0;
+        stopIntervalAudio(); render(); ui.progressRail.classList.remove('visible');
+        clearFinishEffects(); void ui.finish.offsetWidth; ui.finish.classList.add('show');
+        playAudio(ui.lionRoar,.92);
+        finishTimers.push(window.setTimeout(()=>ui.finish.classList.add('impact'),830));
+        finishTimers.push(window.setTimeout(()=>playAudio(ui.crowdCheer,.76),1820));
+        finishTimers.push(window.setTimeout(()=>ui.again.focus(),2050));
+      }
+
+      function selectPreset(kind) {
+        if(state.running)return;
+        if(kind==='tabata')Object.assign(settings,{rounds:8,work:20,rest:10,prep:5,finalRest:false});
+        else Object.assign(settings,{rounds:4,work:300,rest:60,prep:10,finalRest:false});
+        ui.finalRest.checked=settings.finalRest;
+        ui.tabataPreset.classList.toggle('active',kind==='tabata');
+        ui.customPreset.classList.toggle('active',kind==='custom');
+        reset();
+      }
+      function markCustom() { ui.tabataPreset.classList.remove('active'); ui.customPreset.classList.add('active'); }
+      function openSetting(name) {
+        if(state.running)return;
+        activeSetting=name;
+        const meta=settingMeta[name];
+        ui.dialogTitle.textContent=meta.title;
+        ui.dialogHelp.textContent=meta.help;
+        ui.dialogInput.min=meta.min; ui.dialogInput.max=meta.max; ui.dialogInput.step=meta.step; ui.dialogInput.value=settings[name];
+        ui.dialog.showModal();
+        ui.dialogInput.focus(); ui.dialogInput.select();
+      }
+      function changeDialog(direction) {
+        const meta=settingMeta[activeSetting];
+        ui.dialogInput.value=clamp(Number(ui.dialogInput.value)+direction*meta.step,meta.min,meta.max);
+      }
+      function saveSetting() {
+        if(!activeSetting)return;
+        const meta=settingMeta[activeSetting];
+        settings[activeSetting]=clamp(ui.dialogInput.value,meta.min,meta.max);
+        markCustom(); reset();
+      }
+
+      ui.start.addEventListener('click',()=>state.running?pause():begin());
+      ui.reset.addEventListener('click',reset);
+      ui.again.addEventListener('click',reset);
+      ui.tabataPreset.addEventListener('click',()=>selectPreset('tabata'));
+      ui.customPreset.addEventListener('click',()=>selectPreset('custom'));
+      ui.finalRest.addEventListener('change',()=>{ if(state.running){ui.finalRest.checked=settings.finalRest;return;} settings.finalRest=ui.finalRest.checked; markCustom(); reset(); });
+      document.querySelectorAll('[data-setting]').forEach(button=>button.addEventListener('click',()=>openSetting(button.dataset.setting)));
+      document.querySelectorAll('[data-info]').forEach(button=>button.addEventListener('click',()=>{ const message=button.dataset.info==='sound'?'A real boxing bell rings three times whenever work or recovery begins.':'A recorded male voice says three, two, one before every transition.'; ui.dialogTitle.textContent=button.dataset.info==='sound'?'Fight Bell':'Every Transition'; ui.dialogHelp.textContent=message; ui.dialogInput.closest('.number-picker').hidden=true; ui.saveSetting.hidden=true; activeSetting=null; ui.dialog.showModal(); }));
+      ui.dialog.addEventListener('close',()=>{ ui.dialogInput.closest('.number-picker').hidden=false; ui.saveSetting.hidden=false; });
+      ui.decrease.addEventListener('click',()=>changeDialog(-1));
+      ui.increase.addEventListener('click',()=>changeDialog(1));
+      ui.saveSetting.addEventListener('click',saveSetting);
+      ui.dialogInput.addEventListener('keydown',(event)=>{if(event.key==='Enter')saveSetting();});
+      render();
     })();
   </script>
 </body>
