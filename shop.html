@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Endless Vocals — Shop</title>
-    <meta name="description" content="Shop Endless Vocals training products and membership access." />
+    <meta name="description" content="Shop iPhone apps, Endless Vocals training products, RDWS audio plug-ins, and membership access." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -79,6 +79,57 @@
         .hero h1 { margin: 0 0 10px; font-size: clamp(34px, 6vw, 50px); }
         .hero p { margin: 0; color: var(--muted); max-width: 70ch; line-height: 1.6; }
 
+        .featured-product {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 28px;
+            padding: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(31, 92, 255, .24);
+            border-radius: 20px;
+            background: radial-gradient(circle at 100% 0%, rgba(255, 122, 26, .14), transparent 48%), linear-gradient(135deg, #fff, #edf3ff);
+            box-shadow: 0 14px 30px var(--shadow);
+        }
+        .featured-product.has-image { grid-template-columns: minmax(0, 1fr) minmax(180px, 300px); }
+        .featured-product[hidden] { display: none; }
+        .featured-label { color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+        .featured-product h2 { margin: 7px 0 5px; font-size: clamp(26px, 4vw, 38px); }
+        .featured-product .price { margin-bottom: 8px; }
+        .featured-product p { margin: 0 0 16px; color: var(--muted); line-height: 1.55; }
+        .featured-product a { display: inline-block; padding: 10px 15px; border-radius: 12px; background: var(--fg); color: #fff; font-weight: 700; }
+        .featured-product img { display: block; width: 100%; max-height: 230px; object-fit: cover; object-position: center; border-radius: 12px; border: 1px solid var(--surface-border); }
+        .featured-product img[hidden] { display: none; }
+
+        .app-section { margin: 0 0 34px; }
+        .app-section-heading { display:flex; align-items:end; justify-content:space-between; gap:18px; margin:0 0 16px; }
+        .app-section-heading p { margin:0; color:var(--muted); line-height:1.5; }
+        .app-section-heading a { color:var(--accent); font-weight:800; white-space:nowrap; }
+        .app-grid { display:grid; grid-template-columns:1fr; gap:18px; }
+        .app-card { min-height:520px; display:grid; grid-template-columns:minmax(0,1fr) minmax(150px,42%); gap:20px; overflow:hidden; padding:24px; border-radius:22px; box-shadow:0 18px 36px var(--shadow); }
+        .app-card-copy { align-self:center; }
+        .app-card .kicker { margin:0 0 8px; font-size:10px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+        .app-card h2 { margin:0 0 8px; font-size:clamp(30px,4vw,44px); line-height:.98; }
+        .app-card .app-name { margin:0 0 16px; font-size:11px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; }
+        .app-card .price { margin:0 0 14px; }
+        .app-card p { margin:0 0 18px; line-height:1.55; }
+        .app-card .links a { border:0; }
+        .app-preview { width:100%; height:100%; max-height:470px; align-self:end; object-fit:cover; object-position:top; border-radius:24px 24px 0 0; box-shadow:0 22px 42px rgba(0,0,0,.34); }
+        .vst-card { grid-column:1 / -1; min-height:610px; grid-template-columns:minmax(0,1.05fr) minmax(220px,36%); color:#fff; border:1px solid rgba(188,91,255,.45); background:radial-gradient(circle at 5% 10%,rgba(76,210,255,.2),transparent 34%),radial-gradient(circle at 65% 0%,rgba(180,60,255,.34),transparent 44%),#09070f; }
+        .vst-card h2 { max-width:9ch; font-size:clamp(42px,7vw,76px); letter-spacing:-.045em; }
+        .vst-card .app-name,.vst-card .kicker,.vst-card .price { color:#c85cff; }
+        .vst-card p { max-width:52ch; color:#c7c2cf; }
+        .vst-card .links a { background:#b43cff; color:#fff; }
+        .vst-card .app-preview { max-height:560px; border:1px solid rgba(255,255,255,.15); }
+        .gr-card { color:#f5e9e6; border:1px solid #9e3029; border-radius:3px; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0,rgba(255,255,255,.018) 1px,transparent 1px,transparent 4px),radial-gradient(circle at 80% 8%,rgba(231,61,48,.23),transparent 42%),#100909; }
+        .gr-card h2 { font-size:clamp(30px,4vw,46px); letter-spacing:.06em; text-transform:uppercase; }
+        .gr-card .app-name,.gr-card .kicker,.gr-card .price { color:#ff5f53; }
+        .gr-card p { color:#c7aaa5; font-size:13px; }
+        .gr-card .links a { border-radius:2px; background:#e54135; color:#170706; }
+        .gr-card .links a:last-child { background:rgba(255,255,255,.08); color:#fff; }
+        .gr-card .app-preview { border-radius:2px 2px 0 0; filter:saturate(.88) contrast(1.06); }
+
         .shop-grid {
             display: grid;
             gap: 18px;
@@ -110,6 +161,13 @@
             background: var(--surface-soft);
             font-weight: 600;
         }
+        .plugin-product{position:relative;overflow:hidden;color:#edfaff;background:radial-gradient(circle at 8% 0%,rgba(0,117,255,.22),transparent 35%),linear-gradient(135deg,#080d14,#11151c 64%,#111);border-color:rgba(0,117,255,.32)}
+        .plugin-product .kicker{color:#55aaff;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+        .plugin-product h2{font-size:clamp(28px,5vw,42px);margin-top:8px}.plugin-product p{color:#aab7c1}
+        .plugin-product-shot{display:block;width:100%;max-width:760px;margin:18px auto;border-radius:10px;border:1px solid rgba(255,255,255,.14);box-shadow:0 18px 44px rgba(0,0,0,.28)}
+        .plugin-product .links a{background:#e9eef5;color:#111;border:0}.checkout-note{font-size:12px;color:#8fa5b3!important}
+        @media(max-width:760px){.app-grid{grid-template-columns:1fr}.app-card,.vst-card{min-height:460px;grid-column:auto}}
+        @media(max-width:600px){.featured-product.has-image{grid-template-columns:1fr}.featured-product img{max-height:none}.app-section-heading{align-items:flex-start;flex-direction:column}.app-card,.vst-card{grid-template-columns:minmax(0,1fr) minmax(120px,38%);padding:20px;gap:14px}.app-preview{max-height:430px}.vst-card h2{font-size:clamp(34px,10vw,52px)}}
     </style>
 </head>
 <body>
@@ -126,11 +184,72 @@
 
         <section class="hero">
             <h1>SHOP</h1>
-            <p>Three ways to train with Endless Vocals right now: two focused products and full monthly membership. The next bootcamp is starting soon, so jump in now and get ahead.</p>
+            <p>Vocal training, practical tools, and a supportive community—built to keep you practicing and make every session sound inspiring.</p>
+        </section>
+
+        <section class="featured-product" id="featured-product" hidden aria-label="Random featured product">
+            <div>
+                <div class="featured-label">Featured this visit</div>
+                <h2 id="featured-title"></h2>
+                <div class="price" id="featured-price"></div>
+                <p id="featured-description"></p>
+                <a id="featured-link" href="#">See featured product</a>
+            </div>
+            <img id="featured-image" src="" alt="" hidden>
+        </section>
+
+        <section class="app-section" id="iphone-apps" aria-labelledby="iphone-apps-title">
+            <div class="app-section-heading">
+                <div><h2 id="iphone-apps-title">iPhone Apps by Endless Vocals</h2><p>Current apps and previews from Endless Vocals.</p></div>
+                <a href="https://www.radwall.com/apps/">See all iPhone apps ↗</a>
+            </div>
+            <div class="app-grid">
+                <article class="app-card vst-card">
+                    <div class="app-card-copy">
+                        <div class="app-name">Vocal Strength Trainer</div>
+                        <div class="kicker">Endless Vocals × Jaime Vendera</div>
+                        <h2>Your practice. Guided.</h2>
+                        <div class="price">Currently in private testing</div>
+                        <p>Build a complete vocal session, then move through it one stage at a time. Tune, train, run scales, practice songs, record takes, shape vocal effects, and keep the work connected in one iPhone system.</p>
+                        <div class="links"><a href="https://vocalstrengthtrainer.com/">See Vocal Strength Trainer ↗</a></div>
+                    </div>
+                    <img class="app-preview" src="app-images/vocal-strength-trainer.png" alt="Vocal Strength Trainer guided practice screen on iPhone">
+                </article>
+                <article class="app-card gr-card">
+                    <div class="app-card-copy">
+                        <div class="app-name">Endless Vocals // GR-404</div>
+                        <div class="kicker">SYS://FM SIGNAL ENGINE</div>
+                        <h2>GR_SYNTH</h2>
+                        <div class="price">[ APP STORE BUILD IN PROGRESS ]</div>
+                        <p>&gt; GENERATE INDUSTRIAL IMPACTS, UNSTABLE TONES, AND MECHANICAL PHRASES.<br>&gt; SAVE LOCALLY. EXPORT WAV. RETURN TO SESSION.</p>
+                        <div class="links"><a href="https://www.radwall.com/apps/#gr-synth">See GR Synth</a><a href="https://www.radwall.com/grey-red-synth.html">Play the browser synth</a></div>
+                    </div>
+                    <img class="app-preview" src="app-images/gr-synth-home.png" alt="GR Synth running on iPhone">
+                </article>
+            </div>
         </section>
 
         <section class="shop-grid" aria-label="Shop products">
-            <article class="product">
+            <article class="product plugin-product" id="rdws-raw-synth-v2" data-featured="true">
+                <div class="kicker">A Radwalls Production</div>
+                <h2>RAW SYNTH</h2>
+                <div class="price">$15 · AU + VST3 + Standalone</div>
+                <p>A 12-voice stereo software instrument with two oscillators, resonant color filter, dual envelopes, analog drift, chorus, crossfeed delay, reverb, and six working presets. Its 33 controls are taken from real studio hardware and rotate around their original measured pivot points for a tactile interface that feels as raw as it sounds.</p>
+                <img class="plugin-product-shot" src="plugin-images/rdws-raw-synth-v2.jpg" alt="RAW SYNTH interface">
+                <div class="links"><a href="https://buy.stripe.com/dRm00i71a9D514c1PD5gc0g">Get RAW SYNTH · $15</a></div>
+                <p class="checkout-note">Apple Silicon Mac and macOS 13+ required. Your Audio Unit, VST3, standalone app, presets, and installation guide are sent to your checkout email automatically.</p>
+            </article>
+
+            <article class="product plugin-product" id="valveheart-compressor" data-featured="true">
+                <div class="kicker">Rad Walls × Endless Vocals</div>
+                <h2>Valveheart Compressor</h2>
+                <div class="price">$19</div>
+                <p>A gritty, distorted compressor built to add extreme character while compressing and limiting. Choose an Emotion Transmutation process, then hit EXILE to push the effect into its most intense state. Especially useful on a bus send for vocals, industrial drums, samples, or anything else you want to transform. Purchase includes macOS Audio Unit (Logic Pro) and VST3 formats in one download.</p>
+                <img class="plugin-product-shot" src="plugin-images/valveheart-compressor.png" alt="Valveheart Compressor interface in Logic Pro">
+                <div class="links"><a href="https://buy.stripe.com/eVq6oGfxGaH99AIdyl5gc0d">Get Valveheart Compressor</a></div>
+                <p class="checkout-note">Your AU + VST3 download is sent to your checkout email automatically.</p>
+            </article>
+            <article class="product" id="ev-warmup-warmdown" data-featured="true">
                 <h2>EV Warm-up + EV Warm-down Combo Pack</h2>
                 <div class="price">$20</div>
                 <p>These two exercises will help get your voice ready before singing and help minimize strain. The EV Warm-up also incorporates vibrato exercises so you can train vibrato without even thinking about it. The Warm-down is a harmonically inverted version of the warm-up to make sure you are taking your voice downscale.</p>
@@ -140,7 +259,7 @@
                 </stripe-buy-button>
             </article>
 
-            <article class="product">
+            <article class="product" id="full-iso-workout" data-featured="true">
                 <h2>Endless Vocals | Full Workout Example with Jaime Vendera’s ISO Method</h2>
                 <div class="price">$20</div>
                 <p>This full ISO Method video shows a complete workout from start to finish. It also includes a clean, readable PDF with everything you need to follow along. Warm-up files are not included because they are sped up 8x in this lesson and should be purchased separately.</p>
@@ -150,16 +269,60 @@
                 </stripe-buy-button>
             </article>
 
-            <article class="product">
+            <article class="product" id="phase-cycle" data-featured="true">
+                <h2>Phase Cycle Warm-up + Warm-down</h2>
+                <div class="price">$20</div>
+                <p>A guided preparation and recovery pair for getting your voice ready before training, then bringing it down smoothly afterward. Includes both full-quality audio files.</p>
+                <div class="links"><a href="https://buy.stripe.com/8x2dR871abLd4godyl5gc0b">Get the Phase Cycle Pack</a></div>
+                <p class="checkout-note">After checkout, your download link is sent to your email automatically.</p>
+            </article>
+
+            <article class="product" id="vocal-runs-vibrato" data-featured="true">
+                <h2>Vocal Runs &amp; Vibrato Kit</h2>
+                <div class="price">$20</div>
+                <p>Practice-ready runs and vibrato training for male and female ranges, including slow, medium, and fast exercises plus guided vibrato meditations.</p>
+                <div class="links"><a href="https://buy.stripe.com/5kQdR85X65mP3ckgKx5gc0c">Get the Vocal Runs &amp; Vibrato Kit</a></div>
+                <p class="checkout-note">After checkout, your complete ZIP download is sent to your email automatically.</p>
+            </article>
+
+            <article class="product" id="membership" data-featured="true">
                 <h2>Endless Vocals Membership</h2>
                 <div class="price">$24 / month</div>
                 <p>Get access to the Endless Vocals school: live bootcamp classes, replays, vocal training structure, community feedback, and ongoing support from coaches Ryan and Tiago. The next bootcamp is starting soon, so now is the best time to join and lock in your progress.</p>
-                <div class="links">
-                    <a href="https://ko-fi.com/endlessvocals" target="_blank" rel="noopener noreferrer">Join on Ko-fi</a>
-                    <a href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener noreferrer">Join Discord</a>
-                </div>
+                <div class="links"><a href="join.html">JOIN!</a></div>
             </article>
         </section>
     </div>
+    <script>
+        (() => {
+            const products = [...document.querySelectorAll('.shop-grid > .product[data-featured="true"]')];
+            const featured = document.getElementById('featured-product');
+            if (!featured || products.length === 0) return;
+
+            const previousId = sessionStorage.getItem('endless-vocals-featured-product');
+            const choices = products.length > 1 ? products.filter((item) => item.id !== previousId) : products;
+            const product = choices[Math.floor(Math.random() * choices.length)];
+            sessionStorage.setItem('endless-vocals-featured-product', product.id);
+            const title = product.querySelector('h2');
+            const price = product.querySelector('.price');
+            const description = product.querySelector('p');
+            const image = product.querySelector('.plugin-product-shot');
+            const featuredImage = document.getElementById('featured-image');
+
+            document.getElementById('featured-title').textContent = title?.textContent.trim() || 'Featured product';
+            document.getElementById('featured-price').textContent = price?.textContent.trim() || '';
+            document.getElementById('featured-description').textContent = description?.textContent.trim() || '';
+            document.getElementById('featured-link').href = `#${product.id}`;
+
+            if (image && featuredImage) {
+                featured.classList.add('has-image');
+                featuredImage.src = image.currentSrc || image.src;
+                featuredImage.alt = image.alt || `${title?.textContent.trim() || 'Featured product'} preview`;
+                featuredImage.hidden = false;
+            }
+
+            featured.hidden = false;
+        })();
+    </script>
 </body>
 </html>

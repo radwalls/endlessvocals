@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Tabata Timer</title>
+  <style>
+    :root {
+      --green:#58bd5e;
+      --green-dark:#43a84a;
+      --red:#d95f58;
+      --paper:#f7f7f7;
+      --line:#cfcfcf;
+      --ink:#202020;
+      --muted:#777;
+    }
+    * { box-sizing:border-box; }
+    html,body { min-height:100%; }
+    body { margin:0; display:flex; justify-content:center; background:#e9e9e9; color:var(--ink); font-family:Arial,Helvetica,sans-serif; }
+    button,input,select { font:inherit; }
+    button { cursor:pointer; }
+    .page { width:100%; min-height:100vh; background:#f5f5f5; overflow-x:hidden; }
+    .top-strip { height:22px; background:#292929; border-bottom:1px solid #444; }
+    .titlebar { height:44px; display:grid; place-items:center; background:linear-gradient(#fff,#f5f5f5); box-shadow:0 2px 7px rgba(0,0,0,.15); font-size:18px; }
+    main { position:relative; left:-7px; width:293px; margin:0 auto; padding:5px 0 28px; }
+    .timer-stack { width:100%; }
+    .clock { height:104px; display:flex; align-items:center; justify-content:center; margin:0; color:#171717; font-size:116px; font-weight:300; line-height:1; letter-spacing:-7px; font-variant-numeric:tabular-nums; white-space:nowrap; transform:scaleX(1.1); }
+    .clock.counting { color:#111; animation:countPulse .42s ease-out; }
+    .round-strip { height:43px; display:grid; grid-template-columns:repeat(var(--rounds),minmax(28px,1fr)); margin-top:5px; overflow-x:auto; overflow-y:hidden; border-radius:4px; scrollbar-width:thin; }
+    .round-segment { min-width:0; display:grid; place-items:center; color:#fff; background:linear-gradient(to right,var(--green) 0 calc(100% - 10px),var(--red) calc(100% - 10px) 100%); font-size:20px; text-shadow:0 1px 0 rgba(0,0,0,.08); transition:filter .15s ease,box-shadow .15s ease; }
+    .round-segment:last-child { background:var(--green); }
+    .round-segment.done { background:#3ea64a; }
+    .round-segment.current { position:relative; z-index:1; box-shadow:inset 0 0 0 3px rgba(255,255,255,.88); filter:saturate(1.15); }
+    .round-count { height:114px; display:flex; align-items:center; justify-content:center; margin:10px 0 0; color:#171717; font-size:115px; font-weight:300; line-height:1; letter-spacing:-7px; font-variant-numeric:tabular-nums; transform:scaleX(1.22); }
+    .controls-wrap { position:relative; }
+    .controls { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+    .control { height:45px; border-radius:5px; border:1px solid #cfcfcf; background:linear-gradient(#fff,#fafafa); color:#777; font-size:18px; box-shadow:inset 0 1px 0 rgba(255,255,255,.65); }
+    .control.primary { border-color:#4caf50; background:linear-gradient(#63c76a,#55b95d); color:#fff; text-shadow:0 -1px rgba(0,0,0,.12); }
+    .control:active { transform:translateY(1px); }
+    .progress-rail { position:absolute; left:0; right:0; bottom:-8px; height:4px; overflow:hidden; border-radius:999px; background:#ddd; opacity:0; transition:opacity .16s ease; }
+    .progress-rail.visible { opacity:1; }
+    .progress-fill { width:100%; height:100%; border-radius:inherit; background:var(--green); transform:scaleX(0); transform-origin:left center; will-change:transform; }
+    .progress-fill.rest { background:var(--red); }
+    .progress-fill.prep { background:#efb63f; }
+    .settings { margin-top:13px; overflow:hidden; border:1px solid #c9c9c9; border-radius:5px; background:#fff; }
+    .tabs { display:grid; grid-template-columns:1fr 1fr; gap:0; padding:10px 10px 9px; }
+    .tab { height:33px; border:1px solid #c9c9c9; background:#fff; color:#333; font-size:14px; }
+    .tab:first-child { border-radius:3px 0 0 3px; }
+    .tab:last-child { margin-left:-1px; border-radius:0 3px 3px 0; color:#64160f; }
+    .tab.active { position:relative; z-index:1; background:linear-gradient(#f8f8f8,#e3e3e3); box-shadow:inset 0 1px 5px rgba(0,0,0,.12); color:#555; }
+    .setting-row { width:100%; min-height:43px; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:0 10px; border:0; border-top:1px solid var(--line); background:#fff; color:#3d3d3d; text-align:left; }
+    .setting-label { font-size:18px; font-weight:700; white-space:nowrap; }
+    .setting-value { color:#444; font-size:18px; font-weight:400; white-space:nowrap; }
+    .setting-value.muted { color:#999; }
+    .value-field { display:flex; align-items:center; justify-content:flex-end; gap:6px; color:#777; font-size:14px; }
+    .number-field,.choice-field { height:33px; border:1px solid #bdbdbd; border-radius:4px; background:#fff; color:#333; box-shadow:inset 0 1px 2px rgba(0,0,0,.07); }
+    .number-field { width:82px; padding:4px 6px; text-align:right; font-size:17px; font-variant-numeric:tabular-nums; }
+    .choice-field { width:168px; padding:4px 28px 4px 8px; font-size:15px; }
+    .number-field:disabled,.choice-field:disabled { color:#999; background:#f2f2f2; }
+    .toggle { position:relative; width:75px; height:28px; flex:none; }
+    .toggle input { position:absolute; width:1px; height:1px; opacity:0; }
+    .toggle-track { position:absolute; inset:1px 0; border:1px solid #b8b8b8; border-radius:999px; background:linear-gradient(#e5e5e5,#fff); box-shadow:inset 0 1px 2px rgba(0,0,0,.14); }
+    .toggle-knob { position:absolute; top:1px; left:0; width:27px; height:27px; border:1px solid #999; border-radius:50%; background:linear-gradient(#fff,#e9e9e9); box-shadow:0 1px 3px rgba(0,0,0,.28); transition:transform .16s ease; }
+    .toggle-text { position:absolute; right:8px; top:6px; color:#777; font-size:14px; font-weight:700; }
+    .toggle input:checked ~ .toggle-track { background:#67c86e; border-color:#4caf50; }
+    .toggle input:checked ~ .toggle-knob { transform:translateX(48px); }
+    .toggle input:checked ~ .toggle-text { left:9px; right:auto; color:#fff; }
+    .phase-live { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+    .finish { position:fixed; z-index:20; inset:0; display:grid; place-items:center; padding:24px; visibility:hidden; opacity:0; overflow:hidden; background:rgba(1,7,10,.94); transition:opacity .18s ease,visibility .18s ease; transform-origin:center; will-change:transform; }
+    .finish.show { visibility:visible; opacity:1; }
+    .finish.impact { animation:screenRock .9s cubic-bezier(.22,.78,.26,1) both; }
+    .finish::after { content:""; position:absolute; inset:0; background:#ffd27b; opacity:0; pointer-events:none; mix-blend-mode:screen; }
+    .finish.impact::after { animation:impactFlash .42s ease-out both; }
+    .claws { position:absolute; inset:-12vh -14vw; width:128vw; height:124vh; object-fit:cover; opacity:0; transform:translate3d(-128%,-16%,0) rotate(-8deg) scale(1.24); pointer-events:none; mix-blend-mode:screen; will-change:transform,opacity; }
+    .finish.show .claws { animation:clawSwipe 1.05s cubic-bezier(.12,.72,.16,1) .12s both; }
+    .finish-content { position:relative; z-index:2; width:min(620px,100%); color:#fff; text-align:center; }
+    .finish-kicker { color:#ffb24a; font-size:14px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    .finish h2 { margin:9px 0 14px; font-size:clamp(58px,13vw,122px); line-height:.84; letter-spacing:-.08em; }
+    .finish p { max-width:430px; margin:0 auto 26px; color:#d2dde1; font-size:17px; line-height:1.45; }
+    .again { min-width:150px; height:48px; border:0; border-radius:8px; background:#61e5ae; color:#09251b; font-weight:700; }
+    @keyframes countPulse { 0% { transform:scaleX(1.1) scale(1); } 45% { transform:scaleX(1.1) scale(1.045); } 100% { transform:scaleX(1.1) scale(1); } }
+    @keyframes clawSwipe { 0% { opacity:0; transform:translate3d(-128%,-16%,0) rotate(-8deg) scale(1.24); } 12% { opacity:1; } 68% { opacity:1; transform:translate3d(-2%,0,0) rotate(0) scale(1.1); } 82% { opacity:1; transform:translate3d(4%,0,0) rotate(.6deg) scale(1.12); } 100% { opacity:.86; transform:translate3d(0,0,0) rotate(0) scale(1.1); } }
+    @keyframes screenRock { 0% { transform:translate3d(0,0,0) rotate(0); } 10% { transform:translate3d(-34px,10px,0) rotate(-1.35deg); } 22% { transform:translate3d(30px,-8px,0) rotate(1.15deg); } 35% { transform:translate3d(-22px,6px,0) rotate(-.82deg); } 49% { transform:translate3d(16px,-4px,0) rotate(.58deg); } 64% { transform:translate3d(-10px,3px,0) rotate(-.36deg); } 80% { transform:translate3d(5px,-1px,0) rotate(.18deg); } 100% { transform:translate3d(0,0,0) rotate(0); } }
+    @keyframes impactFlash { 0% { opacity:.55; } 100% { opacity:0; } }
+    :focus-visible { outline:3px solid #1877d2; outline-offset:2px; }
+    @media (min-width:600px) and (max-width:759px) {
+      main { left:0; width:min(520px,calc(100% - 40px)); }
+      .clock { height:120px; font-size:136px; transform:scaleX(1.06); }
+      .round-count { height:128px; font-size:132px; transform:scaleX(1.16); }
+      .settings { width:100%; }
+    }
+    @media (min-width:760px) {
+      main { left:0; width:min(960px,calc(100% - 48px)); display:grid; grid-template-columns:minmax(360px,1fr) minmax(330px,390px); gap:clamp(36px,6vw,72px); align-items:start; padding:38px 0 60px; }
+      .timer-stack { width:100%; max-width:500px; justify-self:center; }
+      .clock { height:132px; font-size:clamp(122px,12vw,156px); transform:scaleX(1.06); }
+      .round-strip { height:50px; }
+      .round-count { height:144px; margin-top:12px; font-size:clamp(124px,11vw,150px); transform:scaleX(1.15); }
+      .control { height:52px; font-size:19px; }
+      .settings { width:100%; margin-top:0; }
+      @keyframes countPulse { 0% { transform:scaleX(1.06) scale(1); } 45% { transform:scaleX(1.06) scale(1.045); } 100% { transform:scaleX(1.06) scale(1); } }
+    }
+    @media (max-width:420px) { main { left:0; width:calc(100% - 24px); } .choice-field { width:min(168px,47vw); } }
+    @media (max-width:350px) { .clock { font-size:100px; } .round-count { font-size:102px; } .setting-label,.setting-value { font-size:16px; } .number-field { width:70px; } .choice-field { width:145px; font-size:14px; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="top-strip" aria-hidden="true"></div>
+    <header class="titlebar">Tabata Timer</header>
+    <main aria-label="Tabata timer">
+      <section class="timer-stack" aria-label="Timer display">
+        <p id="clock" class="clock" aria-live="off">00:00</p>
+        <div id="roundStrip" class="round-strip" role="img" aria-label="Eight workout rounds"></div>
+        <p id="roundCount" class="round-count">0/8</p>
+        <div class="controls-wrap">
+          <div class="controls">
+            <button id="start" class="control primary" type="button">Start</button>
+            <button id="reset" class="control" type="button">Reset</button>
+          </div>
+          <div id="progressRail" class="progress-rail" aria-hidden="true"><div id="progressFill" class="progress-fill"></div></div>
+        </div>
+        <span id="phaseLive" class="phase-live" aria-live="assertive"></span>
+      </section>
+      <section class="settings" aria-label="Timer settings">
+        <div class="tabs" aria-label="Presets">
+          <button id="tabataPreset" class="tab active" type="button">Tabata</button>
+          <button id="customPreset" class="tab" type="button">Tabata This</button>
+        </div>
+        <label class="setting-row" for="roundsInput"><span class="setting-label">Rounds</span><span class="value-field"><input id="roundsInput" class="number-field" type="number" min="1" max="99" step="1" value="8"><span>×</span></span></label>
+        <label class="setting-row" for="workInput"><span class="setting-label">Time On</span><span class="value-field"><input id="workInput" class="number-field" type="number" min="5" max="900" step="5" value="20"><span>sec</span></span></label>
+        <label class="setting-row" for="restInput"><span class="setting-label">Time Off</span><span class="value-field"><input id="restInput" class="number-field" type="number" min="0" max="600" step="5" value="10"><span>sec</span></span></label>
+        <label class="setting-row"><span class="setting-label">Include Last Rest</span><span class="toggle"><input id="finalRest" type="checkbox"><span class="toggle-track"></span><span class="toggle-knob"></span><span id="toggleText" class="toggle-text">OFF</span></span></label>
+        <div class="setting-row"><span class="setting-label">Total Workout Time</span><span id="totalTime" class="setting-value muted">3:50</span></div>
+        <label class="setting-row" for="prepInput"><span class="setting-label">Prep Time</span><span class="value-field"><input id="prepInput" class="number-field" type="number" min="0" max="600" step="5" value="5"><span>sec</span></span></label>
+        <label class="setting-row" for="soundSelect"><span class="setting-label">Sounds</span><select id="soundSelect" class="choice-field"><option value="fight3">Fight Bell ×3</option><option value="fight1">Fight Bell ×1</option><option value="beep">Clean Beeps</option><option value="silent">Silent</option></select></label>
+        <label class="setting-row" for="countdownSelect"><span class="setting-label">Count Down</span><select id="countdownSelect" class="choice-field"><option value="every">Every Transition</option><option value="work">Before Work Only</option><option value="first">First Round Only</option><option value="off">Off</option></select></label>
+      </section>
+    </main>
+  </div>
+
+  <section id="finish" class="finish" role="dialog" aria-modal="true" aria-labelledby="finishTitle">
+    <img class="claws" src="images/lion-claw-overlay.png" alt="" aria-hidden="true">
+    <div class="finish-content"><div class="finish-kicker">Workout complete</div><h2 id="finishTitle">CRUSHED IT.</h2><p>You showed up and finished every round. Take the win.</p><button id="again" class="again" type="button">Run it back</button></div>
+  </section>
+
+  <audio id="countdownVoice" src="sounds/male-countdown.wav" preload="auto" aria-hidden="true"></audio>
+  <audio id="bellOne" src="sounds/fight-bell.wav" preload="auto" aria-hidden="true"></audio>
+  <audio id="bellTwo" src="sounds/fight-bell.wav" preload="auto" aria-hidden="true"></audio>
+  <audio id="bellThree" src="sounds/fight-bell.wav" preload="auto" aria-hidden="true"></audio>
+  <audio id="lionRoar" src="sounds/lion-roar.wav" preload="auto" aria-hidden="true"></audio>
+  <audio id="crowdCheer" src="sounds/crowd-cheer.wav" preload="auto" aria-hidden="true"></audio>
+
+  <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
+      const ui = {
+        clock:$('clock'),roundStrip:$('roundStrip'),roundCount:$('roundCount'),start:$('start'),reset:$('reset'),
+        progressRail:$('progressRail'),progressFill:$('progressFill'),totalTime:$('totalTime'),finalRest:$('finalRest'),toggleText:$('toggleText'),
+        tabataPreset:$('tabataPreset'),customPreset:$('customPreset'),phaseLive:$('phaseLive'),roundsInput:$('roundsInput'),workInput:$('workInput'),
+        restInput:$('restInput'),prepInput:$('prepInput'),soundSelect:$('soundSelect'),countdownSelect:$('countdownSelect'),
+        finish:$('finish'),again:$('again'),countdownVoice:$('countdownVoice'),bellOne:$('bellOne'),bellTwo:$('bellTwo'),bellThree:$('bellThree'),
+        lionRoar:$('lionRoar'),crowdCheer:$('crowdCheer')
+      };
+      const settings = { rounds:8, work:20, rest:10, prep:5, finalRest:false, sound:'fight3', countdown:'every' };
+      let finishTimers = [];
+      let transitionTimers = [];
+      let mediaUnlocked = false;
+      let audioContext = null;
+      let state = freshState();
+
+      function freshState() { return {running:false,phase:'ready',round:0,remaining:0,duration:0,target:0,raf:0,finished:false,countdownPlayed:false,lastShown:null}; }
+      function clamp(value,min,max) { return Math.max(min,Math.min(max,Number(value) || min)); }
+      function format(seconds) { const whole=Math.max(0,Math.ceil(seconds)); return `${String(Math.floor(whole/60)).padStart(2,'0')}:${String(whole%60).padStart(2,'0')}`; }
+      function workoutSeconds() { return settings.rounds*settings.work + (settings.rounds-(settings.finalRest?0:1))*settings.rest; }
+      function shortTime(seconds) { return seconds<60 ? `${seconds}` : `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`; }
+      function syncSettingsControls() {
+        ui.roundsInput.value=settings.rounds;
+        ui.workInput.value=settings.work;
+        ui.restInput.value=settings.rest;
+        ui.prepInput.value=settings.prep;
+        ui.finalRest.checked=settings.finalRest;
+        ui.soundSelect.value=settings.sound;
+        ui.countdownSelect.value=settings.countdown;
+      }
+      function lockSettings(locked) {
+        [ui.roundsInput,ui.workInput,ui.restInput,ui.prepInput,ui.finalRest,ui.soundSelect,ui.countdownSelect,ui.tabataPreset,ui.customPreset].forEach(control=>control.disabled=locked);
+      }
+
+      function renderRounds() {
+        ui.roundStrip.style.setProperty('--rounds',settings.rounds);
+        ui.roundStrip.setAttribute('aria-label',`${settings.rounds} workout rounds`);
+        ui.roundStrip.innerHTML='';
+        for(let i=1;i<=settings.rounds;i++){
+          const segment=document.createElement('span');
+          segment.className='round-segment'+(i<state.round?' done':'')+(i===state.round&&state.phase!=='ready'&&state.phase!=='prep'?' current':'');
+          segment.textContent=i;
+          ui.roundStrip.append(segment);
+        }
+      }
+      function render() {
+        ui.clock.textContent=state.phase==='ready'?'00:00':format(state.remaining);
+        ui.roundCount.textContent=`${state.round}/${settings.rounds}`;
+        ui.start.textContent=state.running?'Pause':(state.finished?'Start':'Start');
+        ui.totalTime.textContent=shortTime(workoutSeconds());
+        ui.toggleText.textContent=settings.finalRest?'ON':'OFF';
+        ui.progressRail.classList.toggle('visible',state.phase!=='ready'&&!state.finished);
+        ui.progressFill.className=`progress-fill ${state.phase==='rest'?'rest':state.phase==='prep'?'prep':''}`;
+        lockSettings(state.phase!=='ready');
+        renderRounds();
+      }
+      function updateProgress() {
+        const progress=state.duration>0?Math.max(0,Math.min(1,1-state.remaining/state.duration)):0;
+        ui.progressFill.style.transform=`scaleX(${progress})`;
+      }
+      function pulseCountdown(number) {
+        if(number===state.lastShown)return;
+        state.lastShown=number;
+        ui.clock.classList.remove('counting');
+        void ui.clock.offsetWidth;
+        ui.clock.classList.add('counting');
+        ui.phaseLive.textContent=String(number);
+      }
+      function announcePhase() {
+        const words={prep:'Get ready',work:'Work',rest:'Recover'};
+        ui.phaseLive.textContent=words[state.phase]||'';
+      }
+
+      function unlockMedia() {
+        if(mediaUnlocked)return;
+        mediaUnlocked=true;
+        const items=[[ui.countdownVoice,.9],[ui.bellOne,.92],[ui.bellTwo,.92],[ui.bellThree,.92],[ui.lionRoar,.92],[ui.crowdCheer,.76]];
+        items.forEach(([audio,volume])=>{
+          audio.volume=0;
+          const attempt=audio.play();
+          if(attempt)attempt.then(()=>{audio.pause();audio.currentTime=0;audio.volume=volume;}).catch(()=>{audio.volume=volume;});
+        });
+      }
+      function playAudio(audio,volume) { audio.pause(); audio.currentTime=0; audio.volume=volume; const attempt=audio.play(); if(attempt)attempt.catch(()=>{}); }
+      function ensureAudioContext() {
+        if(!audioContext)audioContext=new (window.AudioContext||window.webkitAudioContext)();
+        if(audioContext.state==='suspended')audioContext.resume();
+        return audioContext;
+      }
+      function playFightBell(count=3) {
+        const bells=[ui.bellOne,ui.bellTwo,ui.bellThree];
+        bells.slice(0,count).forEach((audio,index)=>transitionTimers.push(window.setTimeout(()=>playAudio(audio,.92),index*340)));
+      }
+      function playCleanBeeps() {
+        const context=ensureAudioContext();
+        [0,.24,.48].forEach((delay,index)=>{
+          const start=context.currentTime+delay,osc=context.createOscillator(),gain=context.createGain();
+          osc.type='sine'; osc.frequency.value=740+index*90;
+          gain.gain.setValueAtTime(.0001,start); gain.gain.exponentialRampToValueAtTime(.34,start+.012); gain.gain.exponentialRampToValueAtTime(.0001,start+.2);
+          osc.connect(gain).connect(context.destination); osc.start(start); osc.stop(start+.2);
+        });
+      }
+      function playTransitionSound() {
+        if(settings.sound==='fight3')playFightBell(3);
+        else if(settings.sound==='fight1')playFightBell(1);
+        else if(settings.sound==='beep')playCleanBeeps();
+      }
+      function stopIntervalAudio() {
+        transitionTimers.forEach(window.clearTimeout); transitionTimers=[];
+        [ui.countdownVoice,ui.bellOne,ui.bellTwo,ui.bellThree].forEach(audio=>{audio.pause();audio.currentTime=0;});
+      }
+      function upcomingPhase() {
+        if(state.phase==='prep')return 'work';
+        if(state.phase==='rest')return state.round<settings.rounds?'work':'complete';
+        if(state.phase==='work'){
+          if(state.round===settings.rounds&&!settings.finalRest)return 'complete';
+          if(settings.rest>0)return 'rest';
+          return state.round<settings.rounds?'work':'complete';
+        }
+        return 'work';
+      }
+      function shouldPlayCountdown() {
+        const next=upcomingPhase();
+        if(settings.countdown==='off'||next==='complete')return false;
+        if(settings.countdown==='every')return true;
+        if(settings.countdown==='work')return next==='work';
+        return settings.countdown==='first'&&state.phase==='prep'&&state.round===0;
+      }
+
+      function setPhase(phase,duration,round) {
+        state.phase=phase;
+        state.duration=duration;
+        state.remaining=duration;
+        state.round=round;
+        state.target=performance.now()+duration*1000;
+        state.countdownPlayed=false;
+        state.lastShown=null;
+        announcePhase();
+        render();
+        updateProgress();
+        if(duration<=3&&duration>0&&shouldPlayCountdown()){ playAudio(ui.countdownVoice,.9); state.countdownPlayed=true; }
+      }
+      function begin() {
+        unlockMedia();
+        if(settings.sound==='beep')ensureAudioContext();
+        if(state.finished)reset();
+        if(state.phase==='ready'){
+          if(settings.prep>0)setPhase('prep',settings.prep,0);
+          else { playTransitionSound(); setPhase('work',settings.work,1); }
+        } else {
+          state.target=performance.now()+state.remaining*1000;
+        }
+        state.running=true;
+        render();
+        state.raf=requestAnimationFrame(tick);
+      }
+      function pause() {
+        state.running=false;
+        cancelAnimationFrame(state.raf);
+        state.raf=0;
+        stopIntervalAudio();
+        render();
+      }
+      function tick(now) {
+        if(!state.running)return;
+        state.remaining=Math.max(0,(state.target-now)/1000);
+        const shown=Math.ceil(state.remaining);
+        if(shown<=3&&shown>=1&&shouldPlayCountdown()){
+          pulseCountdown(shown);
+          if(!state.countdownPlayed){ playAudio(ui.countdownVoice,.9); state.countdownPlayed=true; }
+        }
+        ui.clock.textContent=format(state.remaining);
+        updateProgress();
+        if(state.remaining<=0){ advance(); return; }
+        state.raf=requestAnimationFrame(tick);
+      }
+      function advance() {
+        if(state.phase==='prep'){
+          playTransitionSound();
+          setPhase('work',settings.work,1);
+        } else if(state.phase==='work'){
+          if(state.round===settings.rounds&&!settings.finalRest){ finish(); return; }
+          if(settings.rest>0){ playTransitionSound(); setPhase('rest',settings.rest,state.round); }
+          else if(state.round<settings.rounds){ playTransitionSound(); setPhase('work',settings.work,state.round+1); }
+          else { finish(); return; }
+        } else if(state.phase==='rest'){
+          if(state.round===settings.rounds){ finish(); return; }
+          playTransitionSound();
+          setPhase('work',settings.work,state.round+1);
+        }
+        state.raf=requestAnimationFrame(tick);
+      }
+      function reset() {
+        cancelAnimationFrame(state.raf);
+        stopIntervalAudio();
+        clearFinishEffects();
+        state=freshState();
+        ui.progressFill.style.transform='scaleX(0)';
+        render();
+      }
+
+      function clearFinishEffects() {
+        finishTimers.forEach(window.clearTimeout); finishTimers=[];
+        [ui.lionRoar,ui.crowdCheer].forEach(audio=>{audio.pause();audio.currentTime=0;});
+        ui.finish.classList.remove('show','impact');
+      }
+      function finish() {
+        state.running=false; state.finished=true; state.phase='complete'; state.remaining=0;
+        stopIntervalAudio(); render(); ui.progressRail.classList.remove('visible');
+        clearFinishEffects(); void ui.finish.offsetWidth; ui.finish.classList.add('show');
+        playAudio(ui.lionRoar,.92);
+        finishTimers.push(window.setTimeout(()=>ui.finish.classList.add('impact'),830));
+        finishTimers.push(window.setTimeout(()=>playAudio(ui.crowdCheer,.76),1820));
+        finishTimers.push(window.setTimeout(()=>ui.again.focus(),2050));
+      }
+
+      function selectPreset(kind) {
+        if(state.running)return;
+        if(kind==='tabata')Object.assign(settings,{rounds:8,work:20,rest:10,prep:5,finalRest:false});
+        else Object.assign(settings,{rounds:4,work:300,rest:60,prep:10,finalRest:false});
+        ui.tabataPreset.classList.toggle('active',kind==='tabata');
+        ui.customPreset.classList.toggle('active',kind==='custom');
+        syncSettingsControls();
+        reset();
+      }
+      function markCustom() { ui.tabataPreset.classList.remove('active'); ui.customPreset.classList.add('active'); }
+      function updateNumber(key,input) {
+        if(state.phase!=='ready'){input.value=settings[key];return;}
+        settings[key]=clamp(input.value,Number(input.min),Number(input.max));
+        input.value=settings[key];
+        markCustom(); reset();
+      }
+
+      ui.start.addEventListener('click',()=>state.running?pause():begin());
+      ui.reset.addEventListener('click',reset);
+      ui.again.addEventListener('click',reset);
+      ui.tabataPreset.addEventListener('click',()=>selectPreset('tabata'));
+      ui.customPreset.addEventListener('click',()=>selectPreset('custom'));
+      [[ui.roundsInput,'rounds'],[ui.workInput,'work'],[ui.restInput,'rest'],[ui.prepInput,'prep']].forEach(([input,key])=>{
+        input.addEventListener('input',()=>{if(input.value!=='')updateNumber(key,input);});
+        input.addEventListener('change',()=>updateNumber(key,input));
+      });
+      ui.finalRest.addEventListener('change',()=>{ if(state.phase!=='ready'){ui.finalRest.checked=settings.finalRest;return;} settings.finalRest=ui.finalRest.checked; markCustom(); reset(); });
+      ui.soundSelect.addEventListener('change',()=>{settings.sound=ui.soundSelect.value;markCustom();stopIntervalAudio();unlockMedia();if(settings.sound==='beep')ensureAudioContext();playTransitionSound();});
+      ui.countdownSelect.addEventListener('change',()=>{settings.countdown=ui.countdownSelect.value;markCustom();});
+      syncSettingsControls();
+      render();
+    })();
+  </script>
+</body>
+</html>
