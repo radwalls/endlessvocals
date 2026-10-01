@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>September Scream Clinics — Endless Vocals Bootcamp III</title>
-    <meta name="description" content="Scream month begins September 8, 2026 at 6 PM Pacific with gargling tone, groggy fry, and fry scream. Still time to join: live clinics, member recordings, and the Endless Vocals community." />
+    <title>Clean to Scream — Thank You | Endless Vocals Bootcamp III</title>
+    <meta name="description" content="Clean to Scream Bootcamp III is complete. Thank you to everyone who joined the nine live clinics. Member replays remain available for continued practice." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://endlessvocals.com/" />
-    <meta property="og:title" content="September Scream Clinics — Endless Vocals Bootcamp III" />
-    <meta property="og:description" content="First scream clinic: September 8 at 6 PM Pacific. Gargling tone, groggy fry, and fry scream. Still time to join the live classes and catch up with member recordings." />
+    <meta property="og:title" content="Clean to Scream — Thank You | Endless Vocals Bootcamp III" />
+    <meta property="og:description" content="That’s a wrap on Clean to Scream. Revisit the nine clinic recordings, keep practicing, and stay connected for what comes next." />
     <meta property="og:image" content="https://endlessvocals.com/images/clean-to-scream-bootcamp.jpg" />
     <meta property="og:image:alt" content="Clean to Scream by Endless Vocals, August and September 2026" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="September Scream Clinics — Endless Vocals Bootcamp III" />
-    <meta name="twitter:description" content="First scream clinic: September 8 at 6 PM Pacific. Gargling tone, groggy fry, and fry scream. Still time to join the live classes and catch up with member recordings." />
+    <meta name="twitter:title" content="Clean to Scream — Thank You | Endless Vocals Bootcamp III" />
+    <meta name="twitter:description" content="That’s a wrap on Clean to Scream. Revisit the nine clinic recordings, keep practicing, and stay connected for what comes next." />
     <meta name="twitter:image" content="https://endlessvocals.com/images/clean-to-scream-bootcamp.jpg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -268,13 +268,18 @@
         }
 
         .hero-clinic strong,
-        .hero-clinic time {
+        .hero-clinic time,
+        .hero-clinic span {
             display: block;
         }
 
         .hero-clinic strong {
             margin-bottom: 6px;
             color: var(--accent-2);
+        }
+
+        .hero-clinic span {
+            color: var(--muted);
         }
 
         .pt-reference {
@@ -411,6 +416,91 @@
         .clinic-progress-arrow {
             color: var(--accent-2);
             font-size: 26px;
+            font-weight: 800;
+        }
+
+        .thank-you-card {
+            position: relative;
+            overflow: hidden;
+            margin-top: 32px;
+            padding: clamp(24px, 5vw, 52px);
+            border: 1px solid var(--surface-border);
+            border-radius: 22px;
+            background:
+                radial-gradient(620px 260px at 100% 0%, rgba(255,122,26,.14), transparent 70%),
+                radial-gradient(720px 320px at 0% 100%, rgba(31,92,255,.16), transparent 72%),
+                var(--surface);
+            box-shadow: 0 20px 50px var(--shadow);
+        }
+
+        .thank-you-card h2 {
+            max-width: 18ch;
+            margin: 4px 0 16px;
+            font-size: clamp(30px, 4.5vw, 52px);
+            line-height: 1.05;
+        }
+
+        .thank-you-card p {
+            max-width: 78ch;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.75;
+        }
+
+        .thank-you-card .thank-you-lead {
+            color: var(--fg);
+            font-size: clamp(18px, 2.4vw, 22px);
+            line-height: 1.55;
+        }
+
+        .thank-you-card a:not(.btn) {
+            color: var(--accent);
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .bootcamp-lessons {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin: 24px 0;
+        }
+
+        .bootcamp-lesson {
+            padding: 18px;
+            border: 1px solid var(--surface-border);
+            border-radius: 14px;
+            background: var(--list-item-bg);
+        }
+
+        .bootcamp-lesson:last-child {
+            border-color: rgba(255,122,26,.45);
+        }
+
+        .bootcamp-lesson strong,
+        .bootcamp-lesson span {
+            display: block;
+        }
+
+        .bootcamp-lesson strong {
+            margin-bottom: 6px;
+            color: var(--accent);
+        }
+
+        .bootcamp-lesson:last-child strong {
+            color: var(--accent-2);
+        }
+
+        .bootcamp-lesson span {
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .coach-signature {
+            margin: 26px 0 0;
+            color: var(--fg) !important;
+            font-size: 18px !important;
             font-weight: 800;
         }
 
@@ -795,7 +885,7 @@
             }
 
             .clinic-list li.is-complete {
-                opacity: .68;
+                opacity: .82;
             }
 
             .clinic-list li.is-latest {
@@ -822,8 +912,8 @@
             }
 
             .clinic-list li.is-complete::after {
-                content: "Done";
-                color: var(--muted);
+                content: "Replay";
+                color: var(--accent);
             }
 
             .clinic-list li.is-latest::after {
@@ -905,6 +995,10 @@
             }
 
             .clinic-progress-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bootcamp-lessons {
                 grid-template-columns: 1fr;
             }
 
@@ -1092,42 +1186,71 @@
         <section class="hero" aria-labelledby="h1">
             <div class="hero-intro">
                 <div>
-                    <span class="hero-kicker">Bootcamp III • September 2026</span>
-                    <h1 id="h1" class="title" data-september-8="Scream month starts today.">September is for screams.</h1>
-                    <p class="subtitle">First class: gargling tone, groggy fry, and fry scream. We're taking it one step at a time, with space to practice between clinics. There's still time to join.</p>
+                    <span class="hero-kicker">Endless Vocals Bootcamp III • Complete</span>
+                    <h1 id="h1" class="title">Clean to Scream — Thank You!</h1>
+                    <p class="subtitle">That’s a wrap on Clean to Scream. Thank you to everyone who joined the live clinics, watched the replays, asked questions, shared recordings, and supported Endless Vocals through two months of training.</p>
                     <div class="hero-clinic">
-                        <strong data-september-8="Today (Pacific) • First scream clinic">September 8 • First scream clinic</strong>
-                        <time class="js-local-time" datetime="2026-09-09T01:00:00Z">Tuesday, September 8 at 6:00 PM PT</time>
+                        <strong>9 live clinics • August 1–September 26, 2026</strong>
+                        <span>Member recordings remain replayable.</span>
                     </div>
                     <div class="cta-row" role="group" aria-label="Primary actions">
-                        <a class="btn btn-primary" href="join.html" aria-label="Join Endless Vocals">
-                            <span>JOIN!</span>
+                        <a class="btn btn-primary" href="#thank-you">
+                            <span>Read Coach Ryan’s note</span>
                         </a>
-                        <a class="btn btn-secondary" href="#schedule" aria-label="See the clinic schedule on this page">
-                            <span>See the dates</span>
+                        <a class="btn btn-secondary" href="shop.html">
+                            <span>Visit the shop</span>
                         </a>
                     </div>
                 </div>
                 <figure class="campaign-poster">
-                    <img src="images/clean-to-scream-scream.jpg" alt="Ryan singing into a handheld microphone during a scream demonstration" width="1200" height="1600" fetchpriority="high">
+                    <img src="images/clean-to-scream-bootcamp.jpg" alt="Endless Vocals Clean to Scream Bootcamp III artwork" fetchpriority="high">
                 </figure>
             </div>
 
+            <section class="thank-you-card" id="thank-you" aria-labelledby="thank-you-title">
+                <span class="month-label">A note from Coach Ryan</span>
+                <h2 id="thank-you-title">Thank you for being part of Clean to Scream.</h2>
+                <p class="thank-you-lead">Thank you to everyone who joined the live clinics, watched the replays, asked questions, shared recordings, and supported Endless Vocals throughout these two months.</p>
+                <p>We covered a lot—from the Ultimate Vocal Warm-Up, breathing, support, placement, and the ISO Method all the way through fry screams, frustrated sighs, low grit, grit slides, and putting those sounds into songs.</p>
+                <div class="bootcamp-lessons" aria-label="Bootcamp III training arc">
+                    <div class="bootcamp-lesson">
+                        <strong>Clean foundation</strong>
+                        <span>Ultimate Vocal Warm-Up, breathing, support, placement, the ISO Method, song work, and bonus techniques.</span>
+                    </div>
+                    <div class="bootcamp-lesson">
+                        <strong>Scream progression</strong>
+                        <span>Fry screams, frustrated sighs, low grit, grit slides, combinations, resets, and song application.</span>
+                    </div>
+                </div>
+                <p>Finishing the bootcamp doesn’t mean you’re supposed to have mastered everything. This is material you can keep coming back to as your voice develops.</p>
+                <p><strong>The clinic videos are replayable for members.</strong> Revisit the demonstrations, pause where you need to, and work through the lessons at your own pace. Whether you missed a class or just need another look at an exercise, use those recordings as part of your practice.</p>
+                <p>Keep sharing your progress and questions in the community, too. I want to hear what you’re working on—not just the finished performances, but the things you’re still figuring out.</p>
+                <p>Please also check out the <a href="shop.html">Endless Vocals shop</a>. Every purchase helps support the work that goes into these clinics, videos, and future training resources. Your support makes a real difference.</p>
+                <p>There’s more coming, including additional practice material, videos, and future clinics. Keep an eye on the community for updates, and keep putting your Vocal Strength Trainer to use.</p>
+                <p>Most importantly, keep singing your songs, have fun, and respect your voice. Consistency matters more than trying to accomplish everything in one session.</p>
+                <p>It’s been a pleasure being your vocal coach. Thank you for being part of Endless Vocals—I’ll see you in the next bootcamp!</p>
+                <p class="coach-signature">— Coach Ryan / Ryan Wall</p>
+                <div class="cta-row" role="group" aria-label="Continue with Endless Vocals">
+                    <a class="btn btn-primary" href="shop.html">Explore the shop</a>
+                    <a class="btn btn-secondary" href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener">Join the community</a>
+                </div>
+            </section>
+
             <section class="clinic-progress" aria-labelledby="clinic-progress-title">
-                <span class="month-label">September • Scream month</span>
-                <h2 id="clinic-progress-title">Start with fry. Build from there.</h2>
-                <p>We begin with gargling tone, groggy fry, and fry scream on September 8. The next clinic focuses on frustrated sigh, followed by low grit, grit slides, and putting the sounds into songs.</p>
+                <span class="month-label">Bootcamp III • Complete</span>
+                <h2 id="clinic-progress-title">Nine clinics. Two months. One foundation to keep building.</h2>
+                <p>The live run is finished, but the material is built to be revisited. Use the recordings to repeat exercises, review demonstrations, and keep connecting technique to your own songs.</p>
                 <div class="clinic-progress-grid">
-                    <div class="clinic-progress-step next">
-                        <span class="clinic-progress-label" data-september-8="Today (Pacific) • First scream clinic">First scream clinic • September 8</span>
-                        <strong>Gargling Tone, Groggy Fry + Fry Scream</strong>
-                        <time class="js-local-time" datetime="2026-09-09T01:00:00Z">Tuesday, September 8 at 6:00 PM PT</time>
+                    <div class="clinic-progress-step">
+                        <span class="clinic-progress-label">Complete • Replays available</span>
+                        <strong>Clean Singing — ISO Method</strong>
+                        <time datetime="2026-08">August 2026 • 5 clinics</time>
                     </div>
                     <span class="clinic-progress-arrow" aria-hidden="true">→</span>
-                    <div class="clinic-progress-step">
-                        <span class="clinic-progress-label">Clinic 2 • September 12</span>
-                        <strong>Frustrated Sigh</strong>
-                        <time class="js-local-time" datetime="2026-09-12T16:00:00Z">Saturday, September 12 at 9:00 AM PT</time>
+                    <div class="clinic-progress-step next">
+                        <span class="clinic-progress-label">Complete • Replays available</span>
+                        <strong>Scream Center Progression</strong>
+                        <time datetime="2026-09">September 2026 • 4 clinics</time>
                     </div>
                 </div>
             </section>
@@ -1151,14 +1274,14 @@
 
             <div class="grid" style="margin-top:32px">
                 <section class="card" aria-labelledby="whatis">
-                    <h3 id="whatis">You can still join.</h3>
-                    <p>August covered the clean-singing foundation. September is the scream month, with four clinics from September 8 through September 26. Join for $24/month and catch up with the clean-singing recordings as you go.</p>
-                    <div class="list" aria-label="What membership includes">
-                        <div class="item">Live scream clinics and recordings for members</div>
-                        <div class="item">August's clean-singing and ISO Method recordings</div>
-                        <div class="item">The Discord school for practice clips, feedback, and community</div>
+                    <h3 id="whatis">Keep practicing with the replays.</h3>
+                    <p>All nine Bootcamp III clinics are complete. Member recordings remain available so you can repeat the exercises, revisit a demonstration, or catch a clinic you missed.</p>
+                    <div class="list" aria-label="Bootcamp archive highlights">
+                        <div class="item">Five clean-singing and ISO Method clinic recordings</div>
+                        <div class="item">Four Scream Center progression clinic recordings</div>
+                        <div class="item">The Discord community for practice clips, questions, and progress</div>
                     </div>
-                    <div class="cta-row"><a class="btn btn-primary" href="join.html">JOIN!</a></div>
+                    <div class="cta-row"><a class="btn btn-primary" href="shop.html">Visit the shop</a></div>
                 </section>
                 <figure class="card motion-card">
                     <img src="images/clean-to-scream-motion.jpg" alt="Singer moving under blue and purple studio light" loading="lazy">
@@ -1166,27 +1289,14 @@
                 </figure>
             </div>
 
-            <p class="schedule-zone" id="schedule-zone" aria-live="polite"><strong>Pacific Time schedule.</strong> On supported devices, these class times automatically change to your local time.</p>
+            <p class="schedule-zone" id="schedule-zone"><strong>Bootcamp III archive.</strong> These are the original live clinic dates. Recordings remain available to members.</p>
 
-            <section class="program-grid" id="schedule" aria-label="September scream clinics and August recordings">
-                <article class="card month-card screams" aria-labelledby="september-title">
-                    <img class="month-image" src="images/clean-to-scream-scream.jpg" alt="Ryan demonstrating screaming with a handheld microphone under blue light" loading="lazy">
-                    <span class="month-label">September • Scream clinics</span>
-                    <h3 id="september-title">This month's live classes</h3>
-                    <ul class="clinic-list">
-                        <li><strong>Gargling Tone, Groggy Fry + Fry Scream</strong><time class="js-local-time" datetime="2026-09-09T01:00:00Z">Tuesday, September 8 at 6:00 PM PT</time></li>
-                        <li><strong>Frustrated Sigh</strong><time class="js-local-time" datetime="2026-09-12T16:00:00Z">Saturday, September 12 at 9:00 AM PT</time></li>
-                        <li><strong>Low Grit + Grit Slides</strong><time class="js-local-time" datetime="2026-09-22T01:00:00Z">Monday, September 21 at 6:00 PM PT</time></li>
-                        <li><strong>Combinations + Song Application</strong><time class="js-local-time" datetime="2026-09-26T16:00:00Z">Saturday, September 26 at 9:00 AM PT</time></li>
-                    </ul>
-                    <p class="note" style="margin-top:12px">Reset whenever needed with a held gargling tone or a gentle major-third gargling slide before continuing.</p>
-                </article>
-
+            <section class="program-grid" id="schedule" aria-label="Bootcamp III clinic archive">
                 <article class="card month-card" aria-labelledby="august-title">
                     <img class="month-image" src="images/clean-to-scream-clean.jpg" alt="Ryan demonstrating clean singing at a studio microphone" loading="lazy">
                     <span class="month-label">August • Member recordings</span>
                     <h3 id="august-title">Clean Singing — ISO Method</h3>
-                    <p>Catch up with the foundation at your own pace.</p>
+                    <p>Revisit the foundation at your own pace.</p>
                     <ul class="clinic-list">
                         <li class="is-complete"><strong>Vocal Stress Release + Practice Baseline</strong><time class="js-local-time" datetime="2026-08-01T16:00:00Z">Saturday, August 1 at 9:00 AM PT</time></li>
                         <li class="is-complete"><strong>Technique — Breathing, Support + Placement</strong><time class="js-local-time" datetime="2026-08-11T01:00:00Z">Monday, August 10 at 6:00 PM PT</time></li>
@@ -1194,6 +1304,19 @@
                         <li class="is-complete"><strong>Singing Songs + Vocal Strength Trainer App</strong><time class="js-local-time" datetime="2026-08-25T01:00:00Z">Monday, August 24 at 6:00 PM PT</time></li>
                         <li class="is-complete"><strong>Hangout + Bonus Techniques</strong><time class="js-local-time" datetime="2026-08-29T16:00:00Z">Saturday, August 29 at 9:00 AM PT</time></li>
                     </ul>
+                </article>
+
+                <article class="card month-card screams" aria-labelledby="september-title">
+                    <img class="month-image" src="images/clean-to-scream-scream.jpg" alt="Ryan demonstrating screaming with a handheld microphone under blue light" loading="lazy">
+                    <span class="month-label">September • Member recordings</span>
+                    <h3 id="september-title">Scream Clinics — Complete</h3>
+                    <ul class="clinic-list">
+                        <li class="is-complete"><strong>Gargling Tone, Groggy Fry + Fry Scream</strong><time datetime="2026-09-08">Tuesday, September 8 at 6:00 PM PT</time></li>
+                        <li class="is-complete"><strong>Frustrated Sigh</strong><time datetime="2026-09-12">Saturday, September 12 at 9:00 AM PT</time></li>
+                        <li class="is-complete"><strong>Low Grit + Grit Slides</strong><time datetime="2026-09-21">Monday, September 21 at 6:00 PM PT</time></li>
+                        <li class="is-complete"><strong>Combinations + Song Application</strong><time datetime="2026-09-26">Saturday, September 26 at 9:00 AM PT</time></li>
+                    </ul>
+                    <p class="note" style="margin-top:12px">Reset whenever needed with a held gargling tone or a gentle major-third gargling slide before continuing.</p>
                 </article>
 
             </section>
@@ -1242,11 +1365,11 @@
             <div class="divider"></div>
 
             <section class="card" aria-labelledby="how">
-                <h3 id="how">How it works</h3>
+                <h3 id="how">Keep going</h3>
                 <ol>
-                    <li style="margin:8px 0">Join the <a href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener">Discord</a> (free) to see schedules, share clips, and meet the community.</li>
-                    <li style="margin:8px 0">When you’re ready, enroll in a <a href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener">Two‑Month Bootcamp</a> ($24/month via Ko‑fi). Attend live or watch replays—your pace.</li>
-                    <li style="margin:8px 0">Follow the practice plan between calls. Short, repeatable sessions beat long, rare ones.</li>
+                    <li style="margin:8px 0">Join the <a href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener">Discord</a> to share clips, ask questions, and stay connected with the community.</li>
+                    <li style="margin:8px 0">If you’re a member, revisit the clinic recordings at your own pace and return to the exercises as your voice develops.</li>
+                    <li style="margin:8px 0">Visit the <a href="shop.html">Endless Vocals shop</a> to support future clinics, videos, and training resources.</li>
                 </ol>
             </section>
 
@@ -1309,7 +1432,7 @@
     <!-- Sticky mobile CTA -->
     <div class="sticky" role="group" aria-label="Mobile actions">
         <div class="wrap">
-            <a class="btn btn-primary" style="flex:1" href="join.html">JOIN!</a>
+            <a class="btn btn-primary" style="flex:1" href="shop.html">Visit the shop</a>
         </div>
     </div>
 
@@ -1318,67 +1441,6 @@
     const yearEl = document.getElementById('year');
     if (yearEl) {
         yearEl.textContent = new Date().getFullYear();
-    }
-
-    updateLaunchDayCopy();
-    updateLocalClinicTimes();
-
-    // Keep "today" tied to the September 8 clinic's official Pacific date.
-    function updateLaunchDayCopy() {
-        if (typeof Intl === 'undefined' || !Intl.DateTimeFormat) return;
-        const pacificDay = new Intl.DateTimeFormat('en-US', {
-            timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit'
-        }).formatToParts(new Date());
-        const part = (type) => pacificDay.find((item) => item.type === type).value;
-        const isLaunchDay = `${part('year')}-${part('month')}-${part('day')}` === '2026-09-08';
-        document.querySelectorAll('[data-september-8]').forEach((element) => {
-            if (!element.dataset.regularCopy) element.dataset.regularCopy = element.textContent;
-            element.textContent = isLaunchDay ? element.getAttribute('data-september-8') : element.dataset.regularCopy;
-        });
-    }
-
-    document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) updateLaunchDayCopy();
-    });
-
-    function updateLocalClinicTimes() {
-        const timeElements = document.querySelectorAll('.js-local-time[datetime]');
-        if (!timeElements.length || typeof Intl === 'undefined' || !Intl.DateTimeFormat) return;
-
-        const detectedTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const scheduleZone = document.getElementById('schedule-zone');
-
-        const formatter = new Intl.DateTimeFormat(undefined, {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit',
-            timeZoneName: 'short'
-        });
-
-        timeElements.forEach((timeEl) => {
-            const utcValue = timeEl.getAttribute('datetime');
-            if (!utcValue) return;
-
-            const eventDate = new Date(utcValue);
-            if (Number.isNaN(eventDate.getTime())) return;
-
-            const pacificSchedule = timeEl.textContent.trim();
-            timeEl.title = `Official Pacific schedule: ${pacificSchedule}`;
-            timeEl.textContent = formatter.format(eventDate);
-
-            const reference = document.createElement('span');
-            reference.className = 'pt-reference';
-            reference.textContent = `Pacific reference: ${pacificSchedule}`;
-            timeEl.insertAdjacentElement('afterend', reference);
-        });
-
-        document.body.classList.add('times-localized');
-        if (scheduleZone) {
-            scheduleZone.innerHTML = `<strong>Times shown in ${detectedTimeZone || 'your local time'}.</strong> Pacific Time remains listed beneath each class.`;
-        }
     }
 
     const themeToggle = document.getElementById('theme-toggle');
