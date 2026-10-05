@@ -27,15 +27,14 @@
     .timer-stack { width:100%; }
     .clock { height:104px; display:flex; align-items:center; justify-content:center; margin:0; color:#171717; font-size:116px; font-weight:300; line-height:1; letter-spacing:-7px; font-variant-numeric:tabular-nums; white-space:nowrap; transform:scaleX(1.1); }
     .clock.counting { color:#111; animation:countPulse .42s ease-out; }
-    .round-strip { height:43px; display:grid; grid-template-columns:repeat(var(--rounds),minmax(28px,1fr)); margin-top:5px; overflow-x:auto; overflow-y:hidden; border-radius:4px; scrollbar-width:thin; }
-    .round-segment { position:relative; isolation:isolate; min-width:0; display:grid; place-items:center; overflow:hidden; color:#fff; background:linear-gradient(to right,var(--green) 0 calc(100% - 10px),var(--red) calc(100% - 10px) 100%); font-size:20px; text-shadow:0 1px 0 rgba(0,0,0,.16); transition:background .15s ease,filter .15s ease,box-shadow .15s ease; }
-    .round-segment:last-child { background:var(--green); }
-    .round-segment.done { background:#3ea64a; }
-    .round-segment.current { z-index:1; box-shadow:inset 0 0 0 3px rgba(255,255,255,.92); filter:saturate(1.12); }
-    .round-segment.current.work { background:#8bcf90; }
-    .round-segment.current.rest { background:#e49a94; }
-    .round-fill { position:absolute; z-index:-1; inset:0; background:var(--green-dark); transform:scaleX(0); transform-origin:left center; will-change:transform; }
-    .round-segment.current.rest .round-fill { background:#cf443d; }
+    .round-strip { height:43px; display:grid; margin-top:5px; overflow-x:auto; overflow-y:hidden; border-radius:4px; scrollbar-width:thin; }
+    .round-segment { min-width:0; display:flex; color:#fff; font-size:20px; text-shadow:0 1px 0 rgba(0,0,0,.16); }
+    .round-phase { position:relative; min-width:0; display:grid; place-items:center; overflow:hidden; }
+    .round-phase.work { background:var(--green); }
+    .round-phase.rest { background:var(--red); }
+    .round-phase.current::after { content:""; position:absolute; z-index:2; inset:0; box-shadow:inset 0 0 0 2px rgba(255,255,255,.92); pointer-events:none; }
+    .round-fill { position:absolute; z-index:0; inset:0; background:var(--green-dark); transform:scaleX(0); transform-origin:left center; will-change:transform; }
+    .round-phase.rest .round-fill { background:#b83e37; }
     .round-number { position:relative; z-index:1; }
     .round-count { height:114px; display:flex; align-items:center; justify-content:center; margin:10px 0 0; color:#171717; font-size:115px; font-weight:300; line-height:1; letter-spacing:-7px; font-variant-numeric:tabular-nums; transform:scaleX(1.22); }
     .controls-wrap { position:relative; }
@@ -134,11 +133,11 @@
           <button id="customPreset" class="tab" type="button">Tabata This</button>
         </div>
         <label class="setting-row" for="roundsInput"><span class="setting-label">Rounds</span><span class="value-field"><input id="roundsInput" class="number-field" type="number" min="1" max="99" step="1" value="8"><span>×</span></span></label>
-        <label class="setting-row" for="workInput"><span class="setting-label">Time On</span><span class="value-field"><input id="workInput" class="number-field" type="number" min="5" max="900" step="5" value="20"><span>sec</span></span></label>
-        <label class="setting-row" for="restInput"><span class="setting-label">Time Off</span><span class="value-field"><input id="restInput" class="number-field" type="number" min="0" max="600" step="5" value="10"><span>sec</span></span></label>
+        <label class="setting-row" for="workInput"><span class="setting-label">Time On</span><span class="value-field"><input id="workInput" class="number-field" type="number" min="1" max="900" step="1" value="20"><span>sec</span></span></label>
+        <label class="setting-row" for="restInput"><span class="setting-label">Time Off</span><span class="value-field"><input id="restInput" class="number-field" type="number" min="0" max="600" step="1" value="10"><span>sec</span></span></label>
         <label class="setting-row"><span class="setting-label">Include Last Rest</span><span class="toggle"><input id="finalRest" type="checkbox"><span class="toggle-track"></span><span class="toggle-knob"></span><span id="toggleText" class="toggle-text">OFF</span></span></label>
         <div class="setting-row"><span class="setting-label">Total Workout Time</span><span id="totalTime" class="setting-value muted">3:50</span></div>
-        <label class="setting-row" for="prepInput"><span class="setting-label">Prep Time</span><span class="value-field"><input id="prepInput" class="number-field" type="number" min="0" max="600" step="5" value="5"><span>sec</span></span></label>
+        <label class="setting-row" for="prepInput"><span class="setting-label">Prep Time</span><span class="value-field"><input id="prepInput" class="number-field" type="number" min="0" max="600" step="1" value="5"><span>sec</span></span></label>
         <label class="setting-row" for="soundSelect"><span class="setting-label">Sounds</span><select id="soundSelect" class="choice-field"><option value="fight3">Fight Bell ×3</option><option value="fight2">Fight Bell ×2</option><option value="fight1">Fight Bell ×1</option><option value="chime">Power Chime</option><option value="pulse">Digital Pulse</option><option value="beep">Clean Beeps</option><option value="silent">Silent</option></select></label>
         <label class="setting-row" for="countdownSelect"><span class="setting-label">Count Down</span><select id="countdownSelect" class="choice-field"><option value="every">Every Transition</option><option value="work">Before Work Only</option><option value="first">First Round Only</option><option value="off">Off</option></select></label>
       </section>
@@ -169,6 +168,7 @@
         bigCatGrowl:$('bigCatGrowl'),crowdCheer:$('crowdCheer')
       };
       const settings = { rounds:8, work:20, rest:10, prep:5, finalRest:false, sound:'fight3', countdown:'every' };
+      const numberInputs = [[ui.roundsInput,'rounds'],[ui.workInput,'work'],[ui.restInput,'rest'],[ui.prepInput,'prep']];
       let finishTimers = [];
       let transitionTimers = [];
       let mediaUnlocked = false;
@@ -194,8 +194,8 @@
       }
 
       function renderRounds() {
-        ui.roundStrip.style.setProperty('--rounds',settings.rounds);
-        ui.roundStrip.setAttribute('aria-label',`${settings.rounds} workout rounds`);
+        const columns=[];
+        ui.roundStrip.setAttribute('aria-label',`${settings.rounds} workout rounds: ${settings.work} seconds work, ${settings.rest} seconds recovery${settings.finalRest?'':', no final recovery'}`);
         ui.roundStrip.innerHTML='';
         for(let i=1;i<=settings.rounds;i++){
           const segment=document.createElement('span');
@@ -203,15 +203,32 @@
           const current=i===state.round&&(state.phase==='work'||state.phase==='rest');
           segment.className=`round-segment${complete?' done':''}${current?` current ${state.phase}`:''}`;
           segment.setAttribute('aria-label',complete?`Round ${i} complete`:current?`Round ${i}, ${state.phase} in progress`:`Round ${i}, upcoming`);
-          const fill=document.createElement('span');
-          fill.className='round-fill';
-          fill.setAttribute('aria-hidden','true');
-          const number=document.createElement('span');
-          number.className='round-number';
-          number.textContent=i;
-          segment.append(fill,number);
+          const restDuration=i<settings.rounds||settings.finalRest?settings.rest:0;
+          columns.push(`minmax(0,${settings.work+restDuration}fr)`);
+          [['work',settings.work],['rest',restDuration]].forEach(([phase,duration])=>{
+            if(duration===0)return;
+            const part=document.createElement('span');
+            const active=current&&state.phase===phase;
+            const done=complete||(phase==='work'&&i===state.round&&state.phase==='rest');
+            part.className=`round-phase ${phase}${done?' done':''}${active?' current':''}`;
+            part.style.flex=`${duration} 1 0%`;
+            part.setAttribute('aria-label',`Round ${i}, ${phase==='work'?'work':'recovery'}, ${duration} seconds${done?', complete':active?', in progress':''}`);
+            const fill=document.createElement('span');
+            fill.className='round-fill';
+            fill.style.transform=done?'scaleX(1)':'scaleX(0)';
+            fill.setAttribute('aria-hidden','true');
+            part.append(fill);
+            if(phase==='work'){
+              const number=document.createElement('span');
+              number.className='round-number';
+              number.textContent=i;
+              part.append(number);
+            }
+            segment.append(part);
+          });
           ui.roundStrip.append(segment);
         }
+        ui.roundStrip.style.gridTemplateColumns=columns.join(' ');
       }
       function render() {
         ui.clock.textContent=state.phase==='ready'?'00:00':format(state.remaining);
@@ -228,7 +245,7 @@
       function updateProgress() {
         const progress=state.duration>0?Math.max(0,Math.min(1,1-state.remaining/state.duration)):0;
         ui.progressFill.style.transform=`scaleX(${progress})`;
-        const roundFill=ui.roundStrip.querySelector('.round-segment.current .round-fill');
+        const roundFill=ui.roundStrip.querySelector('.round-phase.current .round-fill');
         if(roundFill)roundFill.style.transform=`scaleX(${progress})`;
       }
       function pulseCountdown(number) {
@@ -336,6 +353,7 @@
         if(duration<=3&&duration>0&&shouldPlayCountdown()){ playAudio(ui.countdownVoice,.9); state.countdownPlayed=true; }
       }
       function begin() {
+        if(state.phase==='ready')numberInputs.forEach(([input,key])=>updateNumber(key,input,true));
         unlockMedia();
         if(usesSynthSound())ensureAudioContext();
         if(state.finished)reset();
@@ -419,10 +437,15 @@
         reset();
       }
       function markCustom() { ui.tabataPreset.classList.remove('active'); ui.customPreset.classList.add('active'); }
-      function updateNumber(key,input) {
+      function updateNumber(key,input,commit=false) {
         if(state.phase!=='ready'){input.value=settings[key];return;}
-        settings[key]=clamp(input.value,Number(input.min),Number(input.max));
-        input.value=settings[key];
+        const value=input.value===''?NaN:Number(input.value);
+        const min=Number(input.min),max=Number(input.max);
+        if(!commit&&(!Number.isInteger(value)||value<min||value>max))return;
+        const next=commit?(Number.isFinite(value)?clamp(Math.round(value),min,max):settings[key]):value;
+        if(commit)input.value=next;
+        if(next===settings[key])return;
+        settings[key]=next;
         markCustom(); reset();
       }
 
@@ -431,9 +454,9 @@
       ui.again.addEventListener('click',reset);
       ui.tabataPreset.addEventListener('click',()=>selectPreset('tabata'));
       ui.customPreset.addEventListener('click',()=>selectPreset('custom'));
-      [[ui.roundsInput,'rounds'],[ui.workInput,'work'],[ui.restInput,'rest'],[ui.prepInput,'prep']].forEach(([input,key])=>{
-        input.addEventListener('input',()=>{if(input.value!=='')updateNumber(key,input);});
-        input.addEventListener('change',()=>updateNumber(key,input));
+      numberInputs.forEach(([input,key])=>{
+        input.addEventListener('input',()=>updateNumber(key,input));
+        input.addEventListener('change',()=>updateNumber(key,input,true));
       });
       ui.finalRest.addEventListener('change',()=>{ if(state.phase!=='ready'){ui.finalRest.checked=settings.finalRest;return;} settings.finalRest=ui.finalRest.checked; markCustom(); reset(); });
       ui.soundSelect.addEventListener('change',()=>{settings.sound=ui.soundSelect.value;markCustom();stopIntervalAudio();unlockMedia();if(usesSynthSound())ensureAudioContext();playTransitionSound();});
