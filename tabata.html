@@ -28,10 +28,15 @@
     .clock { height:104px; display:flex; align-items:center; justify-content:center; margin:0; color:#171717; font-size:116px; font-weight:300; line-height:1; letter-spacing:-7px; font-variant-numeric:tabular-nums; white-space:nowrap; transform:scaleX(1.1); }
     .clock.counting { color:#111; animation:countPulse .42s ease-out; }
     .round-strip { height:43px; display:grid; grid-template-columns:repeat(var(--rounds),minmax(28px,1fr)); margin-top:5px; overflow-x:auto; overflow-y:hidden; border-radius:4px; scrollbar-width:thin; }
-    .round-segment { min-width:0; display:grid; place-items:center; color:#fff; background:linear-gradient(to right,var(--green) 0 calc(100% - 10px),var(--red) calc(100% - 10px) 100%); font-size:20px; text-shadow:0 1px 0 rgba(0,0,0,.08); transition:filter .15s ease,box-shadow .15s ease; }
+    .round-segment { position:relative; isolation:isolate; min-width:0; display:grid; place-items:center; overflow:hidden; color:#fff; background:linear-gradient(to right,var(--green) 0 calc(100% - 10px),var(--red) calc(100% - 10px) 100%); font-size:20px; text-shadow:0 1px 0 rgba(0,0,0,.16); transition:background .15s ease,filter .15s ease,box-shadow .15s ease; }
     .round-segment:last-child { background:var(--green); }
     .round-segment.done { background:#3ea64a; }
-    .round-segment.current { position:relative; z-index:1; box-shadow:inset 0 0 0 3px rgba(255,255,255,.88); filter:saturate(1.15); }
+    .round-segment.current { z-index:1; box-shadow:inset 0 0 0 3px rgba(255,255,255,.92); filter:saturate(1.12); }
+    .round-segment.current.work { background:#8bcf90; }
+    .round-segment.current.rest { background:#e49a94; }
+    .round-fill { position:absolute; z-index:-1; inset:0; background:var(--green-dark); transform:scaleX(0); transform-origin:left center; will-change:transform; }
+    .round-segment.current.rest .round-fill { background:#cf443d; }
+    .round-number { position:relative; z-index:1; }
     .round-count { height:114px; display:flex; align-items:center; justify-content:center; margin:10px 0 0; color:#171717; font-size:115px; font-weight:300; line-height:1; letter-spacing:-7px; font-variant-numeric:tabular-nums; transform:scaleX(1.22); }
     .controls-wrap { position:relative; }
     .controls { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
@@ -134,7 +139,7 @@
         <label class="setting-row"><span class="setting-label">Include Last Rest</span><span class="toggle"><input id="finalRest" type="checkbox"><span class="toggle-track"></span><span class="toggle-knob"></span><span id="toggleText" class="toggle-text">OFF</span></span></label>
         <div class="setting-row"><span class="setting-label">Total Workout Time</span><span id="totalTime" class="setting-value muted">3:50</span></div>
         <label class="setting-row" for="prepInput"><span class="setting-label">Prep Time</span><span class="value-field"><input id="prepInput" class="number-field" type="number" min="0" max="600" step="5" value="5"><span>sec</span></span></label>
-        <label class="setting-row" for="soundSelect"><span class="setting-label">Sounds</span><select id="soundSelect" class="choice-field"><option value="fight3">Fight Bell ×3</option><option value="fight1">Fight Bell ×1</option><option value="beep">Clean Beeps</option><option value="silent">Silent</option></select></label>
+        <label class="setting-row" for="soundSelect"><span class="setting-label">Sounds</span><select id="soundSelect" class="choice-field"><option value="fight3">Fight Bell ×3</option><option value="fight2">Fight Bell ×2</option><option value="fight1">Fight Bell ×1</option><option value="chime">Power Chime</option><option value="pulse">Digital Pulse</option><option value="beep">Clean Beeps</option><option value="silent">Silent</option></select></label>
         <label class="setting-row" for="countdownSelect"><span class="setting-label">Count Down</span><select id="countdownSelect" class="choice-field"><option value="every">Every Transition</option><option value="work">Before Work Only</option><option value="first">First Round Only</option><option value="off">Off</option></select></label>
       </section>
     </main>
@@ -149,7 +154,7 @@
   <audio id="bellOne" src="sounds/fight-bell.wav" preload="auto" aria-hidden="true"></audio>
   <audio id="bellTwo" src="sounds/fight-bell.wav" preload="auto" aria-hidden="true"></audio>
   <audio id="bellThree" src="sounds/fight-bell.wav" preload="auto" aria-hidden="true"></audio>
-  <audio id="lionRoar" src="sounds/lion-roar.wav" preload="auto" aria-hidden="true"></audio>
+  <audio id="bigCatGrowl" src="sounds/big-cat-growl.wav" preload="auto" aria-hidden="true"></audio>
   <audio id="crowdCheer" src="sounds/crowd-cheer.wav" preload="auto" aria-hidden="true"></audio>
 
   <script>
@@ -161,7 +166,7 @@
         tabataPreset:$('tabataPreset'),customPreset:$('customPreset'),phaseLive:$('phaseLive'),roundsInput:$('roundsInput'),workInput:$('workInput'),
         restInput:$('restInput'),prepInput:$('prepInput'),soundSelect:$('soundSelect'),countdownSelect:$('countdownSelect'),
         finish:$('finish'),again:$('again'),countdownVoice:$('countdownVoice'),bellOne:$('bellOne'),bellTwo:$('bellTwo'),bellThree:$('bellThree'),
-        lionRoar:$('lionRoar'),crowdCheer:$('crowdCheer')
+        bigCatGrowl:$('bigCatGrowl'),crowdCheer:$('crowdCheer')
       };
       const settings = { rounds:8, work:20, rest:10, prep:5, finalRest:false, sound:'fight3', countdown:'every' };
       let finishTimers = [];
@@ -194,8 +199,17 @@
         ui.roundStrip.innerHTML='';
         for(let i=1;i<=settings.rounds;i++){
           const segment=document.createElement('span');
-          segment.className='round-segment'+(i<state.round?' done':'')+(i===state.round&&state.phase!=='ready'&&state.phase!=='prep'?' current':'');
-          segment.textContent=i;
+          const complete=state.phase==='complete'||i<state.round;
+          const current=i===state.round&&(state.phase==='work'||state.phase==='rest');
+          segment.className=`round-segment${complete?' done':''}${current?` current ${state.phase}`:''}`;
+          segment.setAttribute('aria-label',complete?`Round ${i} complete`:current?`Round ${i}, ${state.phase} in progress`:`Round ${i}, upcoming`);
+          const fill=document.createElement('span');
+          fill.className='round-fill';
+          fill.setAttribute('aria-hidden','true');
+          const number=document.createElement('span');
+          number.className='round-number';
+          number.textContent=i;
+          segment.append(fill,number);
           ui.roundStrip.append(segment);
         }
       }
@@ -209,10 +223,13 @@
         ui.progressFill.className=`progress-fill ${state.phase==='rest'?'rest':state.phase==='prep'?'prep':''}`;
         lockSettings(state.phase!=='ready');
         renderRounds();
+        updateProgress();
       }
       function updateProgress() {
         const progress=state.duration>0?Math.max(0,Math.min(1,1-state.remaining/state.duration)):0;
         ui.progressFill.style.transform=`scaleX(${progress})`;
+        const roundFill=ui.roundStrip.querySelector('.round-segment.current .round-fill');
+        if(roundFill)roundFill.style.transform=`scaleX(${progress})`;
       }
       function pulseCountdown(number) {
         if(number===state.lastShown)return;
@@ -230,7 +247,7 @@
       function unlockMedia() {
         if(mediaUnlocked)return;
         mediaUnlocked=true;
-        const items=[[ui.countdownVoice,.9],[ui.bellOne,.92],[ui.bellTwo,.92],[ui.bellThree,.92],[ui.lionRoar,.92],[ui.crowdCheer,.76]];
+        const items=[[ui.countdownVoice,.9],[ui.bellOne,.92],[ui.bellTwo,.92],[ui.bellThree,.92],[ui.bigCatGrowl,.92],[ui.crowdCheer,.76]];
         items.forEach(([audio,volume])=>{
           audio.volume=0;
           const attempt=audio.play();
@@ -252,14 +269,36 @@
         [0,.24,.48].forEach((delay,index)=>{
           const start=context.currentTime+delay,osc=context.createOscillator(),gain=context.createGain();
           osc.type='sine'; osc.frequency.value=740+index*90;
-          gain.gain.setValueAtTime(.0001,start); gain.gain.exponentialRampToValueAtTime(.34,start+.012); gain.gain.exponentialRampToValueAtTime(.0001,start+.2);
+          gain.gain.setValueAtTime(.0001,start); gain.gain.exponentialRampToValueAtTime(.48,start+.012); gain.gain.exponentialRampToValueAtTime(.0001,start+.2);
           osc.connect(gain).connect(context.destination); osc.start(start); osc.stop(start+.2);
         });
       }
+      function playPowerChime() {
+        const context=ensureAudioContext();
+        [659.25,987.77,1318.51].forEach((frequency,index)=>{
+          const start=context.currentTime+index*.11,osc=context.createOscillator(),gain=context.createGain();
+          osc.type='sine'; osc.frequency.setValueAtTime(frequency,start);
+          gain.gain.setValueAtTime(.0001,start); gain.gain.exponentialRampToValueAtTime(.3,start+.012); gain.gain.exponentialRampToValueAtTime(.0001,start+.54);
+          osc.connect(gain).connect(context.destination); osc.start(start); osc.stop(start+.56);
+        });
+      }
+      function playDigitalPulse() {
+        const context=ensureAudioContext();
+        [0,.17,.34].forEach((delay,index)=>{
+          const start=context.currentTime+delay,osc=context.createOscillator(),gain=context.createGain();
+          osc.type='square'; osc.frequency.setValueAtTime(index===2?1174.66:880,start);
+          gain.gain.setValueAtTime(.0001,start); gain.gain.exponentialRampToValueAtTime(.22,start+.008); gain.gain.exponentialRampToValueAtTime(.0001,start+.12);
+          osc.connect(gain).connect(context.destination); osc.start(start); osc.stop(start+.13);
+        });
+      }
+      function usesSynthSound() { return settings.sound==='beep'||settings.sound==='chime'||settings.sound==='pulse'; }
       function playTransitionSound() {
         if(settings.sound==='fight3')playFightBell(3);
+        else if(settings.sound==='fight2')playFightBell(2);
         else if(settings.sound==='fight1')playFightBell(1);
         else if(settings.sound==='beep')playCleanBeeps();
+        else if(settings.sound==='chime')playPowerChime();
+        else if(settings.sound==='pulse')playDigitalPulse();
       }
       function stopIntervalAudio() {
         transitionTimers.forEach(window.clearTimeout); transitionTimers=[];
@@ -298,7 +337,7 @@
       }
       function begin() {
         unlockMedia();
-        if(settings.sound==='beep')ensureAudioContext();
+        if(usesSynthSound())ensureAudioContext();
         if(state.finished)reset();
         if(state.phase==='ready'){
           if(settings.prep>0)setPhase('prep',settings.prep,0);
@@ -357,14 +396,14 @@
 
       function clearFinishEffects() {
         finishTimers.forEach(window.clearTimeout); finishTimers=[];
-        [ui.lionRoar,ui.crowdCheer].forEach(audio=>{audio.pause();audio.currentTime=0;});
+        [ui.bigCatGrowl,ui.crowdCheer].forEach(audio=>{audio.pause();audio.currentTime=0;});
         ui.finish.classList.remove('show','impact');
       }
       function finish() {
         state.running=false; state.finished=true; state.phase='complete'; state.remaining=0;
         stopIntervalAudio(); render(); ui.progressRail.classList.remove('visible');
         clearFinishEffects(); void ui.finish.offsetWidth; ui.finish.classList.add('show');
-        playAudio(ui.lionRoar,.92);
+        playAudio(ui.bigCatGrowl,.92);
         finishTimers.push(window.setTimeout(()=>ui.finish.classList.add('impact'),830));
         finishTimers.push(window.setTimeout(()=>playAudio(ui.crowdCheer,.76),1820));
         finishTimers.push(window.setTimeout(()=>ui.again.focus(),2050));
@@ -397,7 +436,7 @@
         input.addEventListener('change',()=>updateNumber(key,input));
       });
       ui.finalRest.addEventListener('change',()=>{ if(state.phase!=='ready'){ui.finalRest.checked=settings.finalRest;return;} settings.finalRest=ui.finalRest.checked; markCustom(); reset(); });
-      ui.soundSelect.addEventListener('change',()=>{settings.sound=ui.soundSelect.value;markCustom();stopIntervalAudio();unlockMedia();if(settings.sound==='beep')ensureAudioContext();playTransitionSound();});
+      ui.soundSelect.addEventListener('change',()=>{settings.sound=ui.soundSelect.value;markCustom();stopIntervalAudio();unlockMedia();if(usesSynthSound())ensureAudioContext();playTransitionSound();});
       ui.countdownSelect.addEventListener('change',()=>{settings.countdown=ui.countdownSelect.value;markCustom();});
       syncSettingsControls();
       render();
