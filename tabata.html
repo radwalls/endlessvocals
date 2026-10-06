@@ -10,6 +10,12 @@
       --green:#58bd5e;
       --green-dark:#43a84a;
       --red:#d95f58;
+      --work-color:#58bd5e;
+      --work-fill:#43a84a;
+      --work-ink:#fff;
+      --recovery-color:#d95f58;
+      --recovery-fill:#b83e37;
+      --recovery-ink:#fff;
       --paper:#f7f7f7;
       --line:#cfcfcf;
       --ink:#202020;
@@ -30,11 +36,11 @@
     .round-strip { height:43px; display:grid; margin-top:5px; overflow-x:auto; overflow-y:hidden; border-radius:4px; scrollbar-width:thin; }
     .round-segment { min-width:0; display:flex; color:#fff; font-size:20px; text-shadow:0 1px 0 rgba(0,0,0,.16); }
     .round-phase { position:relative; min-width:0; display:grid; place-items:center; overflow:hidden; }
-    .round-phase.work { background:var(--green); }
-    .round-phase.rest { background:var(--red); }
-    .round-phase.current::after { content:""; position:absolute; z-index:2; inset:0; box-shadow:inset 0 0 0 2px rgba(255,255,255,.92); pointer-events:none; }
-    .round-fill { position:absolute; z-index:0; inset:0; background:var(--green-dark); transform:scaleX(0); transform-origin:left center; will-change:transform; }
-    .round-phase.rest .round-fill { background:#b83e37; }
+    .round-phase.work { background:var(--work-color); color:var(--work-ink); }
+    .round-phase.rest { background:var(--recovery-color); color:var(--recovery-ink); }
+    .round-phase.current::after { content:""; position:absolute; z-index:2; inset:0; box-shadow:inset 0 0 0 2px currentColor; pointer-events:none; }
+    .round-fill { position:absolute; z-index:0; inset:0; background:var(--work-fill); transform:scaleX(0); transform-origin:left center; will-change:transform; }
+    .round-phase.rest .round-fill { background:var(--recovery-fill); }
     .round-number { position:relative; z-index:1; }
     .round-count { height:114px; display:flex; align-items:center; justify-content:center; margin:10px 0 0; color:#171717; font-size:115px; font-weight:300; line-height:1; letter-spacing:-7px; font-variant-numeric:tabular-nums; transform:scaleX(1.22); }
     .controls-wrap { position:relative; }
@@ -44,8 +50,8 @@
     .control:active { transform:translateY(1px); }
     .progress-rail { position:absolute; left:0; right:0; bottom:-8px; height:4px; overflow:hidden; border-radius:999px; background:#ddd; opacity:0; transition:opacity .16s ease; }
     .progress-rail.visible { opacity:1; }
-    .progress-fill { width:100%; height:100%; border-radius:inherit; background:var(--green); transform:scaleX(0); transform-origin:left center; will-change:transform; }
-    .progress-fill.rest { background:var(--red); }
+    .progress-fill { width:100%; height:100%; border-radius:inherit; background:var(--work-color); transform:scaleX(0); transform-origin:left center; will-change:transform; }
+    .progress-fill.rest { background:var(--recovery-color); }
     .progress-fill.prep { background:#efb63f; }
     .settings { margin-top:13px; overflow:hidden; border:1px solid #c9c9c9; border-radius:5px; background:#fff; }
     .tabs { display:grid; grid-template-columns:1fr 1fr; gap:0; padding:10px 10px 9px; }
@@ -61,6 +67,9 @@
     .number-field,.choice-field { height:33px; border:1px solid #bdbdbd; border-radius:4px; background:#fff; color:#333; box-shadow:inset 0 1px 2px rgba(0,0,0,.07); }
     .number-field { width:82px; padding:4px 6px; text-align:right; font-size:17px; font-variant-numeric:tabular-nums; }
     .choice-field { width:168px; padding:4px 28px 4px 8px; font-size:15px; }
+    .color-choice { border-left-width:12px; }
+    .color-choice.work-color { border-left-color:var(--work-color); }
+    .color-choice.recovery-color { border-left-color:var(--recovery-color); }
     .number-field:disabled,.choice-field:disabled { color:#999; background:#f2f2f2; }
     .toggle { position:relative; width:75px; height:28px; flex:none; }
     .toggle input { position:absolute; width:1px; height:1px; opacity:0; }
@@ -140,6 +149,8 @@
         <label class="setting-row" for="prepInput"><span class="setting-label">Prep Time</span><span class="value-field"><input id="prepInput" class="number-field" type="number" min="0" max="600" step="1" value="5"><span>sec</span></span></label>
         <label class="setting-row" for="soundSelect"><span class="setting-label">Sounds</span><select id="soundSelect" class="choice-field"><option value="fight3">Fight Bell ×3</option><option value="fight2">Fight Bell ×2</option><option value="fight1">Fight Bell ×1</option><option value="chime">Power Chime</option><option value="pulse">Digital Pulse</option><option value="beep">Clean Beeps</option><option value="silent">Silent</option></select></label>
         <label class="setting-row" for="countdownSelect"><span class="setting-label">Count Down</span><select id="countdownSelect" class="choice-field"><option value="every">Every Transition</option><option value="work">Before Work Only</option><option value="first">First Round Only</option><option value="off">Off</option></select></label>
+        <label class="setting-row" for="workColorSelect"><span class="setting-label">Work Color</span><select id="workColorSelect" class="choice-field color-choice work-color" aria-label="Work color"></select></label>
+        <label class="setting-row" for="recoveryColorSelect"><span class="setting-label">Recovery Color</span><select id="recoveryColorSelect" class="choice-field color-choice recovery-color" aria-label="Recovery color"></select></label>
       </section>
     </main>
   </div>
@@ -164,10 +175,18 @@
         progressRail:$('progressRail'),progressFill:$('progressFill'),totalTime:$('totalTime'),finalRest:$('finalRest'),toggleText:$('toggleText'),
         tabataPreset:$('tabataPreset'),customPreset:$('customPreset'),phaseLive:$('phaseLive'),roundsInput:$('roundsInput'),workInput:$('workInput'),
         restInput:$('restInput'),prepInput:$('prepInput'),soundSelect:$('soundSelect'),countdownSelect:$('countdownSelect'),
+        workColorSelect:$('workColorSelect'),recoveryColorSelect:$('recoveryColorSelect'),
         finish:$('finish'),again:$('again'),countdownVoice:$('countdownVoice'),bellOne:$('bellOne'),bellTwo:$('bellTwo'),bellThree:$('bellThree'),
         bigCatGrowl:$('bigCatGrowl'),crowdCheer:$('crowdCheer')
       };
       const settings = { rounds:8, work:20, rest:10, prep:5, finalRest:false, sound:'fight3', countdown:'every' };
+      const palette = { green:['Green','#58bd5e'],red:['Red','#d95f58'],blue:['Blue','#3688e8'],orange:['Orange','#f29a38'],purple:['Purple','#9962d8'],teal:['Teal','#34bdb0'],yellow:['Yellow','#f2d54f'],pink:['Pink','#ec76ad'] };
+      const colors = { work:'green',recovery:'red' };
+      try {
+        const saved=JSON.parse(localStorage.getItem('tabataColors')||'null');
+        if(saved&&Object.hasOwn(palette,saved.work))colors.work=saved.work;
+        if(saved&&Object.hasOwn(palette,saved.recovery))colors.recovery=saved.recovery;
+      } catch {}
       const numberInputs = [[ui.roundsInput,'rounds'],[ui.workInput,'work'],[ui.restInput,'rest'],[ui.prepInput,'prep']];
       let finishTimers = [];
       let transitionTimers = [];
@@ -180,6 +199,31 @@
       function format(seconds) { const whole=Math.max(0,Math.ceil(seconds)); return `${String(Math.floor(whole/60)).padStart(2,'0')}:${String(whole%60).padStart(2,'0')}`; }
       function workoutSeconds() { return settings.rounds*settings.work + (settings.rounds-(settings.finalRest?0:1))*settings.rest; }
       function shortTime(seconds) { return seconds<60 ? `${seconds}` : `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`; }
+      function applyColors() {
+        const luminance=channels=>channels.map(channel=>{const n=channel/255;return n<=.04045?n/12.92:((n+.055)/1.055)**2.4;}).reduce((sum,n,i)=>sum+n*[.2126,.7152,.0722][i],0);
+        Object.entries(colors).forEach(([phase,key])=>{
+          const hex=palette[key][1];
+          const channels=[1,3,5].map(offset=>parseInt(hex.slice(offset,offset+2),16));
+          const darker=channels.map(channel=>Math.round(channel*.76));
+          const baseLuminance=luminance(channels),fillLuminance=luminance(darker);
+          const ink=(fillLuminance+.05)/.05>=1.05/(baseLuminance+.05)?'#171717':'#fff';
+          document.documentElement.style.setProperty(`--${phase}-color`,hex);
+          document.documentElement.style.setProperty(`--${phase}-fill`,'#'+darker.map(channel=>channel.toString(16).padStart(2,'0')).join(''));
+          document.documentElement.style.setProperty(`--${phase}-ink`,ink);
+        });
+      }
+      function initializeColorSelectors() {
+        [[ui.workColorSelect,'work'],[ui.recoveryColorSelect,'recovery']].forEach(([select,phase])=>{
+          Object.entries(palette).forEach(([value,[label]])=>select.add(new Option(label,value)));
+          select.value=colors[phase];
+          select.addEventListener('change',()=>{
+            colors[phase]=select.value;
+            applyColors();
+            try { localStorage.setItem('tabataColors',JSON.stringify(colors)); } catch {}
+          });
+        });
+        applyColors();
+      }
       function syncSettingsControls() {
         ui.roundsInput.value=settings.rounds;
         ui.workInput.value=settings.work;
@@ -461,6 +505,7 @@
       ui.finalRest.addEventListener('change',()=>{ if(state.phase!=='ready'){ui.finalRest.checked=settings.finalRest;return;} settings.finalRest=ui.finalRest.checked; markCustom(); reset(); });
       ui.soundSelect.addEventListener('change',()=>{settings.sound=ui.soundSelect.value;markCustom();stopIntervalAudio();unlockMedia();if(usesSynthSound())ensureAudioContext();playTransitionSound();});
       ui.countdownSelect.addEventListener('change',()=>{settings.countdown=ui.countdownSelect.value;markCustom();});
+      initializeColorSelectors();
       syncSettingsControls();
       render();
     })();
