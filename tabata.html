@@ -80,6 +80,8 @@
     .toggle input:checked ~ .toggle-knob { transform:translateX(48px); }
     .toggle input:checked ~ .toggle-text { left:9px; right:auto; color:#fff; }
     .phase-live { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+    .audio-status { margin:16px 0 0; color:#777; font-size:14px; line-height:1.4; }
+    .audio-status:empty { display:none; }
     .finish { position:fixed; z-index:20; inset:0; display:grid; place-items:center; padding:24px; visibility:hidden; opacity:0; overflow:hidden; background:rgba(1,7,10,.94); transition:opacity .18s ease,visibility .18s ease; transform-origin:center; will-change:transform; }
     .finish.show { visibility:visible; opacity:1; }
     .finish.impact { animation:screenRock .9s cubic-bezier(.22,.78,.26,1) both; }
@@ -135,6 +137,7 @@
           <div id="progressRail" class="progress-rail" aria-hidden="true"><div id="progressFill" class="progress-fill"></div></div>
         </div>
         <span id="phaseLive" class="phase-live" aria-live="assertive"></span>
+        <p id="audioStatus" class="audio-status" role="status"></p>
       </section>
       <section class="settings" aria-label="Timer settings">
         <div class="tabs" aria-label="Presets">
@@ -162,11 +165,10 @@
 
   <audio id="countdownVoice" src="sounds/male-countdown.wav" preload="auto" aria-hidden="true"></audio>
   <audio id="bellOne" src="sounds/fight-bell.wav" preload="auto" aria-hidden="true"></audio>
-  <audio id="bellTwo" src="sounds/fight-bell.wav" preload="auto" aria-hidden="true"></audio>
-  <audio id="bellThree" src="sounds/fight-bell.wav" preload="auto" aria-hidden="true"></audio>
   <audio id="bigCatGrowl" src="sounds/big-cat-growl.wav" preload="auto" aria-hidden="true"></audio>
   <audio id="crowdCheer" src="sounds/crowd-cheer.wav" preload="auto" aria-hidden="true"></audio>
 
+  <script src="tabata-audio.js"></script>
   <script>
     (() => {
       const $ = (id) => document.getElementById(id);
@@ -176,7 +178,8 @@
         tabataPreset:$('tabataPreset'),customPreset:$('customPreset'),phaseLive:$('phaseLive'),roundsInput:$('roundsInput'),workInput:$('workInput'),
         restInput:$('restInput'),prepInput:$('prepInput'),soundSelect:$('soundSelect'),countdownSelect:$('countdownSelect'),
         workColorSelect:$('workColorSelect'),recoveryColorSelect:$('recoveryColorSelect'),
-        finish:$('finish'),again:$('again'),countdownVoice:$('countdownVoice'),bellOne:$('bellOne'),bellTwo:$('bellTwo'),bellThree:$('bellThree'),
+        audioStatus:$('audioStatus'),
+        finish:$('finish'),again:$('again'),countdownVoice:$('countdownVoice'),bellOne:$('bellOne'),
         bigCatGrowl:$('bigCatGrowl'),crowdCheer:$('crowdCheer')
       };
       const settings = { rounds:8, work:20, rest:10, prep:5, finalRest:false, sound:'fight3', countdown:'every' };
@@ -189,12 +192,13 @@
       } catch {}
       const numberInputs = [[ui.roundsInput,'rounds'],[ui.workInput,'work'],[ui.restInput,'rest'],[ui.prepInput,'prep']];
       let finishTimers = [];
-      let transitionTimers = [];
-      let mediaUnlocked = false;
       let audioContext = null;
+      let audioLoadPromise = null;
+      let audioPlayer = null;
+      let audioOperation = 0;
       let state = freshState();
 
-      function freshState() { return {running:false,phase:'ready',round:0,remaining:0,duration:0,target:0,raf:0,finished:false,countdownPlayed:false,lastShown:null}; }
+      function freshState() { return {running:false,loading:false,phase:'ready',round:0,remaining:0,duration:0,raf:0,finished:false,lastShown:null,plan:[],position:0,origin:0}; }
       function clamp(value,min,max) { return Math.max(min,Math.min(max,Number(value) || min)); }
       function format(seconds) { const whole=Math.max(0,Math.ceil(seconds)); return `${String(Math.floor(whole/60)).padStart(2,'0')}:${String(whole%60).padStart(2,'0')}`; }
       function workoutSeconds() { return settings.rounds*settings.work + (settings.rounds-(settings.finalRest?0:1))*settings.rest; }
@@ -277,12 +281,13 @@
       function render() {
         ui.clock.textContent=state.phase==='ready'?'00:00':format(state.remaining);
         ui.roundCount.textContent=`${state.round}/${settings.rounds}`;
-        ui.start.textContent=state.running?'Pause':(state.finished?'Start':'Start');
+        ui.start.textContent=state.loading?'Loading sounds…':state.running?'Pause':'Start';
+        ui.start.disabled=state.loading;
         ui.totalTime.textContent=shortTime(workoutSeconds());
         ui.toggleText.textContent=settings.finalRest?'ON':'OFF';
         ui.progressRail.classList.toggle('visible',state.phase!=='ready'&&!state.finished);
         ui.progressFill.className=`progress-fill ${state.phase==='rest'?'rest':state.phase==='prep'?'prep':''}`;
-        lockSettings(state.phase!=='ready');
+        lockSettings(state.loading||state.phase!=='ready');
         renderRounds();
         updateProgress();
       }
@@ -305,169 +310,103 @@
         ui.phaseLive.textContent=words[state.phase]||'';
       }
 
-      function unlockMedia() {
-        if(mediaUnlocked)return;
-        mediaUnlocked=true;
-        const items=[[ui.countdownVoice,.9],[ui.bellOne,.92],[ui.bellTwo,.92],[ui.bellThree,.92],[ui.bigCatGrowl,.92],[ui.crowdCheer,.76]];
-        items.forEach(([audio,volume])=>{
-          audio.volume=0;
-          const attempt=audio.play();
-          if(attempt)attempt.then(()=>{audio.pause();audio.currentTime=0;audio.volume=volume;}).catch(()=>{audio.volume=volume;});
-        });
-      }
-      function playAudio(audio,volume) { audio.pause(); audio.currentTime=0; audio.volume=volume; const attempt=audio.play(); if(attempt)attempt.catch(()=>{}); }
       function ensureAudioContext() {
         if(!audioContext)audioContext=new (window.AudioContext||window.webkitAudioContext)();
-        if(audioContext.state==='suspended')audioContext.resume();
         return audioContext;
       }
-      function playFightBell(count=3) {
-        const bells=[ui.bellOne,ui.bellTwo,ui.bellThree];
-        bells.slice(0,count).forEach((audio,index)=>transitionTimers.push(window.setTimeout(()=>playAudio(audio,.92),index*340)));
-      }
-      function playCleanBeeps() {
+      async function loadSounds() {
         const context=ensureAudioContext();
-        [0,.24,.48].forEach((delay,index)=>{
-          const start=context.currentTime+delay,osc=context.createOscillator(),gain=context.createGain();
-          osc.type='sine'; osc.frequency.value=740+index*90;
-          gain.gain.setValueAtTime(.0001,start); gain.gain.exponentialRampToValueAtTime(.48,start+.012); gain.gain.exponentialRampToValueAtTime(.0001,start+.2);
-          osc.connect(gain).connect(context.destination); osc.start(start); osc.stop(start+.2);
-        });
-      }
-      function playPowerChime() {
-        const context=ensureAudioContext();
-        [659.25,987.77,1318.51].forEach((frequency,index)=>{
-          const start=context.currentTime+index*.11,osc=context.createOscillator(),gain=context.createGain();
-          osc.type='sine'; osc.frequency.setValueAtTime(frequency,start);
-          gain.gain.setValueAtTime(.0001,start); gain.gain.exponentialRampToValueAtTime(.3,start+.012); gain.gain.exponentialRampToValueAtTime(.0001,start+.54);
-          osc.connect(gain).connect(context.destination); osc.start(start); osc.stop(start+.56);
-        });
-      }
-      function playDigitalPulse() {
-        const context=ensureAudioContext();
-        [0,.17,.34].forEach((delay,index)=>{
-          const start=context.currentTime+delay,osc=context.createOscillator(),gain=context.createGain();
-          osc.type='square'; osc.frequency.setValueAtTime(index===2?1174.66:880,start);
-          gain.gain.setValueAtTime(.0001,start); gain.gain.exponentialRampToValueAtTime(.22,start+.008); gain.gain.exponentialRampToValueAtTime(.0001,start+.12);
-          osc.connect(gain).connect(context.destination); osc.start(start); osc.stop(start+.13);
-        });
-      }
-      function usesSynthSound() { return settings.sound==='beep'||settings.sound==='chime'||settings.sound==='pulse'; }
-      function playTransitionSound() {
-        if(settings.sound==='fight3')playFightBell(3);
-        else if(settings.sound==='fight2')playFightBell(2);
-        else if(settings.sound==='fight1')playFightBell(1);
-        else if(settings.sound==='beep')playCleanBeeps();
-        else if(settings.sound==='chime')playPowerChime();
-        else if(settings.sound==='pulse')playDigitalPulse();
-      }
-      function stopIntervalAudio() {
-        transitionTimers.forEach(window.clearTimeout); transitionTimers=[];
-        [ui.countdownVoice,ui.bellOne,ui.bellTwo,ui.bellThree].forEach(audio=>{audio.pause();audio.currentTime=0;});
-      }
-      function upcomingPhase() {
-        if(state.phase==='prep')return 'work';
-        if(state.phase==='rest')return state.round<settings.rounds?'work':'complete';
-        if(state.phase==='work'){
-          if(state.round===settings.rounds&&!settings.finalRest)return 'complete';
-          if(settings.rest>0)return 'rest';
-          return state.round<settings.rounds?'work':'complete';
+        if(!audioLoadPromise){
+          const files={voice:ui.countdownVoice,bell:ui.bellOne,cat:ui.bigCatGrowl,crowd:ui.crowdCheer};
+          audioLoadPromise=Promise.all(Object.entries(files).map(async([name,element])=>{
+            const response=await fetch(element.getAttribute('src'));
+            if(!response.ok)throw new Error('Sound download failed');
+            return [name,await context.decodeAudioData(await response.arrayBuffer())];
+          })).then(entries=>{audioPlayer=TabataAudio.createPlayer(context,Object.fromEntries(entries));}).catch(error=>{audioLoadPromise=null;throw error;});
         }
-        return 'work';
+        return audioLoadPromise;
       }
-      function shouldPlayCountdown() {
-        const next=upcomingPhase();
-        if(settings.countdown==='off'||next==='complete')return false;
-        if(settings.countdown==='every')return true;
-        if(settings.countdown==='work')return next==='work';
-        return settings.countdown==='first'&&state.phase==='prep'&&state.round===0;
-      }
-
-      function setPhase(phase,duration,round) {
-        state.phase=phase;
-        state.duration=duration;
-        state.remaining=duration;
-        state.round=round;
-        state.target=performance.now()+duration*1000;
-        state.countdownPlayed=false;
-        state.lastShown=null;
-        announcePhase();
-        render();
-        updateProgress();
-        if(duration<=3&&duration>0&&shouldPlayCountdown()){ playAudio(ui.countdownVoice,.9); state.countdownPlayed=true; }
-      }
-      function begin() {
-        if(state.phase==='ready')numberInputs.forEach(([input,key])=>updateNumber(key,input,true));
-        unlockMedia();
-        if(usesSynthSound())ensureAudioContext();
+      async function begin() {
+        if(state.loading)return;
         if(state.finished)reset();
-        if(state.phase==='ready'){
-          if(settings.prep>0)setPhase('prep',settings.prep,0);
-          else { playTransitionSound(); setPhase('work',settings.work,1); }
-        } else {
-          state.target=performance.now()+state.remaining*1000;
-        }
-        state.running=true;
+        if(state.phase==='ready')numberInputs.forEach(([input,key])=>updateNumber(key,input,true));
+        const operation=++audioOperation;
+        state.loading=true;
+        ui.audioStatus.textContent='';
         render();
-        state.raf=requestAnimationFrame(tick);
+        try {
+          // Resume from the Start click, before any network await (autoplay policy).
+          const context=ensureAudioContext();
+          const resumed=context.resume();
+          await Promise.all([resumed,loadSounds()]);
+          if(operation!==audioOperation)return;
+          if(context.state!=='running')throw new Error('Audio is not running');
+          if(state.phase==='ready')state.plan=TabataAudio.buildPlan(settings);
+          state.origin=audioPlayer.schedule(state.plan,settings,state.position);
+          state.loading=false;
+          state.running=true;
+          syncPosition();
+          render();
+          state.raf=requestAnimationFrame(tick);
+        } catch {
+          if(operation!==audioOperation)return;
+          state.loading=false;
+          if(audioPlayer)audioPlayer.stop();
+          ui.audioStatus.textContent='Could not load workout sounds. Check your connection and press Start to retry.';
+          render();
+        }
       }
       function pause() {
+        syncPosition();
+        if(state.finished)return;
         state.running=false;
         cancelAnimationFrame(state.raf);
         state.raf=0;
-        stopIntervalAudio();
+        audioPlayer.stop();
         render();
       }
-      function tick(now) {
+      function syncPosition() {
         if(!state.running)return;
-        state.remaining=Math.max(0,(state.target-now)/1000);
-        const shown=Math.ceil(state.remaining);
-        if(shown<=3&&shown>=1&&shouldPlayCountdown()){
-          pulseCountdown(shown);
-          if(!state.countdownPlayed){ playAudio(ui.countdownVoice,.9); state.countdownPlayed=true; }
+        state.position=Math.max(state.position,audioContext.currentTime-state.origin);
+        const phase=TabataAudio.phaseAt(state.plan,state.position);
+        if(!phase){finish();return;}
+        if(state.phase!==phase.phase||state.round!==phase.round){
+          state.phase=phase.phase;state.duration=phase.duration;state.round=phase.round;
+          state.lastShown=null;
+          state.remaining=phase.end-state.position;
+          announcePhase();render();
         }
+        state.remaining=phase.end-state.position;
+        const shown=Math.ceil(state.remaining);
+        if(shown<=3&&shown>=1&&TabataAudio.countdownEnabled(settings,state.plan,state.plan.indexOf(phase)))pulseCountdown(shown);
         ui.clock.textContent=format(state.remaining);
         updateProgress();
-        if(state.remaining<=0){ advance(); return; }
-        state.raf=requestAnimationFrame(tick);
       }
-      function advance() {
-        if(state.phase==='prep'){
-          playTransitionSound();
-          setPhase('work',settings.work,1);
-        } else if(state.phase==='work'){
-          if(state.round===settings.rounds&&!settings.finalRest){ finish(); return; }
-          if(settings.rest>0){ playTransitionSound(); setPhase('rest',settings.rest,state.round); }
-          else if(state.round<settings.rounds){ playTransitionSound(); setPhase('work',settings.work,state.round+1); }
-          else { finish(); return; }
-        } else if(state.phase==='rest'){
-          if(state.round===settings.rounds){ finish(); return; }
-          playTransitionSound();
-          setPhase('work',settings.work,state.round+1);
-        }
-        state.raf=requestAnimationFrame(tick);
+      function tick() {
+        syncPosition();
+        if(state.running)state.raf=requestAnimationFrame(tick);
       }
       function reset() {
+        ++audioOperation;
         cancelAnimationFrame(state.raf);
-        stopIntervalAudio();
+        if(audioPlayer)audioPlayer.stop();
         clearFinishEffects();
         state=freshState();
+        ui.audioStatus.textContent='';
         ui.progressFill.style.transform='scaleX(0)';
         render();
       }
 
       function clearFinishEffects() {
         finishTimers.forEach(window.clearTimeout); finishTimers=[];
-        [ui.bigCatGrowl,ui.crowdCheer].forEach(audio=>{audio.pause();audio.currentTime=0;});
         ui.finish.classList.remove('show','impact');
       }
       function finish() {
         state.running=false; state.finished=true; state.phase='complete'; state.remaining=0;
-        stopIntervalAudio(); render(); ui.progressRail.classList.remove('visible');
+        state.round=settings.rounds;
+        render(); ui.progressRail.classList.remove('visible');
         clearFinishEffects(); void ui.finish.offsetWidth; ui.finish.classList.add('show');
-        playAudio(ui.bigCatGrowl,.92);
         finishTimers.push(window.setTimeout(()=>ui.finish.classList.add('impact'),830));
-        finishTimers.push(window.setTimeout(()=>playAudio(ui.crowdCheer,.76),1820));
         finishTimers.push(window.setTimeout(()=>ui.again.focus(),2050));
       }
 
@@ -503,8 +442,18 @@
         input.addEventListener('change',()=>updateNumber(key,input,true));
       });
       ui.finalRest.addEventListener('change',()=>{ if(state.phase!=='ready'){ui.finalRest.checked=settings.finalRest;return;} settings.finalRest=ui.finalRest.checked; markCustom(); reset(); });
-      ui.soundSelect.addEventListener('change',()=>{settings.sound=ui.soundSelect.value;markCustom();stopIntervalAudio();unlockMedia();if(usesSynthSound())ensureAudioContext();playTransitionSound();});
+      ui.soundSelect.addEventListener('change',async()=>{
+        settings.sound=ui.soundSelect.value;markCustom();
+        ui.audioStatus.textContent='';
+        const operation=++audioOperation;
+        try {
+          const context=ensureAudioContext();
+          await Promise.all([context.resume(),loadSounds()]);
+          if(operation===audioOperation&&!state.running&&!state.loading)audioPlayer.preview(settings.sound);
+        } catch { if(operation===audioOperation)ui.audioStatus.textContent='Could not load the sound preview. Press Start to retry.'; }
+      });
       ui.countdownSelect.addEventListener('change',()=>{settings.countdown=ui.countdownSelect.value;markCustom();});
+      document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.running)syncPosition();});
       initializeColorSelectors();
       syncSettingsControls();
       render();
