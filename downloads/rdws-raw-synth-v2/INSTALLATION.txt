@@ -1,0 +1,50 @@
+RDWS RAW SYNTH V2 — INSTALLATION
+=================================
+
+System requirements
+-------------------
+
+- Apple Silicon Mac (M1, M2, M3, M4 or newer)
+- macOS 13 or newer
+- Logic Pro or another compatible Audio Unit/VST3 host
+
+Logic Pro / Audio Unit
+----------------------
+
+1. Quit Logic Pro.
+2. Copy "RDWS RAW SYNTH V2.component" from the Audio Units folder to:
+
+   ~/Library/Audio/Plug-Ins/Components/
+
+3. Reopen Logic Pro and create a Software Instrument track.
+4. Load RDWS RAW SYNTH V2 from the instrument menu.
+
+If it does not appear, open Logic Pro > Settings > Plug-in Manager, select
+RDWS RAW SYNTH V2, then choose Reset & Rescan Selection.
+
+VST3
+----
+
+1. Quit your host.
+2. Copy "RDWS RAW SYNTH V2.vst3" from the VST3 folder to:
+
+   ~/Library/Audio/Plug-Ins/VST3/
+
+3. Restart your host and rescan plug-ins if needed.
+
+Standalone app
+--------------
+
+The Standalone folder contains a version that runs without a DAW. On first
+launch, Control-click the app, choose Open, then choose Open again if macOS
+asks for confirmation.
+
+Downloaded plug-in note
+-----------------------
+
+This release is locally signed and is not Apple-notarized. Some Macs apply
+stricter security checks to downloaded Audio Units and VST3s. If macOS blocks
+the plug-in, contact support rather than disabling system-wide security.
+
+Support: Radwalls@gmail.com
+

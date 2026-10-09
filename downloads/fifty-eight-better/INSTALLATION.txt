@@ -1,0 +1,20 @@
+FIFTY-EIGHT BETTER v0.2.1 — INSTALLATION
+
+Thank you for supporting independent music tools and vocal education.
+
+LOGIC PRO / AUDIO UNIT
+1. Open the Components folder in this download.
+2. Copy Fifty-Eight Better.component to:
+   Macintosh HD/Library/Audio/Plug-Ins/Components
+3. Restart Logic Pro.
+4. Find the plug-in under Audio FX > Fifty Eight Audio.
+
+VST3 HOSTS
+1. Open the VST3 folder in this download.
+2. Copy Fifty-Eight Better.vst3 to:
+   Macintosh HD/Library/Audio/Plug-Ins/VST3
+3. Restart your DAW and rescan plug-ins if needed.
+
+Fifty-Eight Better requires macOS 11 or later and an Apple Silicon Mac.
+
+Need help? Email radwalls@gmail.com
