@@ -36,7 +36,12 @@
     <section class="workspace" aria-label="Lyric map">
       <div class="section-heading"><div><span class="eyebrow">LYRICS</span><h2>Shape the performance</h2></div><div class="section-heading-actions"><span id="lineCount" class="count-pill">0 lines</span><button id="sectionButton" class="section-launch" type="button">Sections</button></div></div>
       <p class="instruction" id="mapInstruction">Tap or drag across line numbers to select lyrics, then shape them or mark a section.</p>
-      <div id="emptyState" class="empty-state"><span class="empty-icon" aria-hidden="true">✦</span><h3>Find the song. Shape the voice.</h3><p>Search for a song, review its lyrics, then map every word and syllable in your own style.</p><div class="empty-actions"><button class="toolbar-button primary" id="emptyFindLyricsButton" type="button">Find song lyrics</button><button class="toolbar-button" id="emptyLyricsButton" type="button">Paste my lyrics</button></div><span class="empty-feature-line">Six text styles · Song sections · Piano roll · Syllable pitches</span><small>Maps stay in this browser. Export a .smap file to move one to your iPhone.</small></div>
+      <div id="emptyState" class="empty-state">
+        <h3>Start with the lyrics</h3>
+        <p>Find the song you’re working on, or paste in your own lyrics. Add sections and notes as you go.</p>
+        <div class="empty-actions"><button class="toolbar-button primary" id="emptyFindLyricsButton" type="button">Find lyrics</button><button class="toolbar-button" id="emptyLyricsButton" type="button">Paste lyrics</button></div>
+        <small>Saved in this browser. Export a .smap file to use the map on your iPhone.</small>
+      </div>
       <div id="lyricsList" class="lyrics-list" aria-live="polite"></div>
       <div id="focusParking" class="hidden">
         <section class="focus-panel focus-top" id="focusTop" aria-label="Selected lyric controls">
