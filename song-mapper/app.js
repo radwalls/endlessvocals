@@ -94,9 +94,22 @@ function wordPitchDetails(word) {
     notes: (part.notes?.length ? part.notes : [null]).map((note) => validNote(note) == null ? "—" : noteName(validNote(note)))
   }));
 }
-function wordPitchMarkup(details) {
-  if (!details.length) return "";
-  return `<span class="word-note-map" aria-hidden="true">${details.map(({ syllable, notes }) => `<span class="syllable-pitch"><span class="syllable-name">${safe(syllable)}</span><span class="pitch-path">${notes.map(safe).join('<span class="pitch-arrow">→</span>')}</span></span>`).join("")}</span>`;
+function wordPitchMarkup(word, details) {
+  if (!details.length) return `<strong>${visibleLetters(word)}</strong>`;
+  let letterOffset = 0;
+  return `<strong class="word-syllables" aria-hidden="true">${details.map(({ syllable, notes }, index) => {
+    const nextOffset = letterOffset + Array.from(syllable).length;
+    const letters = visibleLetters(word, letterOffset, nextOffset);
+    letterOffset = nextOffset;
+    const previousNotes = details[index - 1]?.notes || [];
+    const sustained = index > 0 && notes[0] !== "—" && previousNotes.at(-1) === notes[0];
+    const pitches = notes.map((note, noteIndex) => {
+      const held = note !== "—" && (noteIndex ? notes[noteIndex - 1] === note : sustained);
+      const arrow = noteIndex && !held ? '<span class="pitch-arrow">→</span>' : "";
+      return `${arrow}${held ? '<span class="pitch-hold-line"></span>' : safe(note)}`;
+    }).join("");
+    return `<span class="syllable-column ${sustained ? "same-note" : ""}"><span class="syllable-lyric">${letters}</span><span class="syllable-notes">${pitches}</span></span>`;
+  }).join("")}</strong>`;
 }
 
 function makeWord(text, old = {}) {
@@ -319,8 +332,9 @@ function selectedWords() {
 }
 function firstValue(key, fallback) { return selectedWords()[0]?.[key] ?? fallback; }
 
-function visibleLetters(word) {
-  return Array.from(word.text).map((letter, index) => {
+function visibleLetters(word, start = 0, end = Array.from(word.text).length) {
+  return Array.from(word.text).slice(start, end).map((letter, offset) => {
+    const index = start + offset;
     const level = clamp(word.letterLevels?.[index] ?? word.enunciation, 0, 100);
     const strength = level > 70 ? "strong" : level < 35 ? "soft" : "normal";
     const displayed = strength === "strong" ? letter.toUpperCase() : strength === "soft" ? letter.toLowerCase() : letter;
@@ -547,7 +561,7 @@ function render() {
       const active = selection?.type === "word" && selection.lineIds[0] === line.id && selection.wordIndex === wordIndex;
       const volumeHue = word.volume == null ? null : Math.round(205 - (word.volume - 1) / 9 * 175);
       const volumeStyle = volumeHue == null ? "" : `style="background:linear-gradient(180deg,hsla(${volumeHue},85%,55%,.24),hsla(${volumeHue},85%,43%,.42))"`;
-      return `${word.breathBefore ? breathMarkup(word.breathBefore) : ""}<button type="button" class="word-chip ${marked ? "marked" : ""} ${active ? "active" : ""}" data-word-index="${wordIndex}" aria-label="Edit ${safe(word.text)}${pitchDetails.length ? `: ${safe(pitchDescription)}` : ""}" ${word.volume != null ? `data-volume="${word.volume}"` : ""} ${volumeStyle}>${word.above ? `<small>${safe(word.above)}</small>` : ""}<strong>${visibleLetters(word)}</strong>${wordPitchMarkup(pitchDetails)}</button>`;
+      return `${word.breathBefore ? breathMarkup(word.breathBefore) : ""}<button type="button" class="word-chip ${marked ? "marked" : ""} ${active ? "active" : ""}" data-word-index="${wordIndex}" aria-label="Edit ${safe(word.text)}${pitchDetails.length ? `: ${safe(pitchDescription)}` : ""}" ${word.volume != null ? `data-volume="${word.volume}"` : ""} ${volumeStyle}>${word.above ? `<small>${safe(word.above)}</small>` : ""}${wordPitchMarkup(word, pitchDetails)}</button>`;
     }).join("");
     const below = [...new Set(line.words.map((word) => word.below).filter(Boolean))].map((value) => `<span>${safe(value)}</span>`).join("");
     const legacyBreaths = line.breaths?.length ? line.breaths.map((breath) => breathMarkup(breath.type)).join("") : "";

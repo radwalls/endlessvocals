@@ -118,11 +118,12 @@ h1, h2, h3, p { margin-top: 0; }
 .enunc-letter.normal { font-size: 15px; font-weight: 800; }
 .enunc-letter.strong { font-size: 18px; font-weight: 900; }
 .word-chip small { max-width: 130px; overflow: hidden; color: var(--blue); font-size: 9px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
-.word-note-map { display: flex; flex-wrap: wrap; gap: 3px; min-width: 0; max-width: 100%; margin-top: 3px; }
-.syllable-pitch { display: inline-flex; align-items: baseline; gap: 3px; max-width: 100%; padding: 3px 5px; border: 1px solid rgba(var(--accent-rgb),.3); border-radius: 4px; background: rgba(var(--accent-rgb),.1); font-size: 11px; line-height: 1.25; white-space: nowrap; }
-.syllable-name { overflow: hidden; color: var(--muted); font-weight: 750; text-overflow: ellipsis; }
-.pitch-path { color: var(--mint); font-variant-numeric: tabular-nums; font-weight: 900; }
-.pitch-arrow { padding: 0 1px; opacity: .7; }
+.word-chip strong.word-syllables { display: inline-flex; align-items: flex-start; gap: 4px; width: max-content; max-width: 100%; }
+.syllable-column { position: relative; display: inline-grid; justify-items: center; flex: none; }
+.syllable-lyric { display: inline-flex; white-space: nowrap; }
+.syllable-notes { display: inline-flex; align-items: center; justify-content: center; width: 100%; min-height: 14px; margin-top: 3px; color: var(--mint); font: 800 10px/1 "SFMono-Regular", Menlo, monospace; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pitch-hold-line { display: inline-block; flex: 1; min-width: 17px; margin: 0 2px; border-top: 2px solid currentColor; }
+.pitch-arrow { margin: 0 2px; font-size: 9px; opacity: .7; }
 .word-chip.marked { border-color: #414b63; background: var(--raised); }
 .word-chip.active { border-color: var(--mint); background: rgba(var(--accent-rgb),.18); }
 .word-chip[data-volume] { background: linear-gradient(180deg, rgba(255,197,110,.18), var(--raised)); }
