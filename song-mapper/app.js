@@ -714,6 +714,16 @@ function openSheet() {
   $("sheetEyebrow").textContent = selection.type === "group" ? `${lines.length} LINES SELECTED` : word ? "WORD SELECTED" : "LINE SELECTED";
   $("sheetTitle").textContent = word ? `Shape “${word.text}”` : selection.type === "group" ? "Shape this group" : "Shape this line";
   $("editAction").textContent = word ? "Edit word" : selection.type === "group" ? "Edit selected lines" : "Edit lyric line";
+  const noteButton = $("focusNoteButton");
+  noteButton.classList.toggle("hidden", selection.type === "group");
+  $("pianoFromSelection").classList.toggle("hidden", selection.type !== "group");
+  if (word) {
+    const notes = word.syllables.flatMap((part) => part.notes).filter((note) => note != null).map(noteName);
+    const summary = notes.slice(0, 3).join(" → ") + (notes.length > 3 ? " …" : "");
+    noteButton.innerHTML = `♪ ${notes.length ? `Edit notes · ${safe(summary)}` : `Add notes to “${safe(word.text)}”`} <span aria-hidden="true">↗</span>`;
+    noteButton.setAttribute("aria-label", notes.length ? `Edit notes for ${word.text}: ${notes.join(", ")}` : `Add notes to ${word.text}`);
+  } else noteButton.innerHTML = '♪ Set notes for this line <span aria-hidden="true">↗</span>';
+  if (!word) noteButton.setAttribute("aria-label", "Set notes for this line");
   $("wordTools").innerHTML = word ? `<button type="button" id="previousWord" ${selection.wordIndex === 0 ? "disabled" : ""}>← Previous</button><button type="button" id="nextWord" ${selection.wordIndex === lines[0].words.length - 1 ? "disabled" : ""}>Next →</button>` : "";
   if (word) {
     $("previousWord").onclick = () => moveWord(-1);
@@ -807,15 +817,46 @@ function openInlineEditor(mode) {
   inlineMode = mode;
   $("inlineEditorLabel").textContent = mode === "word" ? "Edit selected word" : mode === "group" ? "Edit selected lines · one per row" : "Edit lyric line";
   $("inlineEditorText").value = mode === "word" ? word?.text || "" : mode === "group" ? lines.map((line) => line.text).join("\n") : lines[0].text;
-  $("inlineEditorText").rows = mode === "group" ? Math.max(3, lines.length) : 3;
+  $("inlineEditorText").rows = mode === "group" ? Math.max(3, lines.length) : mode === "word" ? 1 : 3;
   $("saveInlineEdit").textContent = mode === "word" ? "Save word" : mode === "group" ? "Save lines" : "Save lyric";
-  $("inlineEditor").classList.remove("hidden");
-  $("inlineEditorText").focus();
+  const editor = $("inlineEditor");
+  editor.dataset.mode = mode;
+  document.body.append(editor);
+  editor.classList.add("floating-editor");
+  editor.classList.remove("hidden");
+  document.body.classList.add("editing-lyric");
+  positionInlineEditor();
+  $("inlineEditorText").focus({ preventScroll: true });
+  requestAnimationFrame(positionInlineEditor);
+}
+
+function positionInlineEditor() {
+  if (!inlineMode) return;
+  const editor = $("inlineEditor");
+  const viewport = window.visualViewport;
+  const visibleTop = viewport?.offsetTop ?? 0;
+  const visibleHeight = viewport?.height ?? window.innerHeight;
+  editor.style.maxHeight = `${Math.max(150, visibleHeight - 24)}px`;
+  const editorTop = Math.max(visibleTop + 12, visibleTop + visibleHeight - editor.offsetHeight - 12);
+  editor.style.top = `${Math.round(editorTop)}px`;
+  const lyric = $("lyricsList").querySelector(".lyric-line.selected .word-chip.active") || $("lyricsList").querySelector(".lyric-line.selected");
+  if (lyric) {
+    const bounds = lyric.getBoundingClientRect();
+    const overlap = bounds.bottom - (editorTop - 12);
+    if (overlap > 0 && bounds.top > visibleTop + 70) window.scrollBy(0, Math.min(overlap, bounds.top - visibleTop - 70));
+  }
 }
 
 function closeInlineEditor() {
   $("inlineEditorText").blur();
-  $("inlineEditor").classList.add("hidden");
+  const editor = $("inlineEditor");
+  editor.classList.add("hidden");
+  editor.classList.remove("floating-editor");
+  delete editor.dataset.mode;
+  editor.style.top = "";
+  editor.style.maxHeight = "";
+  $("focusBottom").append(editor);
+  document.body.classList.remove("editing-lyric");
   inlineMode = null;
 }
 
@@ -831,8 +872,7 @@ function saveInlineEditor() {
     const word = lines[0].words[selection.wordIndex];
     const wordText = value.trim();
     if (!wordText || /\s/.test(wordText)) { showToast("Use one word here; edit the line for spaces"); return; }
-    word.text = wordText;
-    word.letterLevels = Array.from(wordText, () => word.enunciation);
+    Object.assign(word, makeWord(wordText, word));
     lines[0].text = lines[0].words.map((item) => item.text).join(" ");
   } else if (mode === "group") {
     const entries = value.split("\n");
@@ -1038,12 +1078,12 @@ function syncWordNote(word) {
 function selectedRollSlots(word) {
   return word.syllables.flatMap((part, syllableIndex) => part.notes.map((note, pitchIndex) => ({ text: part.text, note, syllableIndex, pitchIndex })));
 }
-function openPianoRoll(lineId = null) {
+function openPianoRoll(lineId = null, wordIndex = null) {
   const lines = activeMap().lines.filter((line) => line.words.length);
   if (!lines.length) { showToast("Add lyrics before opening the piano roll"); return; }
   const selectedId = lineId || selection?.lineIds?.[0];
   rollLineId = lines.some((line) => line.id === selectedId) ? selectedId : lines[0].id;
-  rollWordIndex = 0;
+  rollWordIndex = Number.isInteger(wordIndex) ? wordIndex : 0;
   rollSyllableIndex = 0;
   rollPitchIndex = 0;
   if (focusOpen) closeSheet();
@@ -1067,6 +1107,8 @@ function renderPianoRoll() {
   if (!line?.words.length) { closePianoRoll(); return; }
   const viewport = $("rollViewport");
   const oldTop = viewport.scrollTop, oldLeft = viewport.scrollLeft;
+  const lineStrip = $("rollLinePicker"), wordStrip = $("rollWordRibbon"), syllableStrip = $("rollSyllableRibbon");
+  const oldLineLeft = lineStrip.scrollLeft, oldWordLeft = wordStrip.scrollLeft, oldSyllableLeft = syllableStrip.scrollLeft;
   rollWordIndex = clamp(rollWordIndex, 0, line.words.length - 1);
   const word = line.words[rollWordIndex];
   rollSyllableIndex = clamp(rollSyllableIndex, 0, word.syllables.length - 1);
@@ -1075,6 +1117,11 @@ function renderPianoRoll() {
   $("rollLinePicker").innerHTML = activeMap().lines.filter((item) => item.words.length).map((item, index) => `<button type="button" data-roll-line="${safe(item.id)}" aria-pressed="${item.id === line.id}">${index + 1}. ${safe(item.text)}</button>`).join("");
   $("rollWordRibbon").innerHTML = line.words.map((item, index) => `<button type="button" data-roll-word="${index}" aria-pressed="${index === rollWordIndex}" aria-label="Choose ${safe(item.text)}">${safe(item.text)}<small>${item.syllables.length} ${item.syllables.length === 1 ? "syllable" : "syllables"}</small></button>`).join("");
   $("rollSyllableRibbon").innerHTML = slots.map((slot) => `<button type="button" data-roll-syllable="${slot.syllableIndex}" data-roll-pitch="${slot.pitchIndex}" aria-pressed="${slot.syllableIndex === rollSyllableIndex && slot.pitchIndex === rollPitchIndex}" aria-label="${safe(slot.text)} pitch ${slot.pitchIndex + 1}: ${slot.note == null ? "unassigned" : noteName(slot.note)}">${safe(slot.text)}${slot.pitchIndex ? ` ↗${slot.pitchIndex + 1}` : ""}<small>${slot.note == null ? "—" : noteName(slot.note)}</small></button>`).join("");
+  lineStrip.scrollLeft = oldLineLeft;
+  wordStrip.scrollLeft = oldWordLeft;
+  syllableStrip.scrollLeft = oldSyllableLeft;
+  revealRollSelection(lineStrip);
+  revealRollSelection(wordStrip);
   const notes = Array.from({ length: 48 }, (_, index) => 83 - index);
   const headers = `<div class="roll-corner">NOTE</div>${slots.map((slot) => `<div class="roll-column-head" data-roll-syllable="${slot.syllableIndex}" data-roll-pitch="${slot.pitchIndex}" aria-label="${safe(slot.text)} pitch ${slot.pitchIndex + 1} column">${safe(slot.text)}${slot.pitchIndex ? ` · ${slot.pitchIndex + 1}` : ""}</div>`).join("")}`;
   const rows = notes.map((midi) => {
@@ -1094,6 +1141,18 @@ function renderPianoRoll() {
   $("clearWordNote").disabled = currentRollNote() == null;
   $("addSyllablePitch").disabled = currentRollSyllable().notes.length >= 4;
   $("removeSyllablePitch").disabled = currentRollSyllable().notes.length <= 1;
+}
+function revealRollSelection(strip) {
+  const selected = strip.querySelector('[aria-pressed="true"]');
+  if (!selected) return;
+  const left = selected.offsetLeft - strip.offsetLeft;
+  const right = left + selected.offsetWidth;
+  if (left < strip.scrollLeft) strip.scrollLeft = Math.max(0, left - 8);
+  else if (right > strip.scrollLeft + strip.clientWidth) strip.scrollLeft = right - strip.clientWidth + 8;
+}
+function scrollRollStrip(id, direction) {
+  const strip = $(id);
+  strip.scrollBy({ left: direction * Math.max(140, strip.clientWidth * .7), behavior: "smooth" });
 }
 function scrollToRollNote() {
   const line = currentRollLine();
@@ -1439,6 +1498,7 @@ $("searchOtherLyrics").onclick = openLyricSearch;
 $("cleanLookupDraft").onclick = () => { $("lookupDraft").value = cleanLyricsText($("lookupDraft").value); $("lookupStatus").textContent = "Cleaned the text. Review it before importing."; };
 $("importLookupDraft").onclick = importLookupDraft;
 $("emptyLyricsButton").onclick = () => openEditor("lyrics");
+$("emptyFindLyricsButton").onclick = openLookup;
 $("sectionButton").onclick = () => openSections();
 $("closeSections").onclick = closeSections;
 $("saveSection").onclick = saveSection;
@@ -1456,7 +1516,8 @@ $("addLineButton").onclick = () => { const line = makeLine("New lyric line"); ac
 $("closeSheet").onclick = closeSheet;
 $("editAction").onclick = () => openInlineEditor(selection?.type === "group" ? "group" : selection?.type === "word" ? "word" : "line");
 $("clearAction").onclick = clearSelection;
-$("pianoFromSelection").onclick = () => openPianoRoll(selection?.lineIds?.[0]);
+$("focusNoteButton").onclick = () => openPianoRoll(selection?.lineIds?.[0], selection?.type === "word" ? selection.wordIndex : 0);
+$("pianoFromSelection").onclick = () => openPianoRoll(selection?.lineIds?.[0], selection?.type === "word" ? selection.wordIndex : 0);
 $("cancelInlineEdit").onclick = closeInlineEditor;
 $("saveInlineEdit").onclick = saveInlineEditor;
 $("inlineEditorText").addEventListener("keydown", (event) => { if ((event.metaKey || event.ctrlKey) && event.key === "Enter") saveInlineEditor(); });
@@ -1501,6 +1562,10 @@ $("saveSyllableSplit").onclick = saveSyllableSplit;
 $("syllableSplitText").addEventListener("keydown", (event) => { if (event.key === "Enter") saveSyllableSplit(); });
 $("addSyllablePitch").onclick = addSyllablePitch;
 $("removeSyllablePitch").onclick = removeSyllablePitch;
+$("rollLinesBack").onclick = () => scrollRollStrip("rollLinePicker", -1);
+$("rollLinesForward").onclick = () => scrollRollStrip("rollLinePicker", 1);
+$("rollWordsBack").onclick = () => scrollRollStrip("rollWordRibbon", -1);
+$("rollWordsForward").onclick = () => scrollRollStrip("rollWordRibbon", 1);
 $("rollLinePicker").addEventListener("click", (event) => { const button = event.target.closest("[data-roll-line]"); if (!button) return; stopNotePreview(); rollLineId = button.dataset.rollLine; rollWordIndex = 0; rollSyllableIndex = 0; rollPitchIndex = 0; $("syllableEditor").classList.add("hidden"); renderPianoRoll(); scrollToRollNote(); });
 $("rollWordRibbon").addEventListener("click", (event) => { const button = event.target.closest("[data-roll-word]"); if (!button || suppressRollCellClick) return; rollWordIndex = Number(button.dataset.rollWord); rollSyllableIndex = 0; rollPitchIndex = 0; $("syllableEditor").classList.add("hidden"); renderPianoRoll(); scrollToRollNote(); auditionNote(currentRollNote()); });
 $("rollSyllableRibbon").addEventListener("click", (event) => { const button = event.target.closest("[data-roll-syllable]"); if (!button || suppressRollCellClick) return; rollSyllableIndex = Number(button.dataset.rollSyllable); rollPitchIndex = Number(button.dataset.rollPitch); renderPianoRoll(); scrollToRollNote(); auditionNote(currentRollNote()); });
@@ -1512,12 +1577,19 @@ $("pianoRollScreen").addEventListener("pointerdown", (event) => {
   const slot = source.closest("[data-roll-syllable]");
   if (!Number.isInteger(wordIndex)) return;
   const changedWord = wordIndex !== rollWordIndex;
-  rollDrag = { pointerId: event.pointerId, wordIndex, syllableIndex: slot ? Number(slot.dataset.rollSyllable) : changedWord ? 0 : rollSyllableIndex, pitchIndex: slot ? Number(slot.dataset.rollPitch) : changedWord ? 0 : rollPitchIndex, startX: event.clientX, startY: event.clientY, moved: false, midi: null };
-  $("pianoRollScreen").setPointerCapture(event.pointerId);
-  event.preventDefault();
+  const fromRibbon = !!source.closest(".roll-word-ribbon, .roll-syllable-ribbon");
+  rollDrag = { pointerId: event.pointerId, wordIndex, syllableIndex: slot ? Number(slot.dataset.rollSyllable) : changedWord ? 0 : rollSyllableIndex, pitchIndex: slot ? Number(slot.dataset.rollPitch) : changedWord ? 0 : rollPitchIndex, startX: event.clientX, startY: event.clientY, moved: false, midi: null, fromRibbon, active: !fromRibbon };
+  if (!fromRibbon) { $("pianoRollScreen").setPointerCapture(event.pointerId); event.preventDefault(); }
 });
 $("pianoRollScreen").addEventListener("pointermove", (event) => {
   if (!rollDrag || rollDrag.pointerId !== event.pointerId) return;
+  if (rollDrag.fromRibbon && !rollDrag.active) {
+    const dx = event.clientX - rollDrag.startX, dy = event.clientY - rollDrag.startY;
+    if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) { rollDrag = null; return; }
+    if (Math.abs(dy) <= 8 || Math.abs(dy) <= Math.abs(dx)) return;
+    rollDrag.active = true;
+    $("pianoRollScreen").setPointerCapture(event.pointerId);
+  }
   if (Math.hypot(event.clientX - rollDrag.startX, event.clientY - rollDrag.startY) > 6) rollDrag.moved = true;
   if (!rollDrag.moved) return;
   const midi = rollMidiAt(event.clientX, event.clientY);
@@ -1532,6 +1604,7 @@ $("pianoRollScreen").addEventListener("pointermove", (event) => {
 $("pianoRollScreen").addEventListener("pointerup", (event) => {
   if (!rollDrag || rollDrag.pointerId !== event.pointerId) return;
   const drag = rollDrag; rollDrag = null;
+  if (drag.fromRibbon && !drag.active) return;
   if (Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY) > 6) drag.moved = true;
   drag.midi = rollMidiAt(event.clientX, event.clientY) ?? drag.midi;
   if (drag.moved && drag.midi != null) {
@@ -1550,5 +1623,8 @@ renderAppearanceStudio();
 render();
 window.addEventListener("resize", refreshPitchLayers);
 window.addEventListener("resize", () => updateSongTitle(activeMap().title));
+window.addEventListener("resize", positionInlineEditor);
+window.visualViewport?.addEventListener("resize", positionInlineEditor);
+window.visualViewport?.addEventListener("scroll", positionInlineEditor);
 window.addEventListener("pagehide", stopNotePreview);
 document.addEventListener("visibilitychange", () => { if (document.hidden) stopNotePreview(); });
