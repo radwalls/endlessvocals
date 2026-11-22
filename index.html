@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Clean to Scream — Thank You | Endless Vocals Bootcamp III</title>
-    <meta name="description" content="Clean to Scream Bootcamp III is complete. Thank you to everyone who joined the nine live clinics. Member replays remain available for continued practice." />
+    <title>Endless Vocals | Train Your Voice. Sing Your Songs.</title>
+    <meta name="description" content="Train your voice year-round with the ongoing VST membership from Endless Vocals, Coach Ryan, and the Vocal Strength Trainer app." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://endlessvocals.com/" />
-    <meta property="og:title" content="Clean to Scream — Thank You | Endless Vocals Bootcamp III" />
-    <meta property="og:description" content="That’s a wrap on Clean to Scream. Revisit the nine clinic recordings, keep practicing, and stay connected for what comes next." />
-    <meta property="og:image" content="https://endlessvocals.com/images/clean-to-scream-bootcamp.jpg" />
-    <meta property="og:image:alt" content="Clean to Scream by Endless Vocals, August and September 2026" />
+    <meta property="og:title" content="Endless Vocals | Train Your Voice. Sing Your Songs." />
+    <meta property="og:description" content="A year-round vocal training membership, personalized tools, and a community to help you keep singing." />
+    <meta property="og:image" content="https://endlessvocals.com/images/vst-whole-workout.jpg" />
+    <meta property="og:image:alt" content="Vocal Strength Trainer practice tools" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Clean to Scream — Thank You | Endless Vocals Bootcamp III" />
-    <meta name="twitter:description" content="That’s a wrap on Clean to Scream. Revisit the nine clinic recordings, keep practicing, and stay connected for what comes next." />
-    <meta name="twitter:image" content="https://endlessvocals.com/images/clean-to-scream-bootcamp.jpg" />
+    <meta name="twitter:title" content="Endless Vocals | Train Your Voice. Sing Your Songs." />
+    <meta name="twitter:description" content="A year-round vocal training membership, personalized tools, and a community to help you keep singing." />
+    <meta name="twitter:image" content="https://endlessvocals.com/images/vst-whole-workout.jpg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&amp;display=swap" rel="stylesheet">
@@ -1161,6 +1161,88 @@
             background: linear-gradient(180deg, rgba(10,10,12,.0), rgba(10,10,12,.8) 30%, rgba(10,10,12,.95));
         }
 
+        /* A new chapter: keep the existing theme controls and archive intact. */
+        .hero-intro { align-items: center; gap: clamp(28px, 5vw, 76px); padding: clamp(24px, 5vw, 64px) 0; }
+        .hero-intro .title { font-size: clamp(48px, 6.5vw, 90px); letter-spacing: -.055em; line-height: .98; max-width: 10ch; }
+        .hero-intro .subtitle { line-height: 1.6; max-width: 47ch; }
+        .hero-intro .campaign-poster { border-radius: 24px; overflow: hidden; transform: rotate(2deg); box-shadow: 0 28px 70px rgba(0,0,0,.3); }
+        .hero-intro .campaign-poster img { width: 100%; display: block; }
+        .bootcamp-preview { margin: 40px 0; padding: clamp(24px, 4vw, 48px); border-radius: 24px; background: var(--surface); border: 1px solid var(--surface-border); }
+        .bootcamp-preview h2 { font-size: clamp(30px, 4vw, 50px); letter-spacing: -.04em; line-height: 1.08; max-width: 18ch; margin: 10px 0 16px; }
+        .bootcamp-preview > p { max-width: 65ch; color: var(--muted); line-height: 1.7; }
+        .bootcamp-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 26px 0; }
+        .bootcamp-step { padding: 20px; background: var(--surface-soft); border: 1px solid var(--surface-border); border-radius: 16px; }
+        .bootcamp-step strong { display: block; margin-bottom: 8px; font-size: 18px; }
+        .bootcamp-step p { margin: 0; color: var(--muted); line-height: 1.6; }
+        .bootcamp-note { font-size: 14px; }
+        .membership-label { display: inline-block; margin: 28px 0 0; color: var(--accent); font-weight: 800; font-size: 14px; letter-spacing: .11em; text-transform: uppercase; }
+        .membership-intro { max-width: 66ch; color: var(--muted); line-height: 1.65; }
+        .membership-divider { height: 1px; background: var(--surface-border); margin: 32px 0 4px; }
+        .vst-story { position: relative; overflow: hidden; margin: 40px 0; padding: clamp(30px, 6vw, 72px); border: 1px solid var(--surface-border); border-radius: 26px; background: radial-gradient(circle at 90% 10%, rgba(167,72,255,.19), transparent 38%), var(--surface); }
+        .vst-story h2 { max-width: 16ch; margin: 14px 0 24px; font-size: clamp(34px, 5vw, 64px); letter-spacing: -.045em; line-height: 1.04; }
+        .vst-story .story-lead { max-width: 42ch; color: var(--fg); font-size: clamp(19px, 2.3vw, 25px); font-weight: 600; line-height: 1.5; }
+        .vst-story p { max-width: 66ch; line-height: 1.75; color: var(--muted); }
+        .vst-story .story-signature { color: var(--fg); font-weight: 700; }
+        .archive-shelf { margin: 48px 0; border: 1px solid var(--surface-border); border-radius: 20px; background: var(--surface); padding: 22px; }
+        .archive-shelf summary { cursor: pointer; color: var(--fg); font-weight: 700; font-size: 18px; }
+        .archive-shelf > p { color: var(--muted); line-height: 1.6; }
+        .archive-shelf[open] > summary { margin-bottom: 24px; }
+        /* VST's selectable colorways, translated to the web's light/dark surfaces. */
+        body[data-vst-color] { --accent: color-mix(in srgb, var(--vst-color) 60%, #fff); --accent-alt: color-mix(in srgb, var(--vst-color) 42%, #fff); --accent-2: var(--accent); --accent-2-alt: var(--accent-alt); --accent-3: var(--vst-deep); --focus-outline: var(--accent); --surface-border: color-mix(in srgb, var(--vst-color) 35%, transparent); --hero-bg: radial-gradient(ellipse at 8% 0%, color-mix(in srgb, var(--vst-color) 28%, transparent), transparent 52%), radial-gradient(ellipse at 100% 10%, color-mix(in srgb, var(--vst-deep) 45%, transparent), transparent 55%), linear-gradient(150deg, #101019, #08090e 75%); --coaches-bg: linear-gradient(135deg, color-mix(in srgb, var(--vst-color) 15%, transparent), transparent); }
+        body[data-theme="light"][data-vst-color] { --accent: color-mix(in srgb, var(--vst-color) 53%, #151522); --accent-alt: color-mix(in srgb, var(--vst-color) 60%, #fff); --accent-2: var(--accent); --accent-2-alt: var(--accent-alt); --hero-bg: radial-gradient(ellipse at 8% 0%, color-mix(in srgb, var(--vst-color) 21%, transparent), transparent 55%), linear-gradient(145deg, #fff, #f2f4fb); }
+        body[data-vst-color] .btn-primary, body[data-vst-color] .btn-secondary { background: linear-gradient(130deg, color-mix(in srgb, var(--vst-color) 65%, white), color-mix(in srgb, var(--vst-color) 35%, white)); color: #101017; }
+        body[data-vst-color] .vst-story { background: radial-gradient(circle at 90% 10%, color-mix(in srgb, var(--vst-color) 20%, transparent), transparent 38%), var(--surface); }
+        body[data-vst-color] .app-gallery img { border-color: var(--surface-border); }
+        .colorways { margin: 0 0 24px; padding: 15px 20px; border: 1px solid var(--surface-border); border-radius: 22px; background: var(--surface); }
+        .colorways-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 10px; }
+        .colorways-head strong { font-size: 16px; }
+        .colorways-head span { font-size: 14px; color: var(--muted); }
+        .colorway-list { display: flex; flex-wrap: wrap; gap: 8px; }
+        .colorway-button { width: 38px; height: 38px; flex: 0 0 38px; border: 2px solid transparent; border-radius: 50%; background: var(--swatch); cursor: pointer; box-shadow: 0 0 0 1px rgba(128,128,145,.35); }
+        .colorway-button[aria-pressed="true"] { border-color: var(--surface-strong); box-shadow: 0 0 0 2px var(--accent); }
+        .colorway-button:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+        .colorway-button:hover { transform: scale(1.1); }
+        .colorways-status { font-size: 14px; color: var(--muted); }
+        /* Editorial membership redesign: quieter framing, more room for the work. */
+        .container { max-width: 1240px; }
+        .masthead { padding: 8px 0 16px; margin-bottom: 12px; }
+        .logo { letter-spacing: .04em; font-size: 21px; }
+        .colorways { padding: 12px 16px; border-radius: 14px; margin-bottom: 18px; }
+        .colorway-button { width: 34px; height: 34px; flex-basis: 34px; }
+        .hero { padding: clamp(24px, 4vw, 54px); border-radius: 22px; }
+        .hero-intro { padding: clamp(24px, 4vw, 54px) 0 clamp(38px, 6vw, 74px); grid-template-columns: minmax(0, 1fr) minmax(300px, .9fr); }
+        .hero-intro .title { max-width: 11ch; font-size: clamp(45px, 6vw, 78px); line-height: 1.02; letter-spacing: -.045em; }
+        .hero-intro .subtitle { max-width: 48ch; }
+        .hero-intro .campaign-poster { transform: none; border-radius: 16px; }
+        .hero-clinic { border-left-width: 2px; background: transparent; padding: 4px 0 4px 16px; }
+        .btn { border-radius: 10px; padding: 14px 19px; }
+        .bootcamp-preview { background: transparent; border: 0; border-top: 1px solid var(--surface-border); border-radius: 0; padding: clamp(36px, 5vw, 58px) 0; margin: 0; }
+        .bootcamp-preview h2 { max-width: 20ch; }
+        .bootcamp-steps { gap: 0; border-top: 1px solid var(--surface-border); border-bottom: 1px solid var(--surface-border); }
+        .bootcamp-step { background: transparent; border: 0; border-radius: 0; padding: 24px 22px 24px 0; }
+        .bootcamp-steps .bootcamp-step + .bootcamp-step { border-left: 1px solid var(--surface-border); padding-left: 22px; }
+        .bootcamp-step strong { font-size: 17px; }
+        .membership-divider { display: none; }
+        .vst-story { border-radius: 16px; }
+        .mic-sprinkle { display: none !important; }
+        .coaches { margin-top: 36px; }
+        .sticky { display: none; }
+        .redesign-closure { margin: 42px 0 0; padding: 35px 0 8px; border-top: 1px solid var(--surface-border); }
+        .redesign-closure strong { display: block; font-size: clamp(24px, 3vw, 38px); letter-spacing: -.03em; }
+        .redesign-closure p { color: var(--muted); }
+        .ryan-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 0 clamp(36px, 5vw, 60px); }
+        .ryan-photos figure { position: relative; overflow: hidden; margin: 0; border-radius: 16px; background: var(--surface-strong); }
+        .ryan-photos img { display: block; width: 100%; height: clamp(220px, 35vw, 410px); object-fit: cover; object-position: 50% 38%; }
+        .ryan-photos figure::after { content: ""; position: absolute; inset: 0; background: var(--vst-color, #9433e0); mix-blend-mode: color; opacity: .9; pointer-events: none; transition: background-color .5s ease; }
+        @media (prefers-reduced-motion: reduce) { .ryan-photos figure::after { transition: none; } }
+        @media (max-width: 700px) { .hero-intro { grid-template-columns: minmax(0, 1fr); } .bootcamp-steps .bootcamp-step + .bootcamp-step { border-left: 0; border-top: 1px solid var(--surface-border); padding-left: 0; } .bootcamp-step { padding-right: 0; } }
+        @media (min-width: 901px) { .coach-card.standby { margin-top: 28px; } }
+        .motion-ready .reveal-on-scroll { opacity: 0; transform: translateY(28px); transition: opacity .85s cubic-bezier(.22,1,.36,1), transform .85s cubic-bezier(.22,1,.36,1); }
+        .motion-ready .reveal-on-scroll.is-visible { opacity: 1; transform: none; }
+        .btn { transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease; }
+        .btn:hover { transform: translateY(-2px); }
+        @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .motion-ready .reveal-on-scroll { opacity: 1; transform: none; transition: none; } .btn { transition: none; } .btn:hover { transform: none; } }
+        @media (max-width: 700px) { .bootcamp-steps { grid-template-columns: 1fr; } .hero-intro .campaign-poster { transform: none; } }
     </style>
 
 </head>
@@ -1170,6 +1252,7 @@
             <div class="logo" aria-label="Endless Vocals">ENDLESS <span style="opacity:.7;font-weight:600">vocals</span></div>
             <div class="masthead-right">
                 <nav aria-label="Site navigation">
+                    <a href="#bootcamp">VST Membership</a>
                     <a href="faq.html">FAQ</a>
                     <a href="scream-center.html">Scream Center</a>
                     <a href="#coaches">Coaches</a>
@@ -1183,176 +1266,82 @@
             </div>
         </header>
 
+        <section class="colorways" aria-labelledby="colorways-title" id="colorways" hidden>
+            <div class="colorways-head"><strong id="colorways-title">Make it yours.</strong><span class="colorways-status" id="colorway-status" aria-live="polite"></span></div>
+            <div class="colorway-list" id="colorway-list" role="group" aria-label="VST colorways"></div>
+        </section>
+
         <section class="hero" aria-labelledby="h1">
             <div class="hero-intro">
                 <div>
-                    <span class="hero-kicker">Endless Vocals Bootcamp III • Complete</span>
-                    <h1 id="h1" class="title">Clean to Scream — Thank You!</h1>
-                    <p class="subtitle">That’s a wrap on Clean to Scream. Thank you to everyone who joined the live clinics, watched the replays, asked questions, shared recordings, and supported Endless Vocals through two months of training.</p>
+                    <span class="hero-kicker">Endless Vocals presents VST</span>
+                    <h1 id="h1" class="title">A place to work on your voice.</h1>
+                    <p class="subtitle">Warm up. Work through the hard parts. Sing the songs you love. VST brings the tools and coaching together in one ongoing training membership.</p>
                     <div class="hero-clinic">
-                        <strong>9 live clinics • August 1–September 26, 2026</strong>
-                        <span>Member recordings remain replayable.</span>
+                        <strong>Year-round training with Coach Ryan</strong>
+                        <span>Built around the Vocal Strength Trainer app and the ISO Method.</span>
                     </div>
                     <div class="cta-row" role="group" aria-label="Primary actions">
-                        <a class="btn btn-primary" href="#thank-you">
-                            <span>Read Coach Ryan’s note</span>
+                        <a class="btn btn-primary" href="#bootcamp">
+                            <span>Explore the membership</span>
                         </a>
-                        <a class="btn btn-secondary" href="shop.html">
-                            <span>Visit the shop</span>
+                        <a class="btn btn-secondary" href="#coaches">
+                            <span>Meet the coaches</span>
                         </a>
                     </div>
                 </div>
                 <figure class="campaign-poster">
-                    <img src="images/clean-to-scream-bootcamp.jpg" alt="Endless Vocals Clean to Scream Bootcamp III artwork" fetchpriority="high">
+                    <img src="images/vst-whole-workout.jpg" alt="Vocal Strength Trainer practice tools for singers" fetchpriority="high">
                 </figure>
             </div>
 
-            <section class="thank-you-card" id="thank-you" aria-labelledby="thank-you-title">
+            <div class="ryan-photos" aria-label="Coach Ryan singing">
+                <figure><img src="images/clean-to-scream-clean.jpg" alt="Coach Ryan singing into a studio microphone" loading="lazy"></figure>
+                <figure><img src="images/clean-to-scream-scream.jpg" alt="Coach Ryan singing with a handheld microphone" loading="lazy"></figure>
+            </div>
+
+            <section class="bootcamp-preview" id="bootcamp" aria-labelledby="bootcamp-title">
+                <span class="month-label">Vocal Strength Training · Year-round</span>
+                <h2 id="bootcamp-title">A practice you can come back to.</h2>
+                <p>VST is a monthly membership for singers who want a clearer way to practice. Coach Ryan will help you learn the app, choose exercises, and bring that work into your songs. The training continues throughout the year.</p>
+                <span class="membership-label">Your one-time welcome package</span>
+                <p class="membership-intro">Your membership includes these one-time starting tools. We’ll get to know your voice through clinics and hangouts before preparing your training file.</p>
+                <div class="bootcamp-steps">
+                    <article class="bootcamp-step"><strong>The app</strong><p>A free code for Vocal Strength Trainer on iPhone. The Android beta is available for members to test.</p></article>
+                    <article class="bootcamp-step"><strong>Your Saved Session</strong><p>We’ll evaluate your voice during clinics and hangouts, then provide one personalized Saved Sessions file for your voice and goals.</p></article>
+                    <article class="bootcamp-step"><strong>Your sound</strong><p>One Vocal Stompboxes preset tailored to your singing style.</p></article>
+                </div>
+                <div class="membership-divider"></div>
+                <span class="membership-label">Keep training with us</span>
+                <p class="membership-intro">The year-round schedule covers the app and the training behind it. As features are added, we’ll show you how to put them to use.</p>
+                <div class="bootcamp-steps">
+                    <article class="bootcamp-step"><strong>Guided practice</strong><p>Learn the exercises, set up a warm-up, and build a routine with Coach Ryan.</p></article>
+                    <article class="bootcamp-step"><strong>Clinics &amp; community</strong><p>Share clips and questions in Discord. Jaime Vendera will stop by as an occasional guest.</p></article>
+                    <article class="bootcamp-step"><strong>Work on your songs</strong><p>Take the exercises beyond scales and use them on the music you actually sing.</p></article>
+                </div>
+                <div class="bootcamp-step"><strong>Coming to the app</strong><p>Session Singer and Video Star are in development. We’ll cover the new recording and video tools as they become available.</p></div>
+                <div class="cta-row" role="group" aria-label="Membership and community">
+                    <a class="btn btn-primary" href="https://ko-fi.com/EndlessVocals" target="_blank" rel="noopener">Join on Ko-fi</a>
+                    <a class="btn btn-secondary" href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener">Enter the Discord</a>
+                </div>
+                <p class="bootcamp-note">Join the ongoing monthly membership on Ko-fi, then join us in Discord for the community and training. See Ko-fi for current pricing; welcome-package delivery details will be shared when confirmed.</p>
+            </section>
+
+            <section class="vst-story" aria-labelledby="vst-story-title">
                 <span class="month-label">A note from Coach Ryan</span>
-                <h2 id="thank-you-title">Thank you for being part of Clean to Scream.</h2>
-                <p class="thank-you-lead">Thank you to everyone who joined the live clinics, watched the replays, asked questions, shared recordings, and supported Endless Vocals throughout these two months.</p>
-                <p>We covered a lot—from the Ultimate Vocal Warm-Up, breathing, support, placement, and the ISO Method all the way through fry screams, frustrated sighs, low grit, grit slides, and putting those sounds into songs.</p>
-                <div class="bootcamp-lessons" aria-label="Bootcamp III training arc">
-                    <div class="bootcamp-lesson">
-                        <strong>Clean foundation</strong>
-                        <span>Ultimate Vocal Warm-Up, breathing, support, placement, the ISO Method, song work, and bonus techniques.</span>
-                    </div>
-                    <div class="bootcamp-lesson">
-                        <strong>Scream progression</strong>
-                        <span>Fry screams, frustrated sighs, low grit, grit slides, combinations, resets, and song application.</span>
-                    </div>
-                </div>
-                <p>Finishing the bootcamp doesn’t mean you’re supposed to have mastered everything. This is material you can keep coming back to as your voice develops.</p>
-                <p><strong>The clinic videos are replayable for members.</strong> Revisit the demonstrations, pause where you need to, and work through the lessons at your own pace. Whether you missed a class or just need another look at an exercise, use those recordings as part of your practice.</p>
-                <p>Keep sharing your progress and questions in the community, too. I want to hear what you’re working on—not just the finished performances, but the things you’re still figuring out.</p>
-                <p>Please also check out the <a href="shop.html">Endless Vocals shop</a>. Every purchase helps support the work that goes into these clinics, videos, and future training resources. Your support makes a real difference.</p>
-                <p>There’s more coming, including additional practice material, videos, and future clinics. Keep an eye on the community for updates, and keep putting your Vocal Strength Trainer to use.</p>
-                <p>Most importantly, keep singing your songs, have fun, and respect your voice. Consistency matters more than trying to accomplish everything in one session.</p>
-                <p>It’s been a pleasure being your vocal coach. Thank you for being part of Endless Vocals—I’ll see you in the next bootcamp!</p>
-                <p class="coach-signature">— Coach Ryan / Ryan Wall</p>
-                <div class="cta-row" role="group" aria-label="Continue with Endless Vocals">
-                    <a class="btn btn-primary" href="shop.html">Explore the shop</a>
-                    <a class="btn btn-secondary" href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener">Join the community</a>
-                </div>
+                <h2 id="vst-story-title">How VST began.</h2>
+                <p class="story-lead">Endless Vocals is becoming VST: year-round training with the Vocal Strength Trainer app at its heart.</p>
+                <p>VST began with Tuned XD, Jaime Vendera’s original app. Its pitch wheel, scales, two-track recorder, and glass-shattering game helped me discover my voice through his detailed exercises. But Jaime always had a bigger vision for the way singers could practice.</p>
+                <p>After years of studying his method and working alongside him on projects including Angel Fire East and Timestamped, I understood the training he wanted to bring to life. Jaime’s ear and vision are exceptional, and I’m proud to call him my mentor and friend.</p>
+                <p>VST brings that vision together: a way to practice the ISO Method, learn how your voice responds, and take the work into songs. I’m proud of what Jaime and I have built, and I can’t wait to show you how to use it.</p>
+                <p class="story-signature">— Coach Ryan Wall</p>
             </section>
 
-            <section class="clinic-progress" aria-labelledby="clinic-progress-title">
-                <span class="month-label">Bootcamp III • Complete</span>
-                <h2 id="clinic-progress-title">Nine clinics. Two months. One foundation to keep building.</h2>
-                <p>The live run is finished, but the material is built to be revisited. Use the recordings to repeat exercises, review demonstrations, and keep connecting technique to your own songs.</p>
-                <div class="clinic-progress-grid">
-                    <div class="clinic-progress-step">
-                        <span class="clinic-progress-label">Complete • Replays available</span>
-                        <strong>Clean Singing — ISO Method</strong>
-                        <time datetime="2026-08">August 2026 • 5 clinics</time>
-                    </div>
-                    <span class="clinic-progress-arrow" aria-hidden="true">→</span>
-                    <div class="clinic-progress-step next">
-                        <span class="clinic-progress-label">Complete • Replays available</span>
-                        <strong>Scream Center Progression</strong>
-                        <time datetime="2026-09">September 2026 • 4 clinics</time>
-                    </div>
-                </div>
-            </section>
-
-            <section class="video-section" aria-labelledby="video-title">
-                <div class="card video-card">
-                    <h2 id="video-title">Inside Endless Vocals</h2>
-                    <p>Take a look at how we run bootcamps, build vocal habits, and support each other inside the community. Hear
-                        directly from Coach Ryan about how the program unfolds.</p>
-                    <div class="video-frame">
-                        <iframe id="bootcamp-video" src="https://www.youtube-nocookie.com/embed/B0QLk8mLWQE?rel=0"
-                            title="Inside Endless Vocals" loading="lazy"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    </div>
-                    <a class="video-watch" href="https://www.youtube.com/watch?v=B0QLk8mLWQE" target="_blank" rel="noopener">
-                        Watch it on YouTube
-                    </a>
-                </div>
-            </section>
-
-            <div class="grid" style="margin-top:32px">
-                <section class="card" aria-labelledby="whatis">
-                    <h3 id="whatis">Keep practicing with the replays.</h3>
-                    <p>All nine Bootcamp III clinics are complete. Member recordings remain available so you can repeat the exercises, revisit a demonstration, or catch a clinic you missed.</p>
-                    <div class="list" aria-label="Bootcamp archive highlights">
-                        <div class="item">Five clean-singing and ISO Method clinic recordings</div>
-                        <div class="item">Four Scream Center progression clinic recordings</div>
-                        <div class="item">The Discord community for practice clips, questions, and progress</div>
-                    </div>
-                    <div class="cta-row"><a class="btn btn-primary" href="shop.html">Visit the shop</a></div>
-                </section>
-                <figure class="card motion-card">
-                    <img src="images/clean-to-scream-motion.jpg" alt="Singer moving under blue and purple studio light" loading="lazy">
-                    <figcaption>Increase your range, build power, and sing for longer.</figcaption>
-                </figure>
-            </div>
-
-            <p class="schedule-zone" id="schedule-zone"><strong>Bootcamp III archive.</strong> These are the original live clinic dates. Recordings remain available to members.</p>
-
-            <section class="program-grid" id="schedule" aria-label="Bootcamp III clinic archive">
-                <article class="card month-card" aria-labelledby="august-title">
-                    <img class="month-image" src="images/clean-to-scream-clean.jpg" alt="Ryan demonstrating clean singing at a studio microphone" loading="lazy">
-                    <span class="month-label">August • Member recordings</span>
-                    <h3 id="august-title">Clean Singing — ISO Method</h3>
-                    <p>Revisit the foundation at your own pace.</p>
-                    <ul class="clinic-list">
-                        <li class="is-complete"><strong>Vocal Stress Release + Practice Baseline</strong><time class="js-local-time" datetime="2026-08-01T16:00:00Z">Saturday, August 1 at 9:00 AM PT</time></li>
-                        <li class="is-complete"><strong>Technique — Breathing, Support + Placement</strong><time class="js-local-time" datetime="2026-08-11T01:00:00Z">Monday, August 10 at 6:00 PM PT</time></li>
-                        <li class="is-complete"><strong>ISO Exercises — Falsetto Slides, Transcending Tones + Vendera Sirens</strong><time class="js-local-time" datetime="2026-08-15T16:00:00Z">Saturday, August 15 at 9:00 AM PT</time></li>
-                        <li class="is-complete"><strong>Singing Songs + Vocal Strength Trainer App</strong><time class="js-local-time" datetime="2026-08-25T01:00:00Z">Monday, August 24 at 6:00 PM PT</time></li>
-                        <li class="is-complete"><strong>Hangout + Bonus Techniques</strong><time class="js-local-time" datetime="2026-08-29T16:00:00Z">Saturday, August 29 at 9:00 AM PT</time></li>
-                    </ul>
-                </article>
-
-                <article class="card month-card screams" aria-labelledby="september-title">
-                    <img class="month-image" src="images/clean-to-scream-scream.jpg" alt="Ryan demonstrating screaming with a handheld microphone under blue light" loading="lazy">
-                    <span class="month-label">September • Member recordings</span>
-                    <h3 id="september-title">Scream Clinics — Complete</h3>
-                    <ul class="clinic-list">
-                        <li class="is-complete"><strong>Gargling Tone, Groggy Fry + Fry Scream</strong><time datetime="2026-09-08">Tuesday, September 8 at 6:00 PM PT</time></li>
-                        <li class="is-complete"><strong>Frustrated Sigh</strong><time datetime="2026-09-12">Saturday, September 12 at 9:00 AM PT</time></li>
-                        <li class="is-complete"><strong>Low Grit + Grit Slides</strong><time datetime="2026-09-21">Monday, September 21 at 6:00 PM PT</time></li>
-                        <li class="is-complete"><strong>Combinations + Song Application</strong><time datetime="2026-09-26">Saturday, September 26 at 9:00 AM PT</time></li>
-                    </ul>
-                    <p class="note" style="margin-top:12px">Reset whenever needed with a held gargling tone or a gentle major-third gargling slide before continuing.</p>
-                </article>
-
-            </section>
-
-            <section class="program-grid" aria-label="Clean to Scream curriculum">
-                <article class="card" aria-labelledby="clean-curriculum-title">
-                    <span class="month-label">The Clean Foundation</span>
-                    <h3 id="clean-curriculum-title">Clean Singing Curriculum</h3>
-                    <ol class="curriculum-list">
-                        <li><strong>Vocal Stress Release</strong><ul><li>Body posture</li><li>Neck, jaw/TMJ, tongue, and under-chin massage</li><li>Larynx control</li><li>Release unnecessary tension</li></ul></li>
-                        <li><strong>SOVT Warm-ups</strong><ul><li>Lip bubbles, hums, gargling tone, tongue rolls, and “zzz”</li></ul></li>
-                        <li><strong>ISO Exercises</strong><ul><li>Breathing, support, placement, and resonance</li><li>Falsetto slides, transcending tone, and sirens</li><li>Sustain and dynamic control</li></ul></li>
-                        <li><strong>Song Application</strong><ul><li>Apply the technique directly to songs</li><li>Solve problems one phrase at a time</li></ul></li>
-                        <li><strong>Warm-down</strong><ul><li>Quiet hums, lip bubbles, gargling tone, and gentle falsetto</li><li>Relaxation and stretching</li></ul></li>
-                    </ol>
-                </article>
-
-                <article class="card" aria-labelledby="scream-curriculum-title">
-                    <span class="month-label">The Scream Progression</span>
-                    <h3 id="scream-curriculum-title">Scream Center Curriculum</h3>
-                    <ol class="curriculum-list">
-                        <li><strong>Fry</strong><ul><li>Find effortless vocal fry</li></ul></li>
-                        <li><strong>Fry Scream</strong><ul><li>Stretch the fry into a controlled scream</li></ul></li>
-                        <li><strong>Frustrated Sigh</strong><ul><li>Emotional “ugh…” coordination with solid support</li></ul></li>
-                        <li><strong>Low Grit</strong><ul><li>Easy roof-of-the-mouth grit</li><li>“Come on,” “Yeah,” “Hey,” “Go,” and similar phrases</li></ul></li>
-                        <li><strong>Grit Slides</strong><ul><li>Slide up and down without losing coordination</li></ul></li>
-                        <li><strong>Combinations</strong><ul><li>Fry ↔ low grit</li><li>Frustrated sigh ↔ low grit</li><li>Slides, sustained screams, and stylistic variations</li></ul></li>
-                    </ol>
-                    <p class="note"><strong>Reset whenever needed:</strong> use a gargling tone—held or on a major-third slide—to reset coordination before continuing.</p>
-                </article>
-            </section>
 
             <section class="app-showcase" aria-labelledby="app-showcase-title">
-                <span class="month-label">Vocal Strength Trainer • Coming Soon</span>
+                <span class="month-label">Meet Vocal Strength Trainer</span>
                 <h2 id="app-showcase-title">Your practice. Guided.</h2>
-                <p>The new app is being built around the same training arc: warm up, work the ISO exercises, apply them to songs, and warm down. It brings live pitch, piano, custom scales, practice building, tempo tools, breathing support, and a practice log into one place.</p>
+                <p>Vocal Strength Trainer brings live pitch, piano, custom scales, practice building, tempo tools, breathing support, and a practice log into one place. Build your routine around the way you sing.</p>
                 <div class="app-gallery" aria-label="Vocal Strength Trainer preview screens">
                     <img class="featured" src="images/vst-whole-workout.jpg" alt="Vocal Strength Trainer showing practice, metronome, and pitch challenge screens" loading="lazy">
                     <img src="images/vst-listen-closer.jpg" alt="Vocal Strength Trainer live tuner preview" loading="lazy">
@@ -1365,13 +1354,15 @@
             <div class="divider"></div>
 
             <section class="card" aria-labelledby="how">
-                <h3 id="how">Keep going</h3>
+                <h3 id="how">Stay connected</h3>
                 <ol>
                     <li style="margin:8px 0">Join the <a href="https://discord.gg/eQMNpUA687" target="_blank" rel="noopener">Discord</a> to share clips, ask questions, and stay connected with the community.</li>
-                    <li style="margin:8px 0">If you’re a member, revisit the clinic recordings at your own pace and return to the exercises as your voice develops.</li>
-                    <li style="margin:8px 0">Visit the <a href="shop.html">Endless Vocals shop</a> to support future clinics, videos, and training resources.</li>
+                    <li style="margin:8px 0">Learn more about the VST membership and the tools included when you join.</li>
+                    <li style="margin:8px 0">Explore the <a href="shop.html">Endless Vocals shop</a> for more resources.</li>
                 </ol>
             </section>
+
+            <div class="redesign-closure"><strong>Your voice keeps growing. So do we.</strong><p>That’s the meaning of Endless Vocals.</p></div>
 
             <div class="mic-sprinkle" aria-hidden="true">
                 <img src="images/mics/mic-gold.png" alt="" loading="lazy">
@@ -1383,7 +1374,7 @@
 
         <section id="coaches" class="coaches" aria-labelledby="coaches-title">
             <h2 id="coaches-title">Meet the Coaches</h2>
-            <p class="lead">The Endless Vocals team blends decades of stage experience, technical mastery, and songwriting craft to help you grow as a vocalist and artist. Get to know the coaches guiding each session and the mentor who set the foundations.</p>
+            <p class="lead">Meet Ryan, his mentor Jaime, and standby coach Tiago.</p>
 
             <div class="mic-sprinkle" aria-hidden="true">
                 <img src="images/mics/mic-purple.png" alt="" loading="lazy">
@@ -1396,26 +1387,24 @@
                 <article class="coach-card" aria-labelledby="coach-ryan">
                     <span class="role">Head Coach &amp; Founder</span>
                     <h3 id="coach-ryan">Ryan Wall</h3>
-                    <p>Ryan Wall is a singer, songwriter, and long-time vocal coach who spent a decade teaching alongside Jaime Vendera as his right hand coach of the Vendera Vocal Academy. With over 20 years of songwriting experience and multiple albums to his name, Ryan brings a deep creative perspective to his teaching. Through Endless Vocals, he not only helps singers strengthen and protect their voices but also guides them in the art of writing and producing original music—skills he shares directly with members of the Discord community. His coaching blends technical precision, stage experience, and creative mentorship to help every vocalist find their unique voice and message.</p>
+                    <p>Ryan is a singer, songwriter, and vocal coach who spent a decade teaching alongside Jaime at Vendera Vocal Academy. At Endless Vocals, he helps singers work on technique and bring it into their songs. He also shares songwriting and production experience with the community.</p>
                     <div class="coach-gallery">
                         <img class="coach-photo" src="images/clean-to-scream-clean.jpg" alt="Ryan Wall singing into a studio microphone" loading="lazy">
-                    </div>
-                </article>
-                <article class="coach-card" aria-labelledby="coach-tiago">
-                    <span class="role">Coach &amp; Artist</span>
-                    <h3 id="coach-tiago">Tiago Costa</h3>
-                    <p>Tiago Costa is a dynamic vocalist, guitarist, and multi-instrumentalist known for his work with Firemage and Xeque Mate. Tiago was also a primary coach at VVA whose clinics and hangouts were valuable resources. His background spans rock, metal, and folk metal, giving him a broad stylistic reach and deep stage experience. Within Endless Vocals, Tiago focuses on expression, authenticity, and turning raw technique into art. His guitar and musicianship training will also play a role in future bootcamps, connecting vocal control with instrumental understanding. Tiago’s goal is to help singers develop tone, emotion, and confidence—on stage, in the studio, and in themselves.</p>
-                    <div class="coach-gallery">
-                        <img class="coach-photo" src="images/coaches/tiago-costa.png" alt="Photo of Tiago Costa" loading="lazy">
                     </div>
                 </article>
                 <article class="coach-card mentor" aria-labelledby="coach-jaime">
                     <span class="role">Mentor &amp; Originator of the ISO Method</span>
                     <h3 id="coach-jaime">Jaime Vendera</h3>
-                    <p>Jaime Vendera is an internationally recognized vocal coach, author of Raise Your Voice, and creator of the ISO Method. He has trained countless singers and professionals around the world, known for his legendary glass-shattering demonstrations and focus on vocal health. Though VVA has come to a close, Jaime continues to inspire and mentor Ryan and Tiago, giving Endless Vocals his full blessing to carry the ISO legacy forward. While Jaime isn't directly involved in Endless Vocals, his website is worth mentioning as it's a bastion for singers. <a href="https://www.jaimevendera.com" target="_blank" rel="noopener">www.jaimevendera.com</a></p>
+                    <p>Jaime Vendera is an internationally recognized vocal coach, author of Raise Your Voice, creator of the ISO Method, and Ryan’s mentor. Known for his glass-shattering demonstrations and detailed approach to training, Jaime helped inspire Vocal Strength Trainer and will join the VST training as a special guest from time to time. <a href="https://www.jaimevendera.com" target="_blank" rel="noopener">www.jaimevendera.com</a></p>
                     <div class="coach-gallery">
                         <img class="coach-photo" src="images/coaches/jaime-vendera.png" alt="Photo of Jaime Vendera" loading="lazy">
                     </div>
+                </article>
+                <article class="coach-card standby" aria-labelledby="coach-tiago">
+                    <span class="role">Standby Coach &amp; Artist</span>
+                    <h3 id="coach-tiago">Tiago Costa</h3>
+                    <p>Tiago is a vocalist, guitarist, and multi-instrumentalist known for his work with Firemage and Xeque Mate. He joins Endless Vocals as a standby coach, helping with classroom duties, extra clinics, and support in Discord when needed.</p>
+                    <div class="coach-gallery"><img class="coach-photo" src="images/coaches/tiago-costa.png" alt="Photo of Tiago Costa" loading="lazy"></div>
                 </article>
             </div>
         </section>
@@ -1432,12 +1421,74 @@
     <!-- Sticky mobile CTA -->
     <div class="sticky" role="group" aria-label="Mobile actions">
         <div class="wrap">
-            <a class="btn btn-primary" style="flex:1" href="shop.html">Visit the shop</a>
+            <a class="btn btn-primary" style="flex:1" href="#bootcamp">Explore the membership</a>
         </div>
     </div>
 
     <script>
     const body = document.body;
+    // Values match AppAccentChoice in the app. A visit starts with a random
+    // color, while an explicit choice lasts through that browser session.
+    const vstColorways = [
+        ['Purple', '#9433e0', '#9433e0'], ['Blue', '#1f5ceb', '#1f5ceb'],
+        ['Sky', '#2ea8fa', '#0f63c7'], ['Teal', '#00ab91', '#00574f'],
+        ['Frost', '#c4f0ff', '#61a6e0'], ['Abyss', '#613895', '#2e124f'],
+        ['Magenta', '#c93de6', '#82149c'], ['Red', '#eb1a1f', '#940a14'],
+        ['Orange', '#f57a33', '#b5380d'], ['Yellow', '#ffc71f', '#bf7d05'],
+        ['Moonlight', '#b099ed', '#4d4f8f'], ['Silver', '#b8c7d4', '#475769'],
+        ['Copper', '#d47047', '#63291f'], ['Gold', '#edb340', '#6e4712'],
+        ['Light Pink', '#ffa8d1', '#de5e9e'], ['Grey', '#858a94', '#858a94'],
+        ['Green', '#1a9e3d', '#1a9e3d'], ['Blue + Yellow', '#1a70ff', '#ffcc14'],
+        ['Dice Mix', '#00ab91', '#c93de6'], ['Inverted Black', '#ffffff', '#7a808a']
+    ];
+    const colorwayList = document.getElementById('colorway-list');
+    const colorwayStatus = document.getElementById('colorway-status');
+    function applyColorway(name) {
+        const selected = vstColorways.find(color => color[0] === name) || vstColorways[0];
+        let colors = selected.slice(1);
+        if (selected[0] === 'Dice Mix') {
+            const hue = Math.floor(Math.random() * 360);
+            colors = [`hsl(${hue} 80% 58%)`, `hsl(${(hue + 110 + Math.floor(Math.random() * 100)) % 360} 75% 52%)`];
+        }
+        body.dataset.vstColor = selected[0];
+        body.style.setProperty('--vst-color', colors[0]);
+        body.style.setProperty('--vst-deep', colors[1]);
+        colorwayList.querySelectorAll('button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.colorway === selected[0])));
+        colorwayStatus.textContent = `${selected[0]} selected${selected[0] === 'Dice Mix' ? ' · select again to remix' : ''}`;
+    }
+    if (colorwayList && colorwayStatus) {
+        vstColorways.forEach(([name, color, deep]) => {
+            const button = document.createElement('button');
+            button.type = 'button'; button.className = 'colorway-button'; button.dataset.colorway = name;
+            button.title = name; button.setAttribute('aria-label', name); button.setAttribute('aria-pressed', 'false');
+            button.style.setProperty('--swatch', name === 'Dice Mix' ? 'conic-gradient(#9433e0, #1f5ceb, #00ab91, #ffc71f, #eb1a1f, #9433e0)' : `linear-gradient(135deg, ${color}, ${deep})`);
+            button.addEventListener('click', () => {
+                applyColorway(name);
+                try { sessionStorage.setItem('ev-vst-session-colorway', name); } catch (_) {}
+            });
+            colorwayList.appendChild(button);
+        });
+        let savedColorway = null;
+        try { savedColorway = sessionStorage.getItem('ev-vst-session-colorway'); } catch (_) {}
+        const randomColorway = vstColorways[Math.floor(Math.random() * vstColorways.length)][0];
+        applyColorway(savedColorway || randomColorway);
+        document.getElementById('colorways').hidden = false;
+    }
+    // Progressive enhancement: the content stays visible without JavaScript,
+    // IntersectionObserver, or when reduced motion is requested.
+    if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const sections = document.querySelectorAll('.bootcamp-preview, .vst-story, .thank-you-card, .clinic-progress, .video-section, .program-grid, .app-showcase, .coaches');
+        const observer = new IntersectionObserver((entries, activeObserver) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    activeObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+        sections.forEach(section => { section.classList.add('reveal-on-scroll'); observer.observe(section); });
+        document.documentElement.classList.add('motion-ready');
+    }
     const yearEl = document.getElementById('year');
     if (yearEl) {
         yearEl.textContent = new Date().getFullYear();
