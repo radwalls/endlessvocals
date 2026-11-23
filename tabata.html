@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Tabata Timer</title>
+  <style>
+    :root {
+      --green:#58bd5e;
+      --green-dark:#43a84a;
+      --red:#d95f58;
+      --work-color:#58bd5e;
+      --work-fill:#43a84a;
+      --work-ink:#fff;
+      --recovery-color:#d95f58;
+      --recovery-fill:#b83e37;
+      --recovery-ink:#fff;
+      --paper:#f7f7f7;
+      --line:#cfcfcf;
+      --ink:#202020;
+      --muted:#777;
+    }
+    * { box-sizing:border-box; }
+    html,body { min-height:100%; }
+    body { margin:0; display:flex; justify-content:center; background:#e9e9e9; color:var(--ink); font-family:Arial,Helvetica,sans-serif; }
+    button,input,select { font:inherit; }
+    button { cursor:pointer; }
+    .page { width:100%; min-height:100vh; background:#f5f5f5; overflow-x:hidden; }
+    .top-strip { height:22px; background:#292929; border-bottom:1px solid #444; }
+    .titlebar { height:44px; display:grid; place-items:center; background:linear-gradient(#fff,#f5f5f5); box-shadow:0 2px 7px rgba(0,0,0,.15); font-size:18px; }
+    main { position:relative; left:-7px; width:293px; margin:0 auto; padding:5px 0 28px; }
+    .timer-stack { width:100%; }
+    .clock { height:104px; display:flex; align-items:center; justify-content:center; margin:0; color:#171717; font-size:116px; font-weight:300; line-height:1; letter-spacing:-7px; font-variant-numeric:tabular-nums; white-space:nowrap; transform:scaleX(1.1); }
+    .clock.counting { color:#111; animation:countPulse .42s ease-out; }
+    .round-strip { height:43px; display:grid; margin-top:5px; overflow-x:auto; overflow-y:hidden; border-radius:4px; scrollbar-width:thin; }
+    .round-segment { min-width:0; display:flex; color:#fff; font-size:20px; text-shadow:0 1px 0 rgba(0,0,0,.16); }
+    .round-phase { position:relative; min-width:0; display:grid; place-items:center; overflow:hidden; }
+    .round-phase.work { background:var(--work-color); color:var(--work-ink); }
+    .round-phase.rest { background:var(--recovery-color); color:var(--recovery-ink); }
+    .round-phase.current::after { content:""; position:absolute; z-index:2; inset:0; box-shadow:inset 0 0 0 2px currentColor; pointer-events:none; }
+    .round-fill { position:absolute; z-index:0; inset:0; background:var(--work-fill); transform:scaleX(0); transform-origin:left center; will-change:transform; }
+    .round-phase.rest .round-fill { background:var(--recovery-fill); }
+    .round-number { position:relative; z-index:1; }
+    .round-count { height:114px; display:flex; align-items:center; justify-content:center; margin:10px 0 0; color:#171717; font-size:115px; font-weight:300; line-height:1; letter-spacing:-7px; font-variant-numeric:tabular-nums; transform:scaleX(1.22); }
+    .controls-wrap { position:relative; }
+    .controls { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+    .control { height:45px; border-radius:5px; border:1px solid #cfcfcf; background:linear-gradient(#fff,#fafafa); color:#777; font-size:18px; box-shadow:inset 0 1px 0 rgba(255,255,255,.65); }
+    .control.primary { border-color:#4caf50; background:linear-gradient(#63c76a,#55b95d); color:#fff; text-shadow:0 -1px rgba(0,0,0,.12); }
+    .control:active { transform:translateY(1px); }
+    .progress-rail { position:absolute; left:0; right:0; bottom:-8px; height:4px; overflow:hidden; border-radius:999px; background:#ddd; opacity:0; transition:opacity .16s ease; }
+    .progress-rail.visible { opacity:1; }
+    .progress-fill { width:100%; height:100%; border-radius:inherit; background:var(--work-color); transform:scaleX(0); transform-origin:left center; will-change:transform; }
+    .progress-fill.rest { background:var(--recovery-color); }
+    .progress-fill.prep { background:#efb63f; }
+    .settings { margin-top:13px; overflow:hidden; border:1px solid #c9c9c9; border-radius:5px; background:#fff; }
+    .tabs { display:grid; grid-template-columns:1fr 1fr; gap:0; padding:10px 10px 9px; }
+    .tab { height:33px; border:1px solid #c9c9c9; background:#fff; color:#333; font-size:14px; }
+    .tab:first-child { border-radius:3px 0 0 3px; }
+    .tab:last-child { margin-left:-1px; border-radius:0 3px 3px 0; color:#64160f; }
+    .tab.active { position:relative; z-index:1; background:linear-gradient(#f8f8f8,#e3e3e3); box-shadow:inset 0 1px 5px rgba(0,0,0,.12); color:#555; }
+    .setting-row { width:100%; min-height:43px; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:0 10px; border:0; border-top:1px solid var(--line); background:#fff; color:#3d3d3d; text-align:left; }
+    .setting-label { font-size:18px; font-weight:700; white-space:nowrap; }
+    .setting-value { color:#444; font-size:18px; font-weight:400; white-space:nowrap; }
+    .setting-value.muted { color:#999; }
+    .value-field { display:flex; align-items:center; justify-content:flex-end; gap:6px; color:#777; font-size:14px; }
+    .number-field,.choice-field { height:33px; border:1px solid #bdbdbd; border-radius:4px; background:#fff; color:#333; box-shadow:inset 0 1px 2px rgba(0,0,0,.07); }
+    .number-field { width:82px; padding:4px 6px; text-align:right; font-size:17px; font-variant-numeric:tabular-nums; }
+    .choice-field { width:168px; padding:4px 28px 4px 8px; font-size:15px; }
+    .color-choice { border-left-width:12px; }
+    .color-choice.work-color { border-left-color:var(--work-color); }
+    .color-choice.recovery-color { border-left-color:var(--recovery-color); }
+    .number-field:disabled,.choice-field:disabled { color:#999; background:#f2f2f2; }
+    .toggle { position:relative; width:75px; height:28px; flex:none; }
+    .toggle input { position:absolute; width:1px; height:1px; opacity:0; }
+    .toggle-track { position:absolute; inset:1px 0; border:1px solid #b8b8b8; border-radius:999px; background:linear-gradient(#e5e5e5,#fff); box-shadow:inset 0 1px 2px rgba(0,0,0,.14); }
+    .toggle-knob { position:absolute; top:1px; left:0; width:27px; height:27px; border:1px solid #999; border-radius:50%; background:linear-gradient(#fff,#e9e9e9); box-shadow:0 1px 3px rgba(0,0,0,.28); transition:transform .16s ease; }
+    .toggle-text { position:absolute; right:8px; top:6px; color:#777; font-size:14px; font-weight:700; }
+    .toggle input:checked ~ .toggle-track { background:#67c86e; border-color:#4caf50; }
+    .toggle input:checked ~ .toggle-knob { transform:translateX(48px); }
+    .toggle input:checked ~ .toggle-text { left:9px; right:auto; color:#fff; }
+    .phase-live { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+    .audio-status { margin:16px 0 0; color:#777; font-size:14px; line-height:1.4; }
+    .audio-status:empty { display:none; }
+    .finish { position:fixed; z-index:20; inset:0; display:grid; place-items:center; padding:24px; visibility:hidden; opacity:0; overflow:hidden; background:rgba(1,7,10,.94); transition:opacity .18s ease,visibility .18s ease; transform-origin:center; will-change:transform; }
+    .finish.show { visibility:visible; opacity:1; }
+    .finish.impact { animation:screenRock .9s cubic-bezier(.22,.78,.26,1) both; }
+    .finish::after { content:""; position:absolute; inset:0; background:#ffd27b; opacity:0; pointer-events:none; mix-blend-mode:screen; }
+    .finish.impact::after { animation:impactFlash .42s ease-out both; }
+    .claws { position:absolute; inset:-12vh -14vw; width:128vw; height:124vh; object-fit:cover; opacity:0; transform:translate3d(-128%,-16%,0) rotate(-8deg) scale(1.24); pointer-events:none; mix-blend-mode:screen; will-change:transform,opacity; }
+    .finish.show .claws { animation:clawSwipe 1.05s cubic-bezier(.12,.72,.16,1) .12s both; }
+    .finish-content { position:relative; z-index:2; width:min(620px,100%); color:#fff; text-align:center; }
+    .finish-kicker { color:#ffb24a; font-size:14px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    .finish h2 { margin:9px 0 14px; font-size:clamp(58px,13vw,122px); line-height:.84; letter-spacing:-.08em; }
+    .finish p { max-width:430px; margin:0 auto 26px; color:#d2dde1; font-size:17px; line-height:1.45; }
+    .again { min-width:150px; height:48px; border:0; border-radius:8px; background:#61e5ae; color:#09251b; font-weight:700; }
+    @keyframes countPulse { 0% { transform:scaleX(1.1) scale(1); } 45% { transform:scaleX(1.1) scale(1.045); } 100% { transform:scaleX(1.1) scale(1); } }
+    @keyframes clawSwipe { 0% { opacity:0; transform:translate3d(-128%,-16%,0) rotate(-8deg) scale(1.24); } 12% { opacity:1; } 68% { opacity:1; transform:translate3d(-2%,0,0) rotate(0) scale(1.1); } 82% { opacity:1; transform:translate3d(4%,0,0) rotate(.6deg) scale(1.12); } 100% { opacity:.86; transform:translate3d(0,0,0) rotate(0) scale(1.1); } }
+    @keyframes screenRock { 0% { transform:translate3d(0,0,0) rotate(0); } 10% { transform:translate3d(-34px,10px,0) rotate(-1.35deg); } 22% { transform:translate3d(30px,-8px,0) rotate(1.15deg); } 35% { transform:translate3d(-22px,6px,0) rotate(-.82deg); } 49% { transform:translate3d(16px,-4px,0) rotate(.58deg); } 64% { transform:translate3d(-10px,3px,0) rotate(-.36deg); } 80% { transform:translate3d(5px,-1px,0) rotate(.18deg); } 100% { transform:translate3d(0,0,0) rotate(0); } }
+    @keyframes impactFlash { 0% { opacity:.55; } 100% { opacity:0; } }
+    :focus-visible { outline:3px solid #1877d2; outline-offset:2px; }
+    @media (min-width:600px) and (max-width:759px) {
+      main { left:0; width:min(520px,calc(100% - 40px)); }
+      .clock { height:120px; font-size:136px; transform:scaleX(1.06); }
+      .round-count { height:128px; font-size:132px; transform:scaleX(1.16); }
+      .settings { width:100%; }
+    }
+    @media (min-width:760px) {
+      main { left:0; width:min(960px,calc(100% - 48px)); display:grid; grid-template-columns:minmax(360px,1fr) minmax(330px,390px); gap:clamp(36px,6vw,72px); align-items:start; padding:38px 0 60px; }
+      .timer-stack { width:100%; max-width:500px; justify-self:center; }
+      .clock { height:132px; font-size:clamp(122px,12vw,156px); transform:scaleX(1.06); }
+      .round-strip { height:50px; }
+      .round-count { height:144px; margin-top:12px; font-size:clamp(124px,11vw,150px); transform:scaleX(1.15); }
+      .control { height:52px; font-size:19px; }
+      .settings { width:100%; margin-top:0; }
+      @keyframes countPulse { 0% { transform:scaleX(1.06) scale(1); } 45% { transform:scaleX(1.06) scale(1.045); } 100% { transform:scaleX(1.06) scale(1); } }
+    }
+    @media (max-width:420px) { main { left:0; width:calc(100% - 24px); } .choice-field { width:min(168px,47vw); } }
+    @media (max-width:350px) { .clock { font-size:100px; } .round-count { font-size:102px; } .setting-label,.setting-value { font-size:16px; } .number-field { width:70px; } .choice-field { width:145px; font-size:14px; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="top-strip" aria-hidden="true"></div>
+    <header class="titlebar">Tabata Timer</header>
+    <main aria-label="Tabata timer">
+      <section class="timer-stack" aria-label="Timer display">
+        <p id="clock" class="clock" aria-live="off">00:00</p>
+        <div id="roundStrip" class="round-strip" role="img" aria-label="Eight workout rounds"></div>
+        <p id="roundCount" class="round-count">0/8</p>
+        <div class="controls-wrap">
+          <div class="controls">
+            <button id="start" class="control primary" type="button">Start</button>
+            <button id="reset" class="control" type="button">Reset</button>
+          </div>
+          <div id="progressRail" class="progress-rail" aria-hidden="true"><div id="progressFill" class="progress-fill"></div></div>
+        </div>
+        <span id="phaseLive" class="phase-live" aria-live="assertive"></span>
+        <p id="audioStatus" class="audio-status" role="status"></p>
+      </section>
+      <section class="settings" aria-label="Timer settings">
+        <div class="tabs" aria-label="Presets">
+          <button id="tabataPreset" class="tab active" type="button">Tabata</button>
+          <button id="customPreset" class="tab" type="button">Tabata This</button>
+        </div>
+        <label class="setting-row" for="roundsInput"><span class="setting-label">Rounds</span><span class="value-field"><input id="roundsInput" class="number-field" type="number" min="1" max="99" step="1" value="8"><span>×</span></span></label>
+        <label class="setting-row" for="workInput"><span class="setting-label">Time On</span><span class="value-field"><input id="workInput" class="number-field" type="number" min="1" max="900" step="1" value="20"><span>sec</span></span></label>
+        <label class="setting-row" for="restInput"><span class="setting-label">Time Off</span><span class="value-field"><input id="restInput" class="number-field" type="number" min="0" max="600" step="1" value="10"><span>sec</span></span></label>
+        <label class="setting-row"><span class="setting-label">Include Last Rest</span><span class="toggle"><input id="finalRest" type="checkbox"><span class="toggle-track"></span><span class="toggle-knob"></span><span id="toggleText" class="toggle-text">OFF</span></span></label>
+        <div class="setting-row"><span class="setting-label">Total Workout Time</span><span id="totalTime" class="setting-value muted">3:50</span></div>
+        <label class="setting-row" for="prepInput"><span class="setting-label">Prep Time</span><span class="value-field"><input id="prepInput" class="number-field" type="number" min="0" max="600" step="1" value="5"><span>sec</span></span></label>
+        <label class="setting-row" for="soundSelect"><span class="setting-label">Sounds</span><select id="soundSelect" class="choice-field"><option value="fight3">Fight Bell ×3</option><option value="fight2">Fight Bell ×2</option><option value="fight1">Fight Bell ×1</option><option value="chime">Power Chime</option><option value="pulse">Digital Pulse</option><option value="beep">Clean Beeps</option><option value="silent">Silent</option></select></label>
+        <label class="setting-row" for="countdownSelect"><span class="setting-label">Count Down</span><select id="countdownSelect" class="choice-field"><option value="every">Every Transition</option><option value="work">Before Work Only</option><option value="first">First Round Only</option><option value="off">Off</option></select></label>
+        <label class="setting-row" for="workColorSelect"><span class="setting-label">Work Color</span><select id="workColorSelect" class="choice-field color-choice work-color" aria-label="Work color"></select></label>
+        <label class="setting-row" for="recoveryColorSelect"><span class="setting-label">Recovery Color</span><select id="recoveryColorSelect" class="choice-field color-choice recovery-color" aria-label="Recovery color"></select></label>
+      </section>
+    </main>
+  </div>
+
+  <section id="finish" class="finish" role="dialog" aria-modal="true" aria-labelledby="finishTitle">
+    <img class="claws" src="images/lion-claw-overlay.png" alt="" aria-hidden="true">
+    <div class="finish-content"><div class="finish-kicker">Workout complete</div><h2 id="finishTitle">CRUSHED IT.</h2><p>You showed up and finished every round. Take the win.</p><button id="again" class="again" type="button">Run it back</button></div>
+  </section>
+
+  <audio id="countdownVoice" src="sounds/male-countdown.wav" preload="auto" aria-hidden="true"></audio>
+  <audio id="bellOne" src="sounds/fight-bell.wav" preload="auto" aria-hidden="true"></audio>
+  <audio id="bigCatGrowl" src="sounds/big-cat-growl.wav" preload="auto" aria-hidden="true"></audio>
+  <audio id="crowdCheer" src="sounds/crowd-cheer.wav" preload="auto" aria-hidden="true"></audio>
+
+  <script src="tabata-audio.js"></script>
+  <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
+      const ui = {
+        clock:$('clock'),roundStrip:$('roundStrip'),roundCount:$('roundCount'),start:$('start'),reset:$('reset'),
+        progressRail:$('progressRail'),progressFill:$('progressFill'),totalTime:$('totalTime'),finalRest:$('finalRest'),toggleText:$('toggleText'),
+        tabataPreset:$('tabataPreset'),customPreset:$('customPreset'),phaseLive:$('phaseLive'),roundsInput:$('roundsInput'),workInput:$('workInput'),
+        restInput:$('restInput'),prepInput:$('prepInput'),soundSelect:$('soundSelect'),countdownSelect:$('countdownSelect'),
+        workColorSelect:$('workColorSelect'),recoveryColorSelect:$('recoveryColorSelect'),
+        audioStatus:$('audioStatus'),
+        finish:$('finish'),again:$('again'),countdownVoice:$('countdownVoice'),bellOne:$('bellOne'),
+        bigCatGrowl:$('bigCatGrowl'),crowdCheer:$('crowdCheer')
+      };
+      const settings = { rounds:8, work:20, rest:10, prep:5, finalRest:false, sound:'fight3', countdown:'every' };
+      const palette = { green:['Green','#58bd5e'],red:['Red','#d95f58'],blue:['Blue','#3688e8'],orange:['Orange','#f29a38'],purple:['Purple','#9962d8'],teal:['Teal','#34bdb0'],yellow:['Yellow','#f2d54f'],pink:['Pink','#ec76ad'] };
+      const colors = { work:'green',recovery:'red' };
+      try {
+        const saved=JSON.parse(localStorage.getItem('tabataColors')||'null');
+        if(saved&&Object.hasOwn(palette,saved.work))colors.work=saved.work;
+        if(saved&&Object.hasOwn(palette,saved.recovery))colors.recovery=saved.recovery;
+      } catch {}
+      const numberInputs = [[ui.roundsInput,'rounds'],[ui.workInput,'work'],[ui.restInput,'rest'],[ui.prepInput,'prep']];
+      let finishTimers = [];
+      let audioContext = null;
+      let audioLoadPromise = null;
+      let audioPlayer = null;
+      let audioOperation = 0;
+      let state = freshState();
+
+      function freshState() { return {running:false,loading:false,phase:'ready',round:0,remaining:0,duration:0,raf:0,finished:false,lastShown:null,plan:[],position:0,origin:0}; }
+      function clamp(value,min,max) { return Math.max(min,Math.min(max,Number(value) || min)); }
+      function format(seconds) { const whole=Math.max(0,Math.ceil(seconds)); return `${String(Math.floor(whole/60)).padStart(2,'0')}:${String(whole%60).padStart(2,'0')}`; }
+      function workoutSeconds() { return settings.rounds*settings.work + (settings.rounds-(settings.finalRest?0:1))*settings.rest; }
+      function shortTime(seconds) { return seconds<60 ? `${seconds}` : `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`; }
+      function applyColors() {
+        const luminance=channels=>channels.map(channel=>{const n=channel/255;return n<=.04045?n/12.92:((n+.055)/1.055)**2.4;}).reduce((sum,n,i)=>sum+n*[.2126,.7152,.0722][i],0);
+        Object.entries(colors).forEach(([phase,key])=>{
+          const hex=palette[key][1];
+          const channels=[1,3,5].map(offset=>parseInt(hex.slice(offset,offset+2),16));
+          const darker=channels.map(channel=>Math.round(channel*.76));
+          const baseLuminance=luminance(channels),fillLuminance=luminance(darker);
+          const ink=(fillLuminance+.05)/.05>=1.05/(baseLuminance+.05)?'#171717':'#fff';
+          document.documentElement.style.setProperty(`--${phase}-color`,hex);
+          document.documentElement.style.setProperty(`--${phase}-fill`,'#'+darker.map(channel=>channel.toString(16).padStart(2,'0')).join(''));
+          document.documentElement.style.setProperty(`--${phase}-ink`,ink);
+        });
+      }
+      function initializeColorSelectors() {
+        [[ui.workColorSelect,'work'],[ui.recoveryColorSelect,'recovery']].forEach(([select,phase])=>{
+          Object.entries(palette).forEach(([value,[label]])=>select.add(new Option(label,value)));
+          select.value=colors[phase];
+          select.addEventListener('change',()=>{
+            colors[phase]=select.value;
+            applyColors();
+            try { localStorage.setItem('tabataColors',JSON.stringify(colors)); } catch {}
+          });
+        });
+        applyColors();
+      }
+      function syncSettingsControls() {
+        ui.roundsInput.value=settings.rounds;
+        ui.workInput.value=settings.work;
+        ui.restInput.value=settings.rest;
+        ui.prepInput.value=settings.prep;
+        ui.finalRest.checked=settings.finalRest;
+        ui.soundSelect.value=settings.sound;
+        ui.countdownSelect.value=settings.countdown;
+      }
+      function lockSettings(locked) {
+        [ui.roundsInput,ui.workInput,ui.restInput,ui.prepInput,ui.finalRest,ui.soundSelect,ui.countdownSelect,ui.tabataPreset,ui.customPreset].forEach(control=>control.disabled=locked);
+      }
+
+      function renderRounds() {
+        const columns=[];
+        ui.roundStrip.setAttribute('aria-label',`${settings.rounds} workout rounds: ${settings.work} seconds work, ${settings.rest} seconds recovery${settings.finalRest?'':', no final recovery'}`);
+        ui.roundStrip.innerHTML='';
+        for(let i=1;i<=settings.rounds;i++){
+          const segment=document.createElement('span');
+          const complete=state.phase==='complete'||i<state.round;
+          const current=i===state.round&&(state.phase==='work'||state.phase==='rest');
+          segment.className=`round-segment${complete?' done':''}${current?` current ${state.phase}`:''}`;
+          segment.setAttribute('aria-label',complete?`Round ${i} complete`:current?`Round ${i}, ${state.phase} in progress`:`Round ${i}, upcoming`);
+          const restDuration=i<settings.rounds||settings.finalRest?settings.rest:0;
+          columns.push(`minmax(0,${settings.work+restDuration}fr)`);
+          [['work',settings.work],['rest',restDuration]].forEach(([phase,duration])=>{
+            if(duration===0)return;
+            const part=document.createElement('span');
+            const active=current&&state.phase===phase;
+            const done=complete||(phase==='work'&&i===state.round&&state.phase==='rest');
+            part.className=`round-phase ${phase}${done?' done':''}${active?' current':''}`;
+            part.style.flex=`${duration} 1 0%`;
+            part.setAttribute('aria-label',`Round ${i}, ${phase==='work'?'work':'recovery'}, ${duration} seconds${done?', complete':active?', in progress':''}`);
+            const fill=document.createElement('span');
+            fill.className='round-fill';
+            fill.style.transform=done?'scaleX(1)':'scaleX(0)';
+            fill.setAttribute('aria-hidden','true');
+            part.append(fill);
+            if(phase==='work'){
+              const number=document.createElement('span');
+              number.className='round-number';
+              number.textContent=i;
+              part.append(number);
+            }
+            segment.append(part);
+          });
+          ui.roundStrip.append(segment);
+        }
+        ui.roundStrip.style.gridTemplateColumns=columns.join(' ');
+      }
+      function render() {
+        ui.clock.textContent=state.phase==='ready'?'00:00':format(state.remaining);
+        ui.roundCount.textContent=`${state.round}/${settings.rounds}`;
+        ui.start.textContent=state.loading?'Loading sounds…':state.running?'Pause':'Start';
+        ui.start.disabled=state.loading;
+        ui.totalTime.textContent=shortTime(workoutSeconds());
+        ui.toggleText.textContent=settings.finalRest?'ON':'OFF';
+        ui.progressRail.classList.toggle('visible',state.phase!=='ready'&&!state.finished);
+        ui.progressFill.className=`progress-fill ${state.phase==='rest'?'rest':state.phase==='prep'?'prep':''}`;
+        lockSettings(state.loading||state.phase!=='ready');
+        renderRounds();
+        updateProgress();
+      }
+      function updateProgress() {
+        const progress=state.duration>0?Math.max(0,Math.min(1,1-state.remaining/state.duration)):0;
+        ui.progressFill.style.transform=`scaleX(${progress})`;
+        const roundFill=ui.roundStrip.querySelector('.round-phase.current .round-fill');
+        if(roundFill)roundFill.style.transform=`scaleX(${progress})`;
+      }
+      function pulseCountdown(number) {
+        if(number===state.lastShown)return;
+        state.lastShown=number;
+        ui.clock.classList.remove('counting');
+        void ui.clock.offsetWidth;
+        ui.clock.classList.add('counting');
+        ui.phaseLive.textContent=String(number);
+      }
+      function announcePhase() {
+        const words={prep:'Get ready',work:'Work',rest:'Recover'};
+        ui.phaseLive.textContent=words[state.phase]||'';
+      }
+
+      function ensureAudioContext() {
+        if(!audioContext)audioContext=new (window.AudioContext||window.webkitAudioContext)();
+        return audioContext;
+      }
+      async function loadSounds() {
+        const context=ensureAudioContext();
+        if(!audioLoadPromise){
+          const files={voice:ui.countdownVoice,bell:ui.bellOne,cat:ui.bigCatGrowl,crowd:ui.crowdCheer};
+          audioLoadPromise=Promise.all(Object.entries(files).map(async([name,element])=>{
+            const response=await fetch(element.getAttribute('src'));
+            if(!response.ok)throw new Error('Sound download failed');
+            return [name,await context.decodeAudioData(await response.arrayBuffer())];
+          })).then(entries=>{audioPlayer=TabataAudio.createPlayer(context,Object.fromEntries(entries));}).catch(error=>{audioLoadPromise=null;throw error;});
+        }
+        return audioLoadPromise;
+      }
+      async function begin() {
+        if(state.loading)return;
+        if(state.finished)reset();
+        if(state.phase==='ready')numberInputs.forEach(([input,key])=>updateNumber(key,input,true));
+        const operation=++audioOperation;
+        state.loading=true;
+        ui.audioStatus.textContent='';
+        render();
+        try {
+          // Resume from the Start click, before any network await (autoplay policy).
+          const context=ensureAudioContext();
+          const resumed=context.resume();
+          await Promise.all([resumed,loadSounds()]);
+          if(operation!==audioOperation)return;
+          if(context.state!=='running')throw new Error('Audio is not running');
+          if(state.phase==='ready')state.plan=TabataAudio.buildPlan(settings);
+          state.origin=audioPlayer.schedule(state.plan,settings,state.position);
+          state.loading=false;
+          state.running=true;
+          syncPosition();
+          render();
+          state.raf=requestAnimationFrame(tick);
+        } catch {
+          if(operation!==audioOperation)return;
+          state.loading=false;
+          if(audioPlayer)audioPlayer.stop();
+          ui.audioStatus.textContent='Could not load workout sounds. Check your connection and press Start to retry.';
+          render();
+        }
+      }
+      function pause() {
+        syncPosition();
+        if(state.finished)return;
+        state.running=false;
+        cancelAnimationFrame(state.raf);
+        state.raf=0;
+        audioPlayer.stop();
+        render();
+      }
+      function syncPosition() {
+        if(!state.running)return;
+        state.position=Math.max(state.position,audioContext.currentTime-state.origin);
+        const phase=TabataAudio.phaseAt(state.plan,state.position);
+        if(!phase){finish();return;}
+        if(state.phase!==phase.phase||state.round!==phase.round){
+          state.phase=phase.phase;state.duration=phase.duration;state.round=phase.round;
+          state.lastShown=null;
+          state.remaining=phase.end-state.position;
+          announcePhase();render();
+        }
+        state.remaining=phase.end-state.position;
+        const shown=Math.ceil(state.remaining);
+        if(shown<=3&&shown>=1&&TabataAudio.countdownEnabled(settings,state.plan,state.plan.indexOf(phase)))pulseCountdown(shown);
+        ui.clock.textContent=format(state.remaining);
+        updateProgress();
+      }
+      function tick() {
+        syncPosition();
+        if(state.running)state.raf=requestAnimationFrame(tick);
+      }
+      function reset() {
+        ++audioOperation;
+        cancelAnimationFrame(state.raf);
+        if(audioPlayer)audioPlayer.stop();
+        clearFinishEffects();
+        state=freshState();
+        ui.audioStatus.textContent='';
+        ui.progressFill.style.transform='scaleX(0)';
+        render();
+      }
+
+      function clearFinishEffects() {
+        finishTimers.forEach(window.clearTimeout); finishTimers=[];
+        ui.finish.classList.remove('show','impact');
+      }
+      function finish() {
+        state.running=false; state.finished=true; state.phase='complete'; state.remaining=0;
+        state.round=settings.rounds;
+        render(); ui.progressRail.classList.remove('visible');
+        clearFinishEffects(); void ui.finish.offsetWidth; ui.finish.classList.add('show');
+        finishTimers.push(window.setTimeout(()=>ui.finish.classList.add('impact'),830));
+        finishTimers.push(window.setTimeout(()=>ui.again.focus(),2050));
+      }
+
+      function selectPreset(kind) {
+        if(state.running)return;
+        if(kind==='tabata')Object.assign(settings,{rounds:8,work:20,rest:10,prep:5,finalRest:false});
+        else Object.assign(settings,{rounds:4,work:300,rest:60,prep:10,finalRest:false});
+        ui.tabataPreset.classList.toggle('active',kind==='tabata');
+        ui.customPreset.classList.toggle('active',kind==='custom');
+        syncSettingsControls();
+        reset();
+      }
+      function markCustom() { ui.tabataPreset.classList.remove('active'); ui.customPreset.classList.add('active'); }
+      function updateNumber(key,input,commit=false) {
+        if(state.phase!=='ready'){input.value=settings[key];return;}
+        const value=input.value===''?NaN:Number(input.value);
+        const min=Number(input.min),max=Number(input.max);
+        if(!commit&&(!Number.isInteger(value)||value<min||value>max))return;
+        const next=commit?(Number.isFinite(value)?clamp(Math.round(value),min,max):settings[key]):value;
+        if(commit)input.value=next;
+        if(next===settings[key])return;
+        settings[key]=next;
+        markCustom(); reset();
+      }
+
+      ui.start.addEventListener('click',()=>state.running?pause():begin());
+      ui.reset.addEventListener('click',reset);
+      ui.again.addEventListener('click',reset);
+      ui.tabataPreset.addEventListener('click',()=>selectPreset('tabata'));
+      ui.customPreset.addEventListener('click',()=>selectPreset('custom'));
+      numberInputs.forEach(([input,key])=>{
+        input.addEventListener('input',()=>updateNumber(key,input));
+        input.addEventListener('change',()=>updateNumber(key,input,true));
+      });
+      ui.finalRest.addEventListener('change',()=>{ if(state.phase!=='ready'){ui.finalRest.checked=settings.finalRest;return;} settings.finalRest=ui.finalRest.checked; markCustom(); reset(); });
+      ui.soundSelect.addEventListener('change',async()=>{
+        settings.sound=ui.soundSelect.value;markCustom();
+        ui.audioStatus.textContent='';
+        const operation=++audioOperation;
+        try {
+          const context=ensureAudioContext();
+          await Promise.all([context.resume(),loadSounds()]);
+          if(operation===audioOperation&&!state.running&&!state.loading)audioPlayer.preview(settings.sound);
+        } catch { if(operation===audioOperation)ui.audioStatus.textContent='Could not load the sound preview. Press Start to retry.'; }
+      });
+      ui.countdownSelect.addEventListener('change',()=>{settings.countdown=ui.countdownSelect.value;markCustom();});
+      document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.running)syncPosition();});
+      initializeColorSelectors();
+      syncSettingsControls();
+      render();
+    })();
+  </script>
+</body>
+</html>
